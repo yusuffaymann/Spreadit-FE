@@ -3,12 +3,13 @@ import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 
-function ResetPassword() {
-    const [formData, setFormData] = useState({username: "", email: ""})
+function RecoverUsername() {
+    const [email, setEmail] = useState("")
 
     function handleInputChange(event) {
-        const {name, value} = event.target;
-        setFormData(prevFormData => ({...prevFormData, [name]: value}))
+        const {value} = event.target;
+        console.log(value)
+        setFormData(value)
     }
 
     function handleSubmit(event) {
@@ -23,18 +24,10 @@ function ResetPassword() {
       <div className="pageColumn__right">
         <div className="userFormContainer"> 
             <FormInfo 
-            title="Reset your password" 
-            description="Tell us the username and email address associated with your Reddit account, and we'll send you an email with a link to reset your password."
+            title="Recover your username" 
+            description="Tell us the email address associated with your Reddit account, and we'll send you an email with your username."
             />
             <form onSubmit={handleSubmit}>
-                <div>
-                    <input name="username" 
-                        type="text"
-                        placeholder="Username"
-                        onChange={handleInputChange} 
-                    />
-                </div>
-
                 <div>
                     <input name="email" 
                         type="text" 
@@ -42,7 +35,7 @@ function ResetPassword() {
                         onChange={handleInputChange}
                     />
                 </div>
-                <BlueButton>Reset Password</BlueButton>
+                <BlueButton>Email Me</BlueButton>
                 <a href="#" className="bottom-link">forgot username?</a>
             </form>
             <BottomHelp />
@@ -51,4 +44,4 @@ function ResetPassword() {
     );
   }
 
-  export default ResetPassword;
+  export default RecoverUsername;

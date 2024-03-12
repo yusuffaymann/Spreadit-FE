@@ -1,12 +1,12 @@
 'use client'
 import SideArt from "../components/UI/SideArt";
-import ResetPassword from "./ResetPassword";
+import RecoverUsername from "./RecoverUsername.jsx";
 
 function UserName() {
     return (
       <div className="PageColumns">
         <SideArt />
-        <ResetPassword />
+        <RecoverUsername />
       </div>
     );
   }
