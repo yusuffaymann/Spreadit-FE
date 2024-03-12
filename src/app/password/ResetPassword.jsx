@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
+import BottomHelp from "../components/UI/BottomHelp.jsx";
 
 function ResetPassword() {
     const [formData, setFormData] = useState({username: "", email: ""})
@@ -42,7 +43,9 @@ function ResetPassword() {
                 />
                 </div>
                 <BlueButton>Reset Password</BlueButton>
+                <a href="#" className="bottom-link">forgot username?</a>
             </form>
+            <BottomHelp />
         </div>
       </div>
     );

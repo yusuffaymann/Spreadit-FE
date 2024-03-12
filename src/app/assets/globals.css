@@ -33,3 +33,36 @@ body{
   min-width: 260px;
   max-width: 440px
 }
+
+.bottom-text{
+  font-family: Noto Sans, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+
+.bottom-link{
+  font-family: IBMPlexSans, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: #0079d3;
+    text-decoration: none;
+}
+
+.bottom-link:hover{
+  color: #3394dc;
+}
+
+.bottom-link:active{
+  color: #0061a9;
+}
+
+.link-separator {
+  color: #0079d3;
+  margin: 0 4px;
+}
