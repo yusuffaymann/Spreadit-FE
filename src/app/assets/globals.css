@@ -18,8 +18,18 @@ body{
   width: 156px;
 }
 
+.pageColumn__right{
+  width: 100%;
+}
+
 .art{
   height: 100vh;
   min-height: 430px;
   width: 90%;
+}
+
+.userFormContainer {
+  padding: 24px;
+  min-width: 260px;
+  max-width: 440px
 }
