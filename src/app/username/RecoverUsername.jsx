@@ -9,11 +9,13 @@ function RecoverUsername() {
     function handleInputChange(event) {
         const {value} = event.target;
         console.log(value)
-        setFormData(value)
+        setEmail(value)
     }
 
     function handleSubmit(event) {
+        event.preventDefault()
         submitToAPI(formData)
+        setEmail("")
     }
 
     function submitToAPI(formData) {
@@ -33,6 +35,7 @@ function RecoverUsername() {
                         type="text" 
                         placeholder="Email" 
                         onChange={handleInputChange}
+                        value={email}
                     />
                 </div>
                 <BlueButton>Email Me</BlueButton>

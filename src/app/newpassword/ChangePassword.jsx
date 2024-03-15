@@ -3,18 +3,19 @@ import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 
-function ResetPassword() {
-    const [formData, setFormData] = useState({username: "", email: ""})
+function ChangePassword() {
+    const [formData, setFormData] = useState({password: "", password2: ""})
 
     function handleInputChange(event) {
         const {name, value} = event.target;
+        console.log(name, value)
         setFormData(prevFormData => ({...prevFormData, [name]: value}))
     }
 
     function handleSubmit(event) {
         event.preventDefault()
         submitToAPI(formData)
-        setFormData({username: "", email: ""})
+        setFormData({password: "", password2: ""})
     }
 
     function submitToAPI(formData) {
@@ -26,31 +27,32 @@ function ResetPassword() {
         <div className="userFormContainer"> 
             <FormInfo 
             title="Reset your password" 
-            description="Tell us the username and email address associated with your Reddit account, and we'll send you an email with a link to reset your password."
+            description="Choose a new password here, then log in to your account."
             />
             <form onSubmit={handleSubmit}>
                 <div>
-                    <input name="username" 
-                        type="text"
-                        placeholder="Username"
-                        onChange={handleInputChange} 
+                    <input name="password" 
+                        type="password"
+                        placeholder="New Password"
+                        onChange={handleInputChange}
+                        value={formData.password} 
                     />
                 </div>
 
                 <div>
-                    <input name="email" 
-                        type="text" 
-                        placeholder="Email" 
+                    <input name="password2" 
+                        type="password" 
+                        placeholder="Verify Password" 
                         onChange={handleInputChange}
+                        value={formData.password2}
                     />
                 </div>
-                <BlueButton>Reset Password</BlueButton>
-                <a href="#" className="bottom-link">forgot username?</a>
+                <BlueButton>Set Password</BlueButton>
             </form>
-            <BottomHelp />
+            <BottomHelp> </BottomHelp>
         </div>
       </div>
     );
   }
 
-  export default ResetPassword;
+  export default ChangePassword;

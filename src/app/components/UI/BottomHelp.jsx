@@ -1,19 +1,22 @@
 import React from "react";
 
-function BottomHelp() {
+function BottomHelp(props) {
     return (
       <>
-      <div className="bottom-text">
+      {props.children || (
+        <div className="bottom-text">
         Don't have an email or need assistance logging in?
         <a href="#" className="bottom-link"> get help</a>
-      </div>
-      
+        </div>
+        )}
+
         <div className="bottom-text">
-          <a href="#" className="bottom-link">Log in</a>
-          <span className="link-separator">•</span>
-          <a href="#" className="bottom-link">sign up</a>
+        <a href="#" className="bottom-link">Log in</a>
+        <span className="link-separator">•</span>
+        <a href="#" className="bottom-link">sign up</a>
         </div>
       </>
+      
     );
   }
 
