@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+src/app/profile.js
+src/app/settings/page.js
+src/app/settings/profile/page.js

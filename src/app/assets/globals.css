@@ -66,3 +66,17 @@ body{
   color: #0079d3;
   margin: 0 4px;
 }
+
+/* Global Styiling for Settings pages */
+
+.uppercase-h3-description {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  line-height: 12px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #CBCCCD;
+  color: #7e7e7e;
+  margin-bottom: 32px;
+  padding-bottom: 6px;
+}
