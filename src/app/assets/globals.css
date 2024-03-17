@@ -80,3 +80,112 @@ body{
   margin-bottom: 32px;
   padding-bottom: 6px;
 }
+
+.settings--container
+{
+    max-width: 1200px;
+    display: flex;
+    padding: 0px 16px;
+    margin: 0 auto;
+}
+
+.settings--content
+{
+    flex: 1 1 auto;
+    max-width: 700px;
+}
+
+.settings--flex
+{
+  flex-direction: column;
+  display: flex;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.settings--flexheader {
+    display: flex;
+    flex-direction: column;
+    margin-right: 8px;
+    max-width: 80%;
+  }
+
+.settings--flexoption
+{
+        display: flex;
+        align-items: flex-start;
+        margin-top: 12px;
+        -ms-flex-direction: column;
+        flex-direction: column;
+}
+
+.settings--h2 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--newCommunityTheme-bodyText);
+    padding: 40px 0;
+  }
+
+.settings--p
+{
+    font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #aaa9a9;
+  margin: 0;
+}
+
+.settings--h3
+{
+    font-size: 16px;
+  font-weight: 570;
+  line-height: 20px;
+  margin: 0;
+  margin-bottom: 4px;
+
+  display: flex;
+}
+
+._2tU8R9NTqhvBrhoNAXWWcP {
+  position: relative;
+  border: 1px solid #0079d3;
+  color: #0079d3;
+  fill: #0079d3;
+  cursor: pointer;
+}
+
+.HNozj_dKjQZ59ZsfEegz8 {
+  font-family: Noto Sans, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: unset;
+  line-height: 17px;
+  text-transform: unset;
+  min-height: 32px;
+  min-width: 32px;
+  padding: 4px 16px;
+}
+
+._2iuoyPiKHN3kfOoeIQalDT {
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 9999px;
+  box-sizing: border-box;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  width: auto;
+}
+
+/* Global Styiling for Create page (the most likely to be not exclusive) */
+
+.create--h1
+{
+  color: black;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 22px;
+}
