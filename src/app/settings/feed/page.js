@@ -2,7 +2,7 @@
 import SettingItem from "../../components/UI/SettingItem.jsx";
 import optionData from "./options.js";
 
-function Home() {
+function Feed() {
     return (
     <div className="settings--container">
     <div className="settings--content">
@@ -20,4 +20,4 @@ function Home() {
     )
 };
 
-export default Home
+export default Feed

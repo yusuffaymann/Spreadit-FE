@@ -7,7 +7,7 @@ import ProfileImages from "./Profile_images.jsx";
 import SettingItem from "../../components/UI/SettingItem.jsx"
 import optionData from "../feed/options.js";
 
-function Home() {
+function Profile() {
   return (
     <div className="settings--container">
       <div className="settings--content">
@@ -36,4 +36,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Profile;
