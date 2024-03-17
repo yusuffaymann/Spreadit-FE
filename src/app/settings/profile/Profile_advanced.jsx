@@ -1,36 +1,27 @@
 import Image from "next/image";
 import React from "react";
 import SettingItem from "../../components/UI/SettingItem.jsx"
+import optionData from "../feed/options.js";
 
 export default function ProfileAdvanced()
 {
     return (
       <div>
-        <SettingItem option={{
-            id: 14,
-            title: "Allow people to follow you",
-            description: "Followers will be notified about posts you make to your profile and see them in their home feed.",
-          }}/>
+        {optionData.map(option => (
+                    option.id === 14 && <SettingItem key={option.id} option={option} />
+                ))}
         
-        <SettingItem option={{
-            id: 15,
-            title: "Content visibility",
-            description: <>
-            Posts to this profile can appear in <a href="/all">r/all</a> and your profile can be discovered in <a href="/users">/users</a>
-            </>,
-          }}/>
+        {optionData.map(option => (
+                    option.id === 15 && <SettingItem key={option.id} option={option} />
+                ))}
 
-        <SettingItem option={{
-            id: 16,
-            title: "Active in communities visibility",
-            description: "Show which communities I am active on my profile.",
-          }}/>
+{optionData.map(option => (
+                    option.id === 16 && <SettingItem key={option.id} option={option} />
+                ))}
 
-        <SettingItem option={{
-            id: 17,
-            title: "Clear history",
-            description: "Delete your post views history.",
-          }}/>
+{optionData.map(option => (
+                    option.id === 17 && <SettingItem key={option.id} option={option} />
+                ))}
         </div>
     )
 }
