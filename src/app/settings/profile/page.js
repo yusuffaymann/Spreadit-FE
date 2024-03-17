@@ -5,6 +5,7 @@ import ProfileSocial from "./Profile_social.jsx";
 import ProfileAdvanced from "./Profile_advanced.jsx";
 import ProfileImages from "./Profile_images.jsx";
 import SettingItem from "../../components/UI/SettingItem.jsx"
+import optionData from "../feed/options.js";
 
 function Home() {
   return (
@@ -18,14 +19,9 @@ function Home() {
         <h3 className="uppercase-h3-description">Images</h3>
         <ProfileImages />
         <h3 className="uppercase-h3-description">Profile Category</h3>
-        <SettingItem
-          option={{
-            id: 13,
-            title: "NSFW",
-            description:
-              "This content is NSFW (may contain nudity, pornography, profanity or inappropriate content for those under 18)",
-          }}
-        />
+        {optionData.map(option => (
+                    option.id === 13 && <SettingItem key={option.id} option={option} />
+                ))}
         <h3 className="uppercase-h3-description">Advanced</h3>
 
         <ProfileAdvanced />
