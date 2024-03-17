@@ -11,10 +11,10 @@ export default function Bar({ selected, handleSelect }) {
             <h1 className={selected === 1 ? styles.selected : ""} /* onClick={() => handleSelect(1)} */>Profile</h1> 
             <h1 className={selected === 2 ? styles.selected : ""} /* onClick={() => handleSelect(2)} */>Safety & Privacy</h1>
             <h1 className={selected === 3 ? styles.selected : ""} /* onClick={() => handleSelect(3)} */>Feed settings</h1> 
-            <Link href="/notifications">
+            <Link className={styles.link} href="/notifications">
                 <h1 className={selected === 4 ? styles.selected : ""} /* onClick={() => handleSelect(4)} */>Notifications</h1> 
             </Link>
-            <Link href="/emails">
+            <Link className={styles.link} href="/emails">
                 <h1 className={selected === 5 ? styles.selected : "" } /* onClick={() => handleSelect(5)} */>Emails</h1>
             </Link>
             <h1 className={selected === 6 ? styles.selected : ""} /* onClick={() => handleSelect(6)} */>Subscriptions</h1>

@@ -2,7 +2,7 @@
 
 // components/Layout.js
 import React, { useMemo, useState } from 'react';
-import Bar from "./Bar";
+import Bar from "../components/UI/Bar";
 import styles from "./SettingsLayout.module.css";
 
 const Layout = ({ index }) => {

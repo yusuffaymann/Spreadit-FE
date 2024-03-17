@@ -9,6 +9,10 @@
     max-width: 1200px;
 }
 
+.link {
+    text-decoration: none;
+}
+
 .tabs h1 {
     margin: 0px;
     color: rgb(124, 124, 124);
@@ -19,7 +23,6 @@
     padding: 2px;
     padding-bottom: 25px;
     border: none;
-    text-decoration: none;
 }
 
 .tabs h1.selected {
