@@ -1,0 +1,32 @@
+.tabs {
+    display: flex;
+    border-bottom: 0.1rem solid rgb(232, 231, 231);
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding:10px;
+    padding-left: 10px;
+    padding-bottom: 0px;
+    max-width: 1200px;
+}
+
+.tabs h1 {
+    margin: 0px;
+    color: rgb(124, 124, 124);
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    height: 1px;
+    padding: 2px;
+    padding-bottom: 25px;
+    border: none;
+    text-decoration: none;
+}
+
+.tabs h1.selected {
+    border-bottom: 3px solid rgb(0, 121, 211);
+    color: black;
+}
+
+.tabs h1:hover {
+    color: black;
+}
