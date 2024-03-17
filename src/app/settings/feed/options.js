@@ -67,6 +67,40 @@ const options = [
     title: "Open posts in new tab",
     description: "Enable to always open posts in a new tab.",
   },
+  {
+    id: 12,
+    title: "Default to markdown",
+    description: "When posting, your input will default to markdown text instead of fancy pants.",
+    subOptions: [] // No sub-options for this option
+  },
+  {
+    id: 13,
+    title: "NSFW",
+    description:
+      "This content is NSFW (may contain nudity, pornography, profanity or inappropriate content for those under 18)",
+  },
+  {
+    id: 14,
+    title: "Allow people to follow you",
+    description: "Followers will be notified about posts you make to your profile and see them in their home feed.",
+  },
+  {
+    id: 15,
+    title: "Content visibility",
+    description: <>
+    Posts to this profile can appear in <a href="/all">r/all</a> and your profile can be discovered in <a href="/users">/users</a>
+    </>,
+  },
+  {
+    id: 16,
+    title: "Active in communities visibility",
+    description: "Show which communities I am active on my profile.",
+  },
+  {
+    id: 17,
+    title: "Clear history",
+    description: "Delete your post views history.",
+  },
   ];
   
   export default options;
