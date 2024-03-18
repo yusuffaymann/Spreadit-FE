@@ -5,13 +5,17 @@ import ProfileSocial from "./Profile_social.jsx";
 import ProfileAdvanced from "./Profile_advanced.jsx";
 import ProfileImages from "./Profile_images.jsx";
 import SettingItem from "../../components/UI/SettingItem.jsx"
+import BlueButton from "../../components/UI/BlueButton.jsx"
+import SettingsLayout from "../SettingsLayout.jsx"
 import optionData from "../options.js";
 
 function Profile() {
   return (
+    <>
+    <SettingsLayout/>
     <div className="settings--container">
       <div className="settings--content">
-        <h2>Customize profile</h2>
+        <h2 className="settings--h2">Customize profile</h2>
         <h3 className="uppercase-h3-description">Profile Information</h3>
         <ProfileName />
         <ProfileAbout />
@@ -27,12 +31,13 @@ function Profile() {
         <ProfileAdvanced />
         <h3 className="uppercase-h3-description">Profile Moderation</h3>
         <div />
-        <div className="bottom-text">
+        <div>
           For moderation tools please visit our{" "}
           <a href="/moderation">Profile Moderation page</a>
         </div>
       </div>
     </div>
+    </>
   );
 }
 
