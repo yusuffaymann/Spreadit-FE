@@ -12,7 +12,7 @@ function ResetPassword() {
   }
 
   function handleSubmit(event) {
-    event.preventDefault();
+    // event.preventDefault();
     submitToAPI(formData);
     setFormData({ username: "", email: "" });
   }
@@ -28,9 +28,11 @@ function ResetPassword() {
           title="Reset your password"
           description="Tell us the username and email address associated with your Reddit account, and we'll send you an email with a link to reset your password."
         />
-        <form onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
           <div>
             <input
+              className="form-input"
+              id="username"
               name="username"
               type="text"
               placeholder="Username"
@@ -40,8 +42,9 @@ function ResetPassword() {
 
           <div>
             <input
+              className="form-input"
               name="email"
-              type="text"
+              type="email"
               placeholder="Email"
               onChange={handleInputChange}
             />

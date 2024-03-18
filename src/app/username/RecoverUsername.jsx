@@ -29,9 +29,10 @@ function RecoverUsername() {
           title="Recover your username"
           description="Tell us the email address associated with your Reddit account, and we'll send you an email with your username."
         />
-        <form onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
           <div>
             <input
+              className="form-input"
               name="email"
               type="text"
               placeholder="Email"
