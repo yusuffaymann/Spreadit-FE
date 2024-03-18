@@ -115,6 +115,7 @@ const options = [
   {
     id: 17,
     type: 'button',
+    buttontext: 'Clear History',
     title: "Clear history",
     description: "Delete your post views history.",
   },

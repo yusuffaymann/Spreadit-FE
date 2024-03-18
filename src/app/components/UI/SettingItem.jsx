@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import styles from "./SettingItem.module.css";
 import Switch from "./Switch"
+import OutlineButton from "./OutlineButton"
 
 export default function SettingItem({ option })
 {
@@ -19,8 +20,7 @@ export default function SettingItem({ option })
 
             {option.type === 'switch' && <Switch />}
             {option.type === 'dropdown' && <Switch />}
-            {option.type === 'button' && <div><button role="button" tabindex="0" class="_2iuoyPiKHN3kfOoeIQalDT _2tU8R9NTqhvBrhoNAXWWcP HNozj_dKjQZ59ZsfEegz8 ">Clear history</button>
-                <div className={styles.buttonsliderball}></div></div>}
+            {option.type === 'button' && <OutlineButton> {option.buttontext} </OutlineButton>}
 
 
 
