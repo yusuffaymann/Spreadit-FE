@@ -1,5 +1,18 @@
 
 
+:root{
+  --mainblackcolor:#1c1c1c;
+  --brightcolor:#0079D3;
+  --graycolor:#7c7c7c;
+  --buttonbackground:#FFFFFF;
+  --hoverbrightcolor: rgba(0, 121, 211, 0.05);
+  --modaloverlaybackground:rgba(0, 0, 0, 0.5);
+  --enabledbuttonbackground:#0079D3;
+  --disabledbuttonbackground:#7e7c7c;
+  --disabledbuttoncolor:#c3c1c1;
+  --deletebuttonbackground:#ff585b;
+} 
+
 body{
     margin: 0;
     padding: 0;
