@@ -1,6 +1,6 @@
 'use client'
 import SettingItem from "../../components/UI/SettingItem.jsx";
-import optionData from "./options.js";
+import optionData from "../options.js";
 
 function Feed() {
     return (

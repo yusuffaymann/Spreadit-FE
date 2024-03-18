@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import SettingItem from "../../components/UI/SettingItem.jsx"
-import optionData from "../feed/options.js";
+import optionData from "../options.js";
 
 export default function ProfileAdvanced()
 {

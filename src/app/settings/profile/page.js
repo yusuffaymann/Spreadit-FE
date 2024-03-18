@@ -5,7 +5,7 @@ import ProfileSocial from "./Profile_social.jsx";
 import ProfileAdvanced from "./Profile_advanced.jsx";
 import ProfileImages from "./Profile_images.jsx";
 import SettingItem from "../../components/UI/SettingItem.jsx"
-import optionData from "../feed/options.js";
+import optionData from "../options.js";
 
 function Profile() {
   return (
