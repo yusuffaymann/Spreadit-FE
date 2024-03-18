@@ -1,4 +1,6 @@
 import React from "react";
+import Image from "next/image";
+import mailp from "../../assets/mailimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./Changebutton.module.css";
 
@@ -91,7 +93,7 @@ const Changeemailpassword= (props)=>{
           <div className={Styles.modaloverlay}>
             <div className={Styles.modal}>
               <button className={Styles.Xbutton} onClick={closeModal}>X</button>
-              <img className={Styles.mailimage} src="./mailimage.png" alt=""></img>
+              <Image className={Styles.mailimage} src={mailp} alt="" />
               <h2 className={Styles.changeformlabel}>Update your email</h2>
               <p>Update your email below. There will be a new verification email sent that you will need to use to verify this new email.</p>
               <form>
@@ -113,7 +115,7 @@ const Changeemailpassword= (props)=>{
           <div className={Styles.modaloverlay}>
             <div className={Styles.modal}>
               <button className={Styles.Xbutton} onClick={closeModal}>X</button>
-              <img className={Styles.mailimage} src="./mailimage.png" alt=""></img>
+              <Image className={Styles.mailimage} src={mailp} alt=""/>
               <h2 className={Styles.changeformlabel}>Change the password</h2>
               <p>Enter the old password</p>
               <form>

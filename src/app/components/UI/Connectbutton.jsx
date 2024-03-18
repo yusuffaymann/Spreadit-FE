@@ -1,5 +1,8 @@
 import React from "react";
 import { useState,useEffect } from 'react';
+import Image from "next/image";
+import mailp from "../../assets/mailimage.png"
+import googlep from "../../assets/Google.png"
 import Styles from "./Connectbutton.module.css"
 
 const Connectbutton=(props)=>{
@@ -57,14 +60,14 @@ const Connectbutton=(props)=>{
                     <h3 className={Styles.subsectiontitle}>Connect to {props.type}</h3>
                     <p className={Styles.description}>{props.description}</p>
                 </div>
-                {!isConnected&&<button className={Styles.connectbutton}><img src="./Google.png" className={Styles.picture} /> Connect to {props.type}</button>}
+                {!isConnected&&<button className={Styles.connectbutton}><Image src={googlep} className={Styles.picture} /> Connect to {props.type}</button>}
                 {isConnected&&<button className={Styles.disconnectbutton} onClick={openModal}>(disconnect)</button>}
             </div>
             {showModal && (
             <div className={Styles.modaloverlay}>
                 <div className={Styles.modal}>
                 <button className={Styles.Xbutton} onClick={closeModal}>X</button>
-                <img className={Styles.mailimage} src="./mailimage.png" alt=""></img>
+                <Image className={Styles.mailimage} src={mailp} alt=""/>
                 <h2 className={Styles.connectformlabel}>Disconnect {props.type} Account</h2>
                 <p>To continue, confirm your password.</p>
                 <form>

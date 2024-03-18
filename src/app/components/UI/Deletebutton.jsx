@@ -1,4 +1,6 @@
 import React from "react";
+import Image from "next/image";
+import binp from"../../assets/binimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./Deletebutton.module.css";
 const Deleteaccount=(props)=>{
@@ -74,7 +76,7 @@ const Deleteaccount=(props)=>{
     return(
         <div className={Styles.deletecontainer}>
             <div className={Styles.leftflex}>
-                <img className={Styles.bin} src= "./binimage.png" ></img>
+                <Image className={Styles.bin} src= {binp} />
                 <button className={Styles.delete} onClick={openModal}>DELETE ACCOUNT</button>
             </div>
             {showModal && (
