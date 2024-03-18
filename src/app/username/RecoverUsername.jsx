@@ -34,7 +34,7 @@ function RecoverUsername() {
             <input
               className="form-input"
               name="email"
-              type="text"
+              type="email"
               placeholder="Email"
               onChange={handleInputChange}
               value={email}
