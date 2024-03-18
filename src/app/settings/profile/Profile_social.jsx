@@ -12,9 +12,10 @@ export default function ProfileSocial()
           <p className="settings--p">People who visit your profile will see your social links.</p>
           </div>
           <div className="settings--flexoption">
-          <nav>
+          <nav className="profile--social-nav">
           <ul>
-          <li class="buttonround"><img src="../../assets/logoSpreadIt.svg" />Add social link</li>
+          <li class="buttonround"> 
+<i className="icon">&#43;</i>Add social link</li>
           </ul>
           </nav>
         
