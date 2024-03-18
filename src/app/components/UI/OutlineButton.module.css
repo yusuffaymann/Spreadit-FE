@@ -1,0 +1,41 @@
+.buttonColor {
+  position: relative;
+  border: 1px solid #0079d3;
+  color: #0079d3;
+  fill: #0079d3;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+
+.buttonColor:hover {
+  background-color: #f5fafd; /* Change background color on hover */
+}
+
+.buttonColor:active {
+  background-color: #d6e9f8; /* Change background color on click */
+}
+
+.buttonText {
+  font-family: Noto Sans, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: unset;
+  line-height: 17px;
+  text-transform: unset;
+  min-height: 32px;
+  min-width: 32px;
+  padding: 4px 16px;
+}
+
+.buttonBorder {
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 9999px;
+  box-sizing: border-box;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  width: auto;
+}
