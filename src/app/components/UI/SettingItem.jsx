@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import styles from "./SettingItem.module.css";
+import Switch from "./Switch"
 
 export default function SettingItem({ option })
 {
@@ -16,9 +17,12 @@ export default function SettingItem({ option })
           <div className={styles.settingOptionRight}>
             <div className={styles.settingOptionRightButtonFloat}>
 
+            {option.type === 'switch' && <Switch />}
+            {option.type === 'dropdown' && <Switch />}
+            {option.type === 'button' && <div><button role="button" tabindex="0" class="_2iuoyPiKHN3kfOoeIQalDT _2tU8R9NTqhvBrhoNAXWWcP HNozj_dKjQZ59ZsfEegz8 ">Clear history</button>
+                <div className={styles.buttonsliderball}></div></div>}
 
-<button role="button" tabindex="0" class="_2iuoyPiKHN3kfOoeIQalDT _2tU8R9NTqhvBrhoNAXWWcP HNozj_dKjQZ59ZsfEegz8 ">Clear history</button>
-                <div className={styles.buttonsliderball}></div>
+
 
             </div>
           </div>
