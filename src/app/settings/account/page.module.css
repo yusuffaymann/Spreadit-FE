@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+.App {
+  text-align: center;
+  height: 100%;
+}
+.bigcontainer{
+  display:grid;
+  grid-template-columns: 20% 55% 25%;
+  font-family: 'IBMPlexSans';
+}
+.sectioncontainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  grid-column: 2/ 3;
+  background-color: #FFFFFF;
+  color:black;
+}
+
+.sectionname{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  
+}
+
+.accountheader{
+  padding-bottom: 0px;
+  margin-bottom: 25px;
+  font-size: 20px;
+  font-weight: bold;
+  list-style: 24;
+  color:var(--mainblackcolor) ;
+}
+
+.subheader{
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  line-height: 12px;
+  text-transform: uppercase;
+  margin-top: 20px;
+  color: var(--graycolor);
+  font-size: 12px;
+  position: relative;
+  margin-bottom: 0px;
+}
+
+.line{
+  background-color: rgb(216 213 213);
+  border: rgb(216 213 213);   
+  height: 1px;
+  width: 100%;
+  margin-top: 0;
+}

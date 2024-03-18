@@ -79,6 +79,7 @@
     background: white;
     position: relative;
     padding: 20px;
+    text-align: left;
     border-radius: 8px;
     width:400px;
     color: var(--mainblackcolor);
