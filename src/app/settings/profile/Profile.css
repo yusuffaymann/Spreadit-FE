@@ -94,7 +94,7 @@ input, textarea::placeholder {
 .profile--images-dragarea {
   -ms-flex-align: center;
   align-items: center;
-  background-color: #DAE0E6;
+  background-color: #f6f7f8;
   border-radius: 8px;
   border: 1px dashed grey;
   box-sizing: border-box;
