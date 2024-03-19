@@ -4,6 +4,7 @@ import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 
 function RecoverUsername() {
+  const url = "http://localhost:3002/forgot-username";
   const [email, setEmail] = useState("");
 
   function handleInputChange(event) {
@@ -12,15 +13,23 @@ function RecoverUsername() {
     setEmail(value);
   }
 
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    submitToAPI(formData);
-    setEmail("");
+    
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email })
+    }
+
+    fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
+
+    setEmail("");    
   }
 
-  function submitToAPI(formData) {
-    console.log("data submitted");
-  }
+
 
   return (
     <div className="pageColumn__right">
