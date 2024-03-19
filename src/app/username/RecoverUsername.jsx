@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
+import submitToApi from "../utils/submitToApi.js";
 
 function RecoverUsername() {
   const url = "http://localhost:3002/forgot-username";
@@ -15,21 +16,11 @@ function RecoverUsername() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email })
-    }
-
-    fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
-
-    setEmail("");    
-  }
-
-
+    const data = { email };
+    const response = await submitToApi(url, "POST", data);
+    console.log(response);
+    setEmail("");
+  };
 
   return (
     <div className="pageColumn__right">

@@ -1,0 +1,21 @@
+const submitToApi = async (url, method, data) => {
+    const options = {
+        method,
+        headers: {
+        "Content-Type": "application/json",
+        },
+    };
+    method === "POST" && (options.body = JSON.stringify(data));
+    
+    try {
+        const response = options.body ? await fetch(url, options) : await fetch(url);
+        const responseData = await response.json();
+        if (!responseData.message) {
+        throw new Error(responseData.error);
+        }
+        console.log(responseData.message);
+        return responseData;
+    } catch (error) {
+        console.error(error);
+    }
+}

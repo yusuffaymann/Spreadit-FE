@@ -12,7 +12,7 @@ function ResetPassword() {
   }
 
   function handleSubmit(event) {
-    // event.preventDefault();
+    event.preventDefault();
     submitToAPI(formData);
     setFormData({ username: "", email: "" });
   }
