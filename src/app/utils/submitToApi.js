@@ -6,6 +6,7 @@ const submitToApi = async (url, method, data) => {
         },
     };
     method === "POST" && (options.body = JSON.stringify(data));
+    console.log(JSON.stringify(data));
     
     try {
         const response = options.body ? await fetch(url, options) : await fetch(url);
@@ -19,3 +20,5 @@ const submitToApi = async (url, method, data) => {
         console.error(error);
     }
 }
+
+export default submitToApi;

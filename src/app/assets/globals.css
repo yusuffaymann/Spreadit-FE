@@ -80,3 +80,12 @@ body{
   border-radius: 4px;
   background-color: #fcfcfb;
 }
+
+.input-error{
+  border: 1px solid #ff0000;
+}
+
+.error-message{
+  color: #ff0000;
+  margin: 0;
+}
