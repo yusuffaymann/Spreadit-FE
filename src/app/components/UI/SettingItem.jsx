@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import styles from "./SettingItem.module.css";
 import Switch from "./Switch"
+import Dropdown from "./Dropdown"
 import OutlineButton from "./OutlineButton"
 
 export default function SettingItem({ option })
@@ -19,7 +20,7 @@ export default function SettingItem({ option })
             <div className={styles.settingOptionRightButtonFloat}>
 
             {option.type === 'switch' && <Switch />}
-            {option.type === 'dropdown' && <Switch />}
+            {option.type === 'dropdown' && <Dropdown />}
             {option.type === 'button' && <OutlineButton> {option.buttontext} </OutlineButton>}
 
 
