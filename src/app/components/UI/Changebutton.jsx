@@ -27,9 +27,6 @@ const Changeemailpassword= (props)=>{
       if (currentPassword.trim().length < 8) {
         setIsPasswordValid(false);
         setPasswordErrorMessage('Password must be at least 8 characters long.');
-      } else if(currentPassword!=props.password) {
-        setIsPasswordValid(false);
-        setPasswordErrorMessage('Incorrect password.');
       }else{
         setIsPasswordValid(true);
         setPasswordErrorMessage('');
@@ -50,17 +47,67 @@ const Changeemailpassword= (props)=>{
         setIsFormValid(true);
       }
     }
+    async function updateEmail(newEmail) {
+      try {
+          const response = await fetch('http://localhost:3001/settings/account', {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  email: newEmail
+              })
+          });
+    
+          if (!response.ok) {
+              throw new Error('Failed to change email');
+          }
+    
+          //const data = await response.json();
+          console.log("email changed to "+newEmail);
+      } catch (error) {
+          console.error('Error updating email:', error.message);
+      }
+    } 
+    async function post(url, data) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        return response;
+      } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Failed to make POST request');
+      }
+    }
+    async function checkpassword() {
+      try {
+        const response = await post('http://localhost:3001/settings/layout/check-password',{currentPassword});
+        if (!response.ok) {
+          setIsPasswordValid(false);
+          setPasswordErrorMessage('Incorrect password.');
+        }else{
+          if(props.type==="Email address"){
+            updateEmail(newEmail);   
+            closeModal();
+          }
+          if(props.type==="Password"){
+            console.log("updated password");
+            closeModal();
+          }   
+        }
+      } catch (error) {
+        console.error('Error ', error.message);
+      }
+    }       
     useEffect(() => {
       // Submit form 
       if (isFormValid&&isEmailValid&&isPasswordValid) {
-        if(props.type==="Email address"){
-          console.log("Form submitted");
-          closeModal();
-        }
-        if(props.type==="Password"){
-          console.log("updated password");
-          closeModal();
-        }   
+        checkpassword(); 
       }
     }, [isFormValid, isPasswordValid, isEmailValid]);
     // Disable the button if either input is empty

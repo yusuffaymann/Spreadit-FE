@@ -23,10 +23,8 @@ const Connectbutton=(props)=>{
         if (currentPassword.trim().length < 8) {
             setIsPasswordValid(false);
             setPasswordErrorMessage('Password must be at least 8 characters long.');
-          } else if(currentPassword!=props.password) {
-            setIsPasswordValid(false);
-            setPasswordErrorMessage('Incorrect password.');
-          }else{
+          }
+          else{
             setIsPasswordValid(true);
             setPasswordErrorMessage('');
           }
@@ -34,13 +32,63 @@ const Connectbutton=(props)=>{
             setIsFormValid(true);
           }
       }
+      async function post(url, data) {
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+          return response;
+        } catch (error) {
+          console.error('Error:', error);
+          throw new Error('Failed to make POST request');
+        }
+      }
+      async function checkpassword() {
+        try {
+          const response = await post('http://localhost:3001/settings/layout/check-password',{currentPassword});
+          if (!response.ok) {
+            setIsPasswordValid(false);
+            setPasswordErrorMessage('Incorrect password.');
+          }else{
+            setIsConnected(false);
+            alterconnect(isConnected); 
+            closeModal();  
+          }
+        } catch (error) {
+          console.error('Error ', error.message);
+        }
+      }
+      async function alterconnect(isConnected) {
+        try {
+            const response = await fetch('http://localhost:3001/settings/account', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    connected: isConnected
+                })
+            });
+      
+            if (!response.ok) {
+                throw new Error('Failed to alter connection');
+            }
+      
+            //const data = await response.json();
+            console.log("connected changed to "+isConnected);
+        } catch (error) {
+            console.error('Error altering connection:', error.message);
+        }
+      }
       useEffect(() => {
         // Submit form 
         if (isFormValid&&isPasswordValid) {
-            console.log("Disconnected");  
-            setIsConnected(false);
-            closeModal();
-        }
+              checkpassword(); 
+            }
       }, [isFormValid, isPasswordValid]);
     const openModal = (event) => {
         handleCurrentPasswordChange(event);

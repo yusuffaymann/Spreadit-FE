@@ -5,12 +5,12 @@ import  Styles from "./Listbutton.module.css";
 const Changegendercountry= (props)=>{
     const [showList, setShowList] = useState(false);
     const [Ygender,setYgender]=useState(props.initialv);
-  
     const handleItemClick = (item) => {
       setYgender(item);
       setShowList(false);
+      props.choose(item);
     };
-  
+
     return(
       <div className={Styles.smallcontainer}>
         <div className={Styles.changecontainer}>
@@ -20,7 +20,7 @@ const Changegendercountry= (props)=>{
               {showList && (
             <ul className={Styles.unorderedlist}>
               {props.list.map((item, index) => (
-                <li className={Styles.listitem} key={index} onClick={() => handleItemClick(item)}>
+                <li className={Styles.listitem} key={index} onClick={() =>handleItemClick(item)}>
                   {item}
                 </li>
               ))}
@@ -35,3 +35,6 @@ const Changegendercountry= (props)=>{
   }
 
   export default Changegendercountry;
+
+  /*<li className={Styles.listitem} key={index} onClick={() => {props.choose(item);
+                                                                          setShowList(false)}}>*/

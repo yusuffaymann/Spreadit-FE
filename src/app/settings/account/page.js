@@ -1,15 +1,91 @@
 'use client';
 import  Styles from "./page.module.css";
-/*import React, { useEffect ,useState} from "react";*/
+import React, { useEffect ,useState} from "react";
 import Deleteaccount from "../../components/UI/Deletebutton";
+import Layout from "../SettingsLayout";
 import Changeemailpassword from "../../components/UI/Changebutton";
 import Changegendercountry from "../../components//UI/Listbutton";
 import Connectbutton from "../../components/UI/Connectbutton";
 
 const Home=()=> {
-  const Yusername="aaaa";
-  const Yemail="aa@gmail.com";
-  const Ypassword="123456789";
+  const [userData, setUserData] = useState(null);
+/*   const [Ygender,setYgender]=useState("MAN");
+  const handleItemClick = (item) => {
+    setYgender(item);
+    console.log(item);
+  }; */
+
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:3001/settings/account');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        console.log(data);
+        setUserData(data);
+        /* setYgender(data.gender); */
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (!userData) {
+    // Render loading state or return null
+    return <div>Loading...</div>;
+  }
+
+  const {username, email, password, gender, country, connected } = userData;
+  async function updateGender(newgender) {
+    try {
+        const response = await fetch('http://localhost:3001/settings/account', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                gender: newgender
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update gender');
+        }
+
+        //const data = await response.json();
+        console.log("gender changed to "+newgender);
+    } catch (error) {
+        console.error('Error updating gender:', error.message);
+    }
+}
+async function updateCountry(newcountry) {
+  try {
+      const response = await fetch('http://localhost:3001/settings/account', {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              country: newcountry
+          })
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to update country');
+      }
+
+      //const data = await response.json();
+      console.log("country changed to "+newcountry);
+  } catch (error) {
+      console.error('Error updating country:', error.message);
+  }
+}
+
+
   const genders=["MAN","WOMAN"];
   const countries = [
     "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
@@ -42,30 +118,31 @@ const Home=()=> {
   return (
     <div className={Styles.App}>
       <div className={Styles.bigcontainer}>
+        <Layout index={0} />
         <div className={Styles.sectioncontainer}>
             <div className={Styles.sectionname}>
               <h1 className={Styles.accountheader}>Account Settings</h1>
               <h3 className={Styles.subheader}>ACCOUNT PREFERENCES</h3>
               <hr className={Styles.line}></hr>
             </div>
-            <Changeemailpassword type="Email address" description={Yemail} password={Ypassword}/>
-            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" password={Ypassword}/>
-            <Changegendercountry list={genders} initialv={"MAN"} type={"Gender"} />
-            <Changegendercountry list={countries} initialv={"EGYPT"} type={"Country"} />
+            <Changeemailpassword type="Email address" description={email} />
+            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" />
+            <Changegendercountry list={genders} initialv={gender} type={"Gender"}   choose={(newgender) => updateGender(newgender)} />
+            <Changegendercountry list={countries} initialv={country} type={"Country"} choose={(newcountry) => updateCountry(newcountry)} />
         </div>
         <div className={Styles.sectioncontainer}>
             <div className={Styles.sectionname}>
               <h3 className={Styles.subheader}>CONNECTED ACCOUNTS</h3>
               <hr className={Styles.line}></hr>
             </div>
-            <Connectbutton type="Google" description="Connect account to log in to Reddit with Google" condition={true} password={Ypassword}/>
+            <Connectbutton type="Google" description="Connect account to log in to Reddit with Google" condition={connected}/>
         </div>
         <div className={Styles.sectioncontainer}>
           <div className={Styles.sectionname}>
             <h3 className={Styles.subheader}>DELETE ACCOUNT</h3>
             <hr className={Styles.line}></hr>
           </div>
-          <Deleteaccount password={Ypassword} username={Yusername}/>
+          <Deleteaccount password={password} username={username}/>
         </div>
       </div>
     </div>
