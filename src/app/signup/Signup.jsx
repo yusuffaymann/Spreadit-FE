@@ -19,7 +19,7 @@ function Signup() {
 
     function handleSubmit(event) {
         event.preventDefault()
-        loginSubmit(formData)
+        loginSubmit(JSON.stringify(formData))
         setErrors(Validation(formData))
     }
 
@@ -35,14 +35,15 @@ function Signup() {
         })
     }
 
-    const url = "http://localhost:3001/signup"
+    const url = "http://localhost:3002/signup"
     const loginSubmit = async(values)=>{
+      console.log(values)
         const options = {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(values)
+            body: values
           }
       
           fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
@@ -65,6 +66,7 @@ function Signup() {
                         type="text"
                         placeholder="Email"
                         onChange={handleInputChange} 
+                        value={formData.email}
                     />
                      {errors.email && <p className="errors-text">{errors.email}</p>}
                 </div>
