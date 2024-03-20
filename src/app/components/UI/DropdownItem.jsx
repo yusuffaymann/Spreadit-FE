@@ -3,16 +3,10 @@ import "./dropdown.css";
 import Dropdownmenu from "./dropdownmenu";
 import dropdownOptions from "./dropdownOptions";
 
-function DropdownItem({ toggleMenu ,pId = -1}) {
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-
-  const toggleMenuVisibility = () => {
-    console.log('clicked');
-    setIsMenuVisible(!isMenuVisible);
-  };
+function DropdownItem({ toggleMenu ,pId = -1, selectedId = 0}) {
   
   const parentObject = dropdownOptions.find(option => option.parentId === pId);
-  const childObject = parentObject && parentObject.choices && parentObject.choices.length > 0 ? parentObject.choices[0] : null;
+  const childObject = parentObject && parentObject.choices && parentObject.choices.length > 0 ? parentObject.choices[selectedId - 1] : null;
   return (
       <div className="_2gyG4Nl0mMXg9j65G_cVwp" onClick={toggleMenu}>
   <div className="_2OI2GNt8U_hqISJzbsrb0Y" data-testid="subreddit-sort-setting-listing">

@@ -1,8 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import "./dropdown.css";
 import dropdownOptions from "./dropdownOptions"; // Ensure this import matches the export
 
-function Dropdownmenu({ closeMenu, pId, selectedId = 2 }) {
+function Dropdownmenu({ closeMenu, pId, onSelect, selectedId : initialSelectedId}) {
+  
+  const [selectedId, setSelectedId] = useState(initialSelectedId); // State to track the selected ID
+
+  const handleItemClick = (selectedItemId) => {
+    console.log("Item clicked:", selectedItemId); // Debugging
+    setSelectedId(selectedItemId);
+    onSelect(selectedItemId);
+  };
+  
   const renderDropdownItems = () => {
     // Find the object with the matching parentId
     const parentObject = dropdownOptions.find(option => option.parentId === pId);
@@ -14,19 +23,19 @@ function Dropdownmenu({ closeMenu, pId, selectedId = 2 }) {
       <button
         key={option.dropId}
         role="menuitem"
-        classNameName="_10K5i7NW6qcm-UoCtpB3aK _3LwUIE7yX7CZQKmD2L87vf _1oYEKCssGFjqxQ9jJMNj5G"
-        onClick={closeMenu}
+        className="_10K5i7NW6qcm-UoCtpB3aK _3LwUIE7yX7CZQKmD2L87vf _1oYEKCssGFjqxQ9jJMNj5G"
+        onClick={() => handleItemClick(option.dropId)}
       >
         
-        <span classNameName="pthKOcceozMuXLYrLlbL1">{option.icon}</span>
-        <span classNameName={`${option.dropId === selectedId ? "blue" : "_2-cXnP74241WI7fpcpfPmg"}`}>{option.desc}</span>
+        <span className="pthKOcceozMuXLYrLlbL1">{option.icon}</span>
+        <span className={`${option.dropId === selectedId ? "blue" : "_2-cXnP74241WI7fpcpfPmg"}`}>{option.desc}</span>
       </button>
     ));
   };
 
   return (
-    <div classNameName="_1VhYfuKTAdUU_3j4cMjkr5" onClick={closeMenu}>
-      <div classNameName="menuFormat">
+    <div className="_1VhYfuKTAdUU_3j4cMjkr5">
+      <div className="menuFormat">
         {renderDropdownItems()}
       </div>
     </div>
