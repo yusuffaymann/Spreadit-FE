@@ -1,4 +1,7 @@
 import React from "react";
+import Image from "next/image";
+import pathPP1 from "../../assets/PP1.png"
+import pathPP2 from "../../assets/PP2.png" 
 import styles from "./Blockedmuted.module.css"
 const Blockedmuted=(props)=>{
     const removeProfile = () => {
@@ -8,7 +11,7 @@ const Blockedmuted=(props)=>{
         <div className={styles.smallcontainer}>
             <div className={styles.removecontainer}>
                 <div className={styles.smallprofile} onClick={() => alert("redirect me to this profile")}>
-                    <img className={styles.smallprofilepicture} src={props.link} alt=""></img>
+                    <Image className={styles.smallprofilepicture} src={props.path==1? pathPP1 : pathPP2} alt="" />
                     <p className={styles.profilename}>{props.profilename}</p>
                 </div>
                 <button className={styles.removebutton} onClick={removeProfile}>REMOVE</button>
