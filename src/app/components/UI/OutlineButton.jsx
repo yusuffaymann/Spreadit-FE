@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./OutlineButton.module.css";
 
-function OutlineButton({ children }) {
+function OutlineButton(props) {
   const handleClick = () => {
-    console.log(children , "clicked!");
+    console.log(props.children , "clicked!");
   };
 
   return (
@@ -12,9 +12,9 @@ function OutlineButton({ children }) {
         role="button"
         tabIndex="0"
         className={`${styles. buttonBorder} ${styles.buttonText} ${styles.buttonColor}`}
-        onClick={handleClick}
+        onClick={props.btnClick}
       >
-        {children}
+        {props.children}
       </button>
     </div>
   );
