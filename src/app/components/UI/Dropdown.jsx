@@ -3,7 +3,7 @@ import "./dropdown.css";
 import Dropdownmenu from "./dropdownmenu";
 import DropdownItem from "./DropdownItem";
 
-function Dropdown() {
+function Dropdown({pId}) {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const dropdownRef = useRef(null); // Ref for the dropdown container
 
@@ -28,8 +28,8 @@ function Dropdown() {
 
   return (
     <div ref={dropdownRef} style={{ position: 'relative' }}>
-      <DropdownItem toggleMenu={toggleMenuVisibility} />
-      {isMenuVisible && <Dropdownmenu />}
+      <DropdownItem toggleMenu={toggleMenuVisibility} pId = {pId}/>
+      {isMenuVisible && <Dropdownmenu pId = {pId} selectedId = {2}/>}
     </div>
   );
 }
