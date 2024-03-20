@@ -20,7 +20,7 @@ export default function SettingItem({ option })
             <div className={styles.settingOptionRightButtonFloat}>
 
             {option.type === 'switch' && <Switch />}
-            {option.type === 'dropdown' && <Dropdown />}
+            {option.type === 'dropdown' && <Dropdown pId = {option.id} />}
             {option.type === 'button' && <OutlineButton> {option.buttontext} </OutlineButton>}
 
 
