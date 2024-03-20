@@ -1,16 +1,17 @@
 import React, {useState} from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
-import {auth,provider} from "../config";
-import {signInWithPopup} from "firebase/auth";
+import Script from 'next/script';
 import Home from "../home/Home";
 import Validation from "../Validation"
+import ContinueWith from "../ContinueWith";
 import "./Signup.css";
 
 
 function Signup() {
     const [formData, setFormData] = useState({username:"", password:"", email:""})
     const [errors, setErrors] = useState({username:"", password:"", email:""})
+    const [ googleToken, setGoogleToken]= useState("")
 
     function handleInputChange(event) {
         const {name, value} = event.target;
@@ -28,14 +29,6 @@ function Signup() {
         console.log("data submitted")
     }
 
-    const [value,setValue]= useState('')
-    function handleContinueWith(){
-        signInWithPopup(auth, provider).then((data)=>{
-           setValue(data.user.email)
-           localStorage.setItem("email", data.user.email)
-        })
-    }
-
     const url = "http://localhost:3001/signup"
     const loginSubmit = async(values)=>{
       console.log(values)
@@ -51,13 +44,19 @@ function Signup() {
 
 
     return (
+      <>
+      <Script
+         src="https://accounts.google.com/gsi/client"
+         strategy="beforeInteractive"
+         async
+      />
       <div className="pageColumn__right">
         <div className="userFormContainer"> 
             <FormInfo 
             title="Sign up" 
             description="By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy."
             />
-          {value? <Home/> : <button className="continue_with" onClick= {handleContinueWith}>Continue with Google</button>}
+            <ContinueWith setGoogleToken= {setGoogleToken}/>
             <p className="or_spliter">______________ OR ______________</p>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -98,6 +97,7 @@ function Signup() {
             </div>
         </div>
       </div>
+      </>
     );
   }
 

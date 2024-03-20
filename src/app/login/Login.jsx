@@ -3,16 +3,14 @@ import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import Validation from "../Validation";
 import ContinueWith from "../ContinueWith";
-import {auth,provider} from "../config";
-import {signInWithPopup} from "firebase/auth";
-import Home from "../home/Home";
-import "./Login.css";
 import Script from 'next/script';
+import "./Login.css";
 
 function Login() {
-    const [formData, setFormData] = useState({username: "", password: "",usernameExists: false, incorrectPassword: false})
+    const [formData, setFormData] = useState({username: "", password: "", rememberme: false ,usernameExists: false, incorrectPassword: false})
     const [errors, setErrors] = useState({username: "", password: ""})
     const [ googleToken, setGoogleToken]= useState("")
+    const [rememberMe, setRememberMe] = useState(false)
     
 
     function handleInputChange(event) {
@@ -30,24 +28,8 @@ function Login() {
     function submitToAPI(formData) {
         console.log("data submitted")
     }
-
-    const [value,setValue]= useState('')
-    function handleContinueWith(){
-        signInWithPopup(auth, provider).then((data)=>{
-           setValue(data.user.email)
-           localStorage.setItem("email", data.user.email)
-        })
-    }
-
-    function setCookie(){
-        let username = document.getElementById('username').value;
-        let password = document.getElementById('password').value;
-        document.cookie="myusrname="+username+";path=http://localhost:3000/";
-        document.cookie="mypswd="+password+";path=http://localhost:3000/";
-
-    }
-
-    //const url = "http://localhost:3001/login"
+    
+    const url = "http://localhost:3001/login"
     const loginSubmit = async(values)=>{
       console.log(values)
         const options = {
@@ -57,16 +39,21 @@ function Login() {
             },
             body: values
           }
-           fetch("http://localhost:3001/login", options).then(response => response.json()).then(data => console.log(data));
+           fetch(url, options).then(response => response.json()).then(data => console.log(data));
         }
+
+     function HandleRememberMe (){
+          setRememberMe(!rememberMe);
+         }
+
 
     return (
         <>
           <Script
-      src="https://accounts.google.com/gsi/client"
-      strategy="beforeInteractive"
-      async
-    />
+             src="https://accounts.google.com/gsi/client"
+             strategy="beforeInteractive"
+             async
+          />
        
       <div className="pageColumn__right">
         <div className="userFormContainer"> 
@@ -75,7 +62,6 @@ function Login() {
             description="Tell us the username and email address. By continuing, you agree to our User Agreement and Privacy Policy."
             />
             <ContinueWith setGoogleToken= {setGoogleToken}/>
-            {value? <Home/> : <button className="continue_with" onClick= {handleContinueWith}>Continue with Google</button>}
             <p className="or_spliter">______________ OR ______________</p>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -97,7 +83,7 @@ function Login() {
                     />
                     {errors.password && <p className="errors-text">{errors.password}</p>}
                 </div>
-                <input type="checkbox" className="remember_me" onChange={setCookie}/>
+                <input type="checkbox" className="remember_me" onChange={HandleRememberMe}/>
                 <label className="remember_me_label">Remember me</label>
                 <BlueButton>Log in</BlueButton>
                 <div className="bottom-text">

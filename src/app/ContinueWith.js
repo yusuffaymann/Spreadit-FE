@@ -14,7 +14,8 @@ export default function ContinueWith(props){
             });
             google.accounts.id.renderButton(
                 document.getElementById("continuewith"),
-                {theme:"outline", size:"large"}
+                {theme:"outline", size:"large",
+               }
             )
     },[])
 
