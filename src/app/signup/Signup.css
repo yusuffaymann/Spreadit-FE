@@ -3,7 +3,7 @@ form{
     margin: 0px;
 }
 .info_holder{
-    margin: 20px 0px;
+    margin: 10px 0px;
     height: 35px;
     width: 250px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -32,7 +32,6 @@ form{
 .continue_with:active {
     background: #b4b2b2;
 }
-
 .or_spliter{
     color: rgb(125, 125, 125);
     margin: 10px 0px;

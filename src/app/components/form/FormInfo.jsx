@@ -7,7 +7,7 @@ function FormInfo({title, description}) {
     return (
       <div> 
         <div className="form_logo">
-            <Image src={logo} height={40}/>
+            <Image src={logo} alt="Spreadit Logo." height={40}/>
         </div>
         <h1 className={styles.title}>{title}</h1>
         <p className={styles.description}>{description}</p>

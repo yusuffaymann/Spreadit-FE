@@ -1,16 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import Validation from "../Validation";
-import axios from "axios";
+import ContinueWith from "../ContinueWith";
 import {auth,provider} from "../config";
 import {signInWithPopup} from "firebase/auth";
 import Home from "../home/Home";
 import "./Login.css";
+import Script from 'next/script';
 
 function Login() {
     const [formData, setFormData] = useState({username: "", password: "",usernameExists: false, incorrectPassword: false})
     const [errors, setErrors] = useState({username: "", password: ""})
+    const [ googleToken, setGoogleToken]= useState("")
     
 
     function handleInputChange(event) {
@@ -37,10 +39,6 @@ function Login() {
         })
     }
 
-    useEffect(()=>{
-         setValue(localStorage.getItem('email'))
-    })
-
     function setCookie(){
         let username = document.getElementById('username').value;
         let password = document.getElementById('password').value;
@@ -49,27 +47,34 @@ function Login() {
 
     }
 
-    const url = "http://localhost:3001/login"
+    //const url = "http://localhost:3001/login"
     const loginSubmit = async(values)=>{
+      console.log(values)
         const options = {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(values)
+            body: values
           }
-      
-          fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
-        };
-    
+           fetch("http://localhost:3001/login", options).then(response => response.json()).then(data => console.log(data));
+        }
 
     return (
+        <>
+          <Script
+      src="https://accounts.google.com/gsi/client"
+      strategy="beforeInteractive"
+      async
+    />
+       
       <div className="pageColumn__right">
         <div className="userFormContainer"> 
             <FormInfo 
             title="Log in" 
             description="Tell us the username and email address. By continuing, you agree to our User Agreement and Privacy Policy."
             />
+            <ContinueWith setGoogleToken= {setGoogleToken}/>
             {value? <Home/> : <button className="continue_with" onClick= {handleContinueWith}>Continue with Google</button>}
             <p className="or_spliter">______________ OR ______________</p>
             <form onSubmit={handleSubmit}>
@@ -109,6 +114,7 @@ function Login() {
             </div>
         </div>
       </div>
+      </>
     );
  }
 

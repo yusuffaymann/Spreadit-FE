@@ -5,7 +5,7 @@ import sideArt from "../../assets/reddit-side-art.png"
 function SideArt() {
     return (
       <div className="PageColumn__left"> 
-        <Image className="art" src={sideArt} />
+        <Image className="art" alt="Side design image." src={sideArt} />
       </div>
     );
   }

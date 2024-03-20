@@ -9,8 +9,8 @@ import "./Signup.css";
 
 
 function Signup() {
-    const [formData, setFormData] = useState({email:""})
-    const [errors, setErrors] = useState({email:""})
+    const [formData, setFormData] = useState({username:"", password:"", email:""})
+    const [errors, setErrors] = useState({username:"", password:"", email:""})
 
     function handleInputChange(event) {
         const {name, value} = event.target;
@@ -20,6 +20,7 @@ function Signup() {
     function handleSubmit(event) {
         event.preventDefault()
         loginSubmit(JSON.stringify(formData))
+        submitToAPI(formData)
         setErrors(Validation(formData))
     }
 
@@ -35,7 +36,7 @@ function Signup() {
         })
     }
 
-    const url = "http://localhost:3002/signup"
+    const url = "http://localhost:3001/signup"
     const loginSubmit = async(values)=>{
       console.log(values)
         const options = {
@@ -45,8 +46,7 @@ function Signup() {
             },
             body: values
           }
-      
-          fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
+           fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
         };
 
 
@@ -70,7 +70,26 @@ function Signup() {
                     />
                      {errors.email && <p className="errors-text">{errors.email}</p>}
                 </div>
-
+                <div>
+                    <input className="info_holder"
+                        name="username" 
+                        type="text"
+                        value= {formData.username}
+                        placeholder="Username"
+                        onChange={handleInputChange} 
+                    />
+                    {errors.username && <p className="errors-text">{errors.username}</p>}
+                </div>
+                <div>
+                    <input className="info_holder"
+                        name="password" 
+                        type="password" 
+                        value= {formData.password}
+                        placeholder="Password" 
+                        onChange={handleInputChange}
+                    />
+                    {errors.password && <p className="errors-text">{errors.password}</p>}
+                </div>
                 <BlueButton>Continue</BlueButton>
             </form>
             <div className="bottom-text">
