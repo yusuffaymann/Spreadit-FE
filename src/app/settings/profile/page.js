@@ -1,4 +1,5 @@
 'use client'
+import React, {useState} from "react";
 import ProfileName from "./Profile_name.jsx";
 import ProfileAbout from "./Profile_about.jsx";
 import ProfileSocial from "./Profile_social.jsx";
@@ -10,6 +11,33 @@ import SettingsLayout from "../SettingsLayout.jsx"
 import optionData from "../options.js";
 
 function Profile() {
+  
+  // State to track locked components
+  const [lockedComponents, setLockedComponents] = useState({});
+
+  // Callback function to lock/unlock component
+  const handleLockComponent = (id, isLocked) => {
+    // Update locked components state based on ID and lock status
+    setLockedComponents((prevLockedComponents) => ({
+      ...prevLockedComponents,
+      [id]: isLocked,
+    }));
+  };
+
+    const handleItemClick = (id , status) => {
+        console.log(`SettingItem with ID ${id} clicked. ${status}`);
+        if (id === 1 && status === false)
+        {
+            handleLockComponent(2 , true)
+            console.log('locked');
+        }
+        else if (id ===1 && status === true)
+        {
+            handleLockComponent(2 , false)
+            console.log('unlocked');
+        }
+      };
+  
   return (
     <>
     <SettingsLayout/>
@@ -24,11 +52,11 @@ function Profile() {
         <ProfileImages />
         <h3 className="uppercase-h3-description">Profile Category</h3>
         {optionData.map(option => (
-                    option.id === 13 && <SettingItem key={option.id} option={option} />
+                    option.id === 13 && <SettingItem key={option.id} option={option}  onItemClick={handleItemClick} />
                 ))}
         <h3 className="uppercase-h3-description">Advanced</h3>
 
-        <ProfileAdvanced />
+        <ProfileAdvanced  clickEvent={handleItemClick} lockedList = {lockedComponents}/>
         <h3 className="uppercase-h3-description">Profile Moderation</h3>
         <div />
         <div>
