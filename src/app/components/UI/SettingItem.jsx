@@ -1,23 +1,56 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./SettingItem.module.css";
-import Switch from "./Switch"
-import Dropdown from "./Dropdown"
-import OutlineButton from "./OutlineButton"
+import Switch from "./Switch";
+import Dropdown from "./Dropdown";
+import OutlineButton from "./OutlineButton";
 
-export default function SettingItem({ option })
-{
-  console.log(option.subOptions)
+export default function SettingItem(props) {
+  const [isSwitchToggled, setIsSwitchToggled] = useState(false);
+  const [previousSwitchState, setPreviousSwitchState] = useState(false);
 
-    return (
-<div>
-      <div className={styles.settingOption} >
+  const handleClick = () => {
+    // Call the callback function provided by the parent
+    if (props.onItemClick) {
+      props.onItemClick(props.option.id);
+    }
+  };
+
+  const handleSwitchToggle = () => {
+    setIsSwitchToggled((prevState) => !prevState);
+    console.log(`Switch toggled. New state: ${!isSwitchToggled}`);
+    props.onItemClick(props.option.id, !isSwitchToggled);
+  };
+
+  useEffect(() => {
+    if (props.isLocked) {
+      // If the component is being locked, store the current state of the switch toggle
+      setPreviousSwitchState(isSwitchToggled);
+      setIsSwitchToggled(false); // Set the switch toggle off when component is locked
+    } else if (!props.isLocked && previousSwitchState !== undefined) {
+      // If the component is being unlocked and there's a previous state recorded,
+      // restore the switch toggle to its previous state
+      setIsSwitchToggled(previousSwitchState);
+    }
+  }, [props.isLocked]); // Trigger effect when props.isLocked changes
+
+  return (
+    <div>
+      <div className={styles.settingOption}>
         <div className={styles.settingOptionLeft}>
-          <h3 className="settings--h3">{option.title}</h3>
-          <p className="settings--p">{option.description}</p>
+          <h3 className="settings--h3">{props.option.title}</h3>
+          <p className="settings--p">{props.option.description}</p>
         </div>
-          <div className={styles.settingOptionRight}>
-            <div className={styles.settingOptionRightButtonFloat}>
+        <div className={styles.settingOptionRight}>
+          <div className={styles.settingOptionRightButtonFloat}>
+            {props.option.type === "switch" && (
+              <Switch
+                isToggled={isSwitchToggled}
+                onToggle={handleSwitchToggle}
+                disabled={props.isLocked}
+              />
+            )}
+            {props.option.type === "dropdown" && (
 
             {option.type === 'switch' && <Switch />}
             {option.type === 'dropdown' && <Dropdown pId = {option.id} />}
@@ -26,16 +59,23 @@ export default function SettingItem({ option })
 
 
             </div>
+            )}
+            {props.option.type === "button" && (
+              <OutlineButton btnClick={handleClick}>
+                {" "}
+                {props.option.buttontext}{" "}
+              </OutlineButton>
+            )}
           </div>
-        
+        </div>
       </div>
-      {option.subOptions &&
-        option.subOptions.map((subOption) => (
+      
+      {props.option.subOptions &&
+        props.option.subOptions.map((subOption) => (
           <div className={styles.settingSuboption}>
-          <SettingItem key={subOption.id} option={subOption} />
+            <SettingItem key={subOption.id} option={subOption} onItemClick={props.onItemClick}/>
           </div>
         ))}
     </div>
- 
-    )
+  );
 }
