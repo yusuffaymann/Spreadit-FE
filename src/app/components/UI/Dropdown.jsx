@@ -34,21 +34,31 @@ function Dropdown(props) {
   };
 
   return (
-    <div ref={dropdownRef} style={{ position: "relative" }}>
-      <DropdownItem
-        toggleMenu={toggleMenuVisibility}
-        pId={props.pId}
-        selectedId={selectedId}
-        onSelect={handleSelectedIdChange}
-      />
-      {isMenuVisible && (
-        <Dropdownmenu
+    <>
+      <div style={{ position: "relative", display: "inline-block" }}>
+        <DropdownItem
+          toggleMenu={toggleMenuVisibility}
           pId={props.pId}
           selectedId={selectedId}
           onSelect={handleSelectedIdChange}
         />
-      )}
-    </div>
+        <div
+          ref={dropdownRef}
+          style={{
+            position: "absolute",
+            top: "100%",
+            right: "80px", // Align the menu to the right
+            display: isMenuVisible ? "block" : "none",
+          }}
+        >
+          <Dropdownmenu
+            pId={props.pId}
+            selectedId={selectedId}
+            onSelect={handleSelectedIdChange}
+          />
+        </div>
+      </div>
+    </>
   );
 }
 
