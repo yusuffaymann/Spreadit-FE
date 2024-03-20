@@ -30,7 +30,7 @@ export default function BannerArea() {
           style={bannerStyle}
         >
           {bannerImage ? null : (
-            <>
+            <div className="profile--banner-shiftdown">
               <PlusIcon />
               <div className="profile--images-text">
                 <span>
@@ -38,7 +38,7 @@ export default function BannerArea() {
                   <span className="profile--images-textbold">Banner</span> Image
                 </span>
               </div>
-            </>
+            </div>
           )}
         </div>
         <input
