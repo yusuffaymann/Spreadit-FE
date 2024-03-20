@@ -42,10 +42,7 @@ margin-left: 16px;
   padding: 4px;
 }
 
-._3LwUIE7yX7CZQKmD2L87vf._1IKtbRloF_LV1hPqMzP3MC {
-  color: #0079D3;
-  fill: #0079D3;
-}
+
 
 ._3LwUIE7yX7CZQKmD2L87vf {
   font-size: 14px;
@@ -76,6 +73,13 @@ button {
   color: inherit;
   cursor: pointer;
   padding: initial;
+}
+
+._3LwUIE7yX7CZQKmD2L87vf._1oYEKCssGFjqxQ9jJMNj5G:active, ._3LwUIE7yX7CZQKmD2L87vf._1oYEKCssGFjqxQ9jJMNj5G:focus, ._3LwUIE7yX7CZQKmD2L87vf._1oYEKCssGFjqxQ9jJMNj5G:hover {
+  color: #1c1c1c;
+  fill: #1c1c1c;
+  background-color: #e9f5fd;
+  outline: none;
 }
 
 .pthKOcceozMuXLYrLlbL1 {
@@ -147,4 +151,9 @@ svg:not(:root) {
   flex-direction: row;
   text-align: left;
   width: 100%;
+}
+
+.blue {
+  color: #0079D3;
+  fill: #0079D3;
 }
