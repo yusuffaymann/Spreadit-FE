@@ -1,32 +1,36 @@
-import React from "react";
-import styles from "./GrayButton.module.css";
+import React, { useState } from "react";
+import styles from "./GrayOutMenu.module.css";
 
 function GrayOutMenu({ children }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleClick = () => {
-    console.log(children , "clicked!");
+    setIsOpen(!isOpen); // Toggle the isOpen state
   };
 
   return (
-    <div className={`${styles.grayOut} ${styles.menuPosition}`}>
-        <div aria-modal="true" className={styles.menuBox} role="dialog" tabindex="-1">
+    <div>
+      <button onClick={handleClick}>Open Menu</button>
+      {isOpen && (
+        <div className={`${styles.grayOut} ${styles.menuPosition}`}>
+          <div aria-modal="true" className={styles.menuBox} role="dialog" tabIndex="-1">
             <section className={styles.sectionSize}>
-                <header className = {styles.menuHeader}>
-                    <div className = {styles.flexHeader}>
-                        <div className = {styles.textHeader}>
-                            Add Social Link
-                        </div>
-                        <div class="_2ghjBMFIsORwdO3oh2Kq6g" style="flex-basis: 16px;">
-                            <button>
-                                <i class="_1Ars0sGomEhw60_u0ZTnDn icon icon-close">
-                                    </i>
-                                    </button>
-                                    </div>
-                    </div>
-                </header>
+              <header className={styles.menuHeader}>
+                <div className={styles.flexHeader}>
+                  <div className={styles.textHeader}>Add Social Link</div>
+                  <div className={styles.flexX} style={{ flexBasis: "16px" }}>
+                    <button onClick={handleClick}>
+                      <i className="color-X icon icon-close"></i>
+                    </button>
+                  </div>
+                </div>
+              </header>
             </section>
+          </div>
         </div>
+      )}
     </div>
   );
 }
 
-export default GrayButton;
+export default GrayOutMenu;

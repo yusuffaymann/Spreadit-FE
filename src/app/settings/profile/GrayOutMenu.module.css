@@ -56,3 +56,35 @@
     color: #1a1a1b;
     text-align: center;
 }
+
+.flex-X {
+    -ms-flex: 0 0;
+    flex: 0 0;
+}
+
+.color-X {
+    color: #878a8c;
+    height: 16px;
+    width: 16px;
+}
+
+.menuBox > button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: initial;
+}
+
+.icon {
+    font-size: 20px;
+    font-weight: 400;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    width: 20px;
+}
+
+.icon-close:before {
+    content: "\f156";
+}
