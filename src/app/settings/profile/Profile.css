@@ -134,7 +134,10 @@ input, textarea::placeholder {
   border-radius: 10px;
 }
 
-
+.profile--banner-shiftdown
+{
+  margin-top: 30px;
+}
 
 /*SOCIAL*/
 
