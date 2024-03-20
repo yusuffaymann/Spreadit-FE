@@ -2,19 +2,34 @@ import React from "react";
 import Image from "next/image";
 import mailp from "../../assets/mailimage.png"
 import { useState,useEffect } from 'react';
+import SideArt from "./SideArt";
+import FormInfo from "../form/FormInfo";
 import  Styles from "./Changebutton.module.css";
 
 const Changeemailpassword= (props)=>{
     const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setnewPassword] = useState('');
+    const [newPassword2, setnewPassword2] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [isNewPasswordValid, setIsNewPasswordValid] = useState(true);
+    const [isNewPassword2Valid, setIsNewPassword2Valid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+    const [currentPasswordErrorMessage, setCurrentPasswordErrorMessage] = useState('');
+    const [newPasswordErrorMessage, setNewPasswordErrorMessage] = useState('');
+    const [newPassword2ErrorMessage, setNewPassword2ErrorMessage] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
     
     const handleCurrentPasswordChange = (event) => {
       setCurrentPassword(event.target.value);
+    };
+
+    const handlenewPasswordChange = (event) => {
+      setnewPassword(event.target.value);
+    };
+    const handlenewPassword2Change = (event) => {
+      setnewPassword2(event.target.value);
     };
   
     const handleNewEmailChange = (event) => {
@@ -26,10 +41,28 @@ const Changeemailpassword= (props)=>{
       // Validate password
       if (currentPassword.trim().length < 8) {
         setIsPasswordValid(false);
-        setPasswordErrorMessage('Password must be at least 8 characters long.');
+        setCurrentPasswordErrorMessage('Password must be at least 8 characters long.');
       }else{
         setIsPasswordValid(true);
-        setPasswordErrorMessage('');
+        setCurrentPasswordErrorMessage('');
+      }
+      if (newPassword.trim().length < 8) {
+        setIsNewPasswordValid(false);
+        setNewPasswordErrorMessage('Password must be at least 8 characters long.');
+      }else{
+        setIsNewPasswordValid(true);
+        setNewPasswordErrorMessage('');
+      }
+      if (newPassword2.trim().length < 8) {
+        setIsNewPassword2Valid(false);
+        setNewPassword2ErrorMessage('Password must be at least 8 characters long.');
+      }else if(newPassword2!=newPassword){
+        setIsNewPassword2Valid(false);
+        setNewPassword2ErrorMessage("Passwords doesnt match");  
+      }
+      else{
+        setIsNewPassword2Valid(true);
+        setNewPassword2ErrorMessage('');
       }
 
       // Validate email
@@ -39,10 +72,12 @@ const Changeemailpassword= (props)=>{
       } else {
         setIsEmailValid(true);
       }
-      if(isEmailValid&&isPasswordValid){
+      if(isEmailValid&&isPasswordValid&&props.type==="Email address"){
+        setIsNewPasswordValid(true);
+        setIsNewPassword2Valid(true);
         setIsFormValid(true);
       }
-      if(isPasswordValid&&props.type==="Password"){
+      if(isPasswordValid&&isNewPasswordValid&&isNewPassword2Valid&&props.type==="Password"){
         setIsEmailValid(true);
         setIsFormValid(true);
       }
@@ -106,7 +141,7 @@ const Changeemailpassword= (props)=>{
     }       
     useEffect(() => {
       // Submit form 
-      if (isFormValid&&isEmailValid&&isPasswordValid) {
+      if (isFormValid&&isEmailValid&&isPasswordValid&&isNewPasswordValid&&isNewPassword2Valid) {
         checkpassword(); 
       }
     }, [isFormValid, isPasswordValid, isEmailValid]);
@@ -160,9 +195,41 @@ const Changeemailpassword= (props)=>{
         )}
         {props.type==="Password" &&showModal && (
           <div className={Styles.modaloverlay}>
-            <div className={Styles.modal}>
+            <div className={Styles.passwordmodal}>
+              <div className={Styles.rowflex}>
+                <SideArt />
+                <div className={Styles.formcontainer}>
+                  <FormInfo title="Update your password" description=""/>
+                  <div className={Styles.inputwrap}>
+                    <input className={isPasswordValid ? Styles.inputs : Styles.invalidInput} type="password" required placeholder=" " onChange={handleCurrentPasswordChange}></input>
+                    <label for="">OLD PASSWORD</label>
+                    {!isPasswordValid && <p className={Styles.errorMessage}>{currentPasswordErrorMessage}</p>}
+                  </div>
+                  <div className={Styles.inputwrap}>
+                    <input className={isPasswordValid ? Styles.inputs : Styles.invalidInput} type="password" required placeholder=" " onChange={handlenewPasswordChange}></input>
+                    <label for="">NEW PASSWORD</label>
+                    {!isPasswordValid && <p className={Styles.errorMessage}>{newPasswordErrorMessage}</p>}
+                  </div>
+                  <div className={Styles.inputwrap}>
+                    <input className={isPasswordValid ? Styles.inputs : Styles.invalidInput} type="password" required placeholder=" " onChange={handlenewPassword2Change}></input>
+                    <label for="">CONFIRM NEW PASSWORD</label>
+                    {!isPasswordValid && <p className={Styles.errorMessage}>{newPassword2ErrorMessage}</p>}
+                  </div>
+                  <button className={Styles.savebutton} disabled={false} onClick={handleSubmit} >Save</button>
+                </div>
+                
+              </div>
               <button className={Styles.Xbutton} onClick={closeModal}>X</button>
-              <Image className={Styles.mailimage} src={mailp} alt=""/>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  export default Changeemailpassword;
+
+ /*  <Image className={Styles.mailimage} src={mailp} alt=""/>
               <h2 className={Styles.changeformlabel}>Change the password</h2>
               <p>Enter the old password</p>
               <form>
@@ -173,12 +240,4 @@ const Changeemailpassword= (props)=>{
                     <button className={Styles.darkbutton} disabled={isButtonDisabled2} onClick={handleSubmit}>Reset password</button>
                   </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  export default Changeemailpassword;
+              </form> */
