@@ -30,10 +30,8 @@ const Deleteaccount=(props)=>{
       if (currentPassword.trim().length < 8) {
         setIsPasswordValid(false);
         setPasswordErrorMessage('Password must be at least 8 characters long.');
-      } else if(currentPassword!=props.password) {
-        setIsPasswordValid(false);
-        setPasswordErrorMessage('Incorrect password.');
-      }else{
+      } 
+      else{
         setIsPasswordValid(true);
         setPasswordErrorMessage('');
       }
@@ -48,11 +46,57 @@ const Deleteaccount=(props)=>{
         setIsFormValid(true);
       }
     }
+    async function post(url, data) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        return response;
+      } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Failed to make POST request');
+      }
+    }
+    async function checkpassword() {
+      try {
+        const response = await post('http://localhost:3001/settings/layout/check-password',{currentPassword});
+        if (!response.ok) {
+          setIsPasswordValid(false);
+          setPasswordErrorMessage('Incorrect password.');
+        }else{
+          deleteaccount();
+          closeModal();  
+        }
+      } catch (error) {
+        console.error('Error ', error.message);
+      }
+    }
+    async function deleteaccount() {
+      try {
+          const response = await fetch('http://localhost:3001/settings/account', {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+          });
+          if (!response.ok) {
+              throw new Error('Failed to alter connection');
+          }
+    
+          //const data = await response.json();
+          console.log("Accountdeleted");
+      } catch (error) {
+          console.error('Error deleting:', error.message);
+      }
+    }
     useEffect(() => {
       // Submit form 
       if (isFormValid&&isUserNameValid&&isPasswordValid) {
-        console.log("deleted");  
-        closeModal();
+        checkpassword();  
       }
     }, [isFormValid, isPasswordValid, isUserNameValid]);
     // Disable the button if either input is empty
