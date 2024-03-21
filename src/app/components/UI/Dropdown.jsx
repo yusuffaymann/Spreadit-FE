@@ -48,7 +48,8 @@ function Dropdown(props) {
           style={{
             position: "absolute",
             top: "100%",
-            right: "80px", // Align the menu to the right
+            marginLeft: "20px",
+            //right: "80px", // Align the menu to the right
             display: isMenuVisible ? "block" : "none",
           }}
         >
