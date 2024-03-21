@@ -1,11 +1,22 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SettingItem from "../../components/UI/SettingItem.jsx";
 import optionData from "../options.js";
 import SettingsLayout from "../SettingsLayout"
 
 
 function Feed() {
+
+    const [option1Toggled, setOption1Toggled] = useState(false); // Placeholder value for option 1 toggle state
+    useEffect(() => {
+      // Placeholder value for option 1 toggle state (always false for now)
+      setOption1Toggled(false);
+  
+      // Lock option 2 if option 1 is toggled off
+      if (!option1Toggled) {
+        handleLockComponent(2, true);
+      }
+    }, []);
 
     // State to track locked components
   const [lockedComponents, setLockedComponents] = useState({});
@@ -32,7 +43,10 @@ function Feed() {
             console.log('unlocked');
         }
       };
-      
+
+
+
+
     return (
         <>
         <SettingsLayout />
@@ -42,7 +56,7 @@ function Feed() {
           <h3 className="uppercase-h3-description">Content Preferences</h3>
 
           {optionData.map(option => (
-                    option.id < 12 && <SettingItem key={option.id} option={option} onItemClick={handleItemClick} 
+                    option.id < 12 && <SettingItem key={option.id} option={option} onItemClick={handleItemClick} isToggled={false}
                     isLocked={lockedComponents[option.id]}/>
                 ))}
         <h3 className="uppercase-h3-description">Post Preferences</h3>
