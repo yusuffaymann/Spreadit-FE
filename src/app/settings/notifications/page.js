@@ -1,8 +1,9 @@
 'use client'
-import Layout from "../components/SettingsLayout";
-import Toogle from "../components/Switch";
+import Layout from "../SettingsLayout"
+import Toogle from "../../components/UI/Switch"
 import { useEffect, useState } from "react";
-import handler from "../apiHandler";
+import handler from "../../utils/apiHandler";
+import styles from "../emails_messages_notifications.module.css"
 
 
 
@@ -24,11 +25,11 @@ export default function Notification () {
             setLoading(true);
           try {
             // Fetch user preferences
-            const prefsData = await handler("/api/v1/me/prefs", "GET")
+            const prefsData = await handler("/settings/notifications", "GET")
             setMentions(prefsData.mentions);
             setComments(prefsData.comments);
-            setUpvotesComments(prefsData.upvotes);
-            setUpvotesPosts(prefsData.upvotes);
+            setUpvotesPosts(prefsData.upvotesPosts);
+            setUpvotesComments(prefsData.upvotesComments);
             setReplies(prefsData.replies);
             setNewFollowers(prefsData.newFollowers);
             setPosts(prefsData.posts);
@@ -58,7 +59,7 @@ export default function Notification () {
         
         try {
           // Fetch user preferences
-          const prefsData = await handler("/api/v1/me/prefs", "PATCH", newPrefsData);
+          const prefsData = await handler("/settings/notifications", "PUT", newPrefsData);
           console.log(prefsData);
     
         } catch (error) {
@@ -75,8 +76,8 @@ export default function Notification () {
 
       if (loading) {
         return (
-          <div className="window">
-            <div className="page">
+          <div className={styles.window}>
+            <div className={styles.page}>
                 <Layout index={4} />
                 <div>Loading...</div>
               </div>
@@ -86,46 +87,46 @@ export default function Notification () {
     
     // Render JSX with fetched data
     return (
-        <div className="window">
-            <div className="page">
-                <Layout index={4} />
-                <div className="body">
-                <div className="header">Notification settings</div>
-                <div className="messages">
-                <h1>MESSAGES</h1>
-                <Toogle optionTitle="Private messages" />
-                <Toogle optionTitle="Chat messages" />
-                <Toogle optionTitle="Chat requests" />
-                </div>
-                <div className="activity">
-                <h1>ACTIVTY</h1>
-                <Toogle optionTitle="Mentions of u/username" isToggled = {mentions} onToggle = {() => setMentions(!mentions)} />
-                <Toogle optionTitle="Comments on your posts" isToggled = {comments} onToggle = {() => setComments(!comments)} />
-                <Toogle optionTitle="Upvotes on your posts" isToggled = {upvotesPosts} onToggle = {() => setUpvotesPosts(!upvotesPosts)} />
-                <Toogle optionTitle="Upvotes on your comments" isToggled = {upvotesComments} onToggle = {() => setUpvotesComments(!upvotesComments)} />
-                <Toogle optionTitle="Replies to your comments" isToggled = {replies} onToggle = {() => setReplies(!replies)} />
-                <Toogle optionTitle="Activity on your comments" />
-                <Toogle optionTitle="Activity on chat posts you're in" />
-                <Toogle optionTitle="New followers" isToggled = {newFollowers} onToggle = {() => setNewFollowers(!newFollowers)} />
-                <Toogle optionTitle="Awards you receive" />
-                <Toogle optionTitle="Posts you follow" isToggled = {posts} onToggle = {() => setPosts(!posts)} />
-                <Toogle optionTitle="Comments you follow" />
-                </div>
-                <div className="recommendations">
-                <h1>RECOMMENDATIONS</h1>
-                <Toogle optionTitle="Trending posts" />
-                <Toogle optionTitle="Community recommendations" />
-                <Toogle optionTitle="ReReddit" />
-                <Toogle optionTitle="Featured content" />
-                </div>
-                <div className="updates">
-                <h1>UPDATES</h1>
-                <Toogle optionTitle="Reddit announcements" />
-                <Toogle optionTitle="Cake day" />
-                </div>
-            </div>
-        </div>
+      <div className={styles.window}>
+          <div className={styles.page}>
+              <Layout index={4} />
+              <div className={styles.body}>
+              <div className={styles.header}>Notification settings</div>
+              <div className={styles.subsection}>
+              <h1>MESSAGES</h1>
+              <Toogle optionTitle="Private messages" />
+              <Toogle optionTitle="Chat messages" />
+              <Toogle optionTitle="Chat requests" />
+              </div>
+              <div className={styles.subsection}>
+              <h1>ACTIVTY</h1>
+              <Toogle optionTitle="Mentions of u/username" isToggled = {mentions} onToggle = {() => setMentions(!mentions)} />
+              <Toogle optionTitle="Comments on your posts" isToggled = {comments} onToggle = {() => setComments(!comments)} />
+              <Toogle optionTitle="Upvotes on your posts" isToggled = {upvotesPosts} onToggle = {() => setUpvotesPosts(!upvotesPosts)} />
+              <Toogle optionTitle="Upvotes on your comments" isToggled = {upvotesComments} onToggle = {() => setUpvotesComments(!upvotesComments)} />
+              <Toogle optionTitle="Replies to your comments" isToggled = {replies} onToggle = {() => setReplies(!replies)} />
+              <Toogle optionTitle="Activity on your comments" />
+              <Toogle optionTitle="Activity on chat posts you're in" />
+              <Toogle optionTitle="New followers" isToggled = {newFollowers} onToggle = {() => setNewFollowers(!newFollowers)} />
+              <Toogle optionTitle="Awards you receive" />
+              <Toogle optionTitle="Posts you follow" isToggled = {posts} onToggle = {() => setPosts(!posts)} />
+              <Toogle optionTitle="Comments you follow" />
+              </div>
+              <div className={styles.subsection}>
+              <h1>RECOMMENDATIONS</h1>
+              <Toogle optionTitle="Trending posts" />
+              <Toogle optionTitle="Community recommendations" />
+              <Toogle optionTitle="ReReddit" />
+              <Toogle optionTitle="Featured content" />
+              </div>
+              <div className={styles.subsection}>
+              <h1>UPDATES</h1>
+              <Toogle optionTitle="Reddit announcements" />
+              <Toogle optionTitle="Cake day" />
+              </div>
+          </div>
       </div>
-    );
+    </div>
+  );
 
 }

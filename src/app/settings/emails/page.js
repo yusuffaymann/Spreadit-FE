@@ -1,9 +1,10 @@
 'use client'
 
-import Layout from "../components/SettingsLayout";
-import Toogle from "../components/Switch";
+import Layout from "../SettingsLayout"
+import Toogle from "../../components/UI/Switch"
 import { useEffect, useState } from "react";
-import handler from "../apiHandler";
+import handler from "../../utils/apiHandler";
+import styles from "../emails_messages_notifications.module.css"
 
 export default function Email() {
 
@@ -19,7 +20,7 @@ export default function Email() {
             setLoading(true);
           try {
             // Fetch user preferences
-            const prefsData = await handler("/api/v1/me/prefs", "GET")
+            const prefsData = await handler("/settings/emails", "GET")
             setNewFollower(prefsData.email_user_new_follower);
             setChatRequests(prefsData.email_chat_request);
             setUnsubscribeFromAllEmails(prefsData.email_unsubscribe_all);
@@ -45,7 +46,7 @@ export default function Email() {
         
         try {
           // Fetch user preferences
-          const prefsData = await handler("/api/v1/me/prefs", "PATCH", newPrefsData);
+          const prefsData = await handler("/settings/emails", "PUT", newPrefsData);
           console.log(prefsData);
     
         } catch (error) {
@@ -62,8 +63,8 @@ export default function Email() {
 
       if (loading) {
         return (
-          <div className="window">
-            <div className="page">
+          <div className={styles.window}>
+            <div className={styles.page}>
                 <Layout index={5} />
                 <div>Loading...</div>
               </div>
@@ -73,17 +74,17 @@ export default function Email() {
     
     // Render JSX with fetched data
     return (
-        <div className="window">
-            <div className="page">
+        <div className={styles.window}>
+            <div className={styles.page}>
                 <Layout index={5} />
-                <div className="body">
-                    <div className="header">Manage Emails</div>
-                    <div className="messages">
+                <div className={styles.body}>
+                    <div className={styles.header}>Manage Emails</div>
+                    <div className={styles.subsection}>
                         <h1>MESSAGES</h1>
                         <Toogle optionTitle="Private messages" disabled={unsubscribeFromAllEmails} />
                         <Toogle optionTitle="Chat requests" isToggled={chatRequests} onToggle={() => {setChatRequests(!chatRequests)}} disabled={unsubscribeFromAllEmails} />
                     </div>
-                    <div className="activity">
+                    <div className={styles.subsection}>
                         <h1>ACTIVTY</h1>
                         <Toogle optionTitle="New user welcome" disabled={unsubscribeFromAllEmails} />
                         <Toogle optionTitle="Comments on your posts" disabled={unsubscribeFromAllEmails} />
@@ -93,11 +94,11 @@ export default function Email() {
                         <Toogle optionTitle="Username mentions" disabled={unsubscribeFromAllEmails} />
                         <Toogle optionTitle="New followers" isToggled = {newFollower} onToggle = {() => setNewFollower(!newFollower)} disabled={unsubscribeFromAllEmails} />
                     </div>
-                    <div className="newsletters">
+                    <div className={styles.subsection}>
                         <h1>NEWSLETTERS</h1>
                         <Toogle optionTitle="Daily Digest" disabled={unsubscribeFromAllEmails} />
                     </div>
-                    <div className="unnsubscribe">
+                    <div className={styles.subsection}>
                         <h1></h1>
                         <Toogle optionTitle="Unsubscribe from all emails " isToggled = {unsubscribeFromAllEmails} onToggle = {() => setUnsubscribeFromAllEmails(!unsubscribeFromAllEmails)} />
                     </div>
