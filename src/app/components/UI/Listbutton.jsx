@@ -4,23 +4,44 @@ import  Styles from "./Listbutton.module.css";
 
 const Changegendercountry= (props)=>{
     const [showList, setShowList] = useState(false);
-    const [Ygender,setYgender]=useState(props.initialv);
+    const [selectedItem, setSelectedItem] = useState(props.initialv);
+
+
+    const ref = useRef(null);
+
+    useEffect(() => {
+      const handleOutSideClick = (event) => {
+        if (!ref.current?.contains(event.target)) {;
+          setShowList(false);
+        }
+      };
+  
+      window.addEventListener("mousedown", handleOutSideClick);
+  
+      return () => {
+        window.removeEventListener("mousedown", handleOutSideClick);
+      };
+    }, [ref]);
   
     const handleItemClick = (item) => {
-      setYgender(item);
+      setSelectedItem(item);
+      props.choose(item);
       setShowList(false);
     };
   
     return(
       <div className={Styles.smallcontainer}>
         <div className={Styles.changecontainer}>
-          <h3 className={Styles.subsectiontitle}>{props.type}</h3>
+          <div className={Styles.text}>
+            <h3 className={Styles.subsectiontitle}>{props.type}</h3>
+            <p className={Styles.description}>{props.description}</p>
+          </div>
           <div className={Styles.list}>
-            <button className={Styles.openlistbutton} onClick={()=> setShowList(!showList)} >{Ygender}</button>
+            <button className={`${Styles.openlistbutton} ${props.displayedColor === "blue" ? Styles.blueButton : Styles.greyButton}`} onClick={()=> setShowList(!showList)} >{selectedItem}</button>
               {showList && (
-            <ul className={Styles.unorderedlist}>
+            <ul className={Styles.unorderedlist} ref = {ref} >
               {props.list.map((item, index) => (
-                <li className={Styles.listitem} key={index} onClick={() => handleItemClick(item)}>
+                <li className={`${Styles.listitem} ${selectedItem === item ? Styles.selected : ""}`} key={index} onClick={() => handleItemClick(item)} >
                   {item}
                 </li>
               ))}
@@ -28,7 +49,6 @@ const Changegendercountry= (props)=>{
           )}
           </div>
         </div>    
-        <p className={Styles.description}>This information may be used to improve your recommendations and ads.</p>
       </div>
       
     );
