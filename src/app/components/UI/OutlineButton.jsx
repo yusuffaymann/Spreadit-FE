@@ -13,6 +13,7 @@ function OutlineButton(props) {
         tabIndex="0"
         className={`${styles. buttonBorder} ${styles.buttonText} ${styles.buttonColor}`}
         onClick={props.btnClick}
+        disabled={props.isDisabled}
       >
         {props.children}
       </button>
