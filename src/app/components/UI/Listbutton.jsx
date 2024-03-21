@@ -24,7 +24,8 @@ const Changegendercountry= (props)=>{
     }, [ref]);
   
     const handleItemClick = (item) => {
-      setSelectedItem(item)
+      setSelectedItem(item);
+      props.choose(item);
       setShowList(false);
     };
   
