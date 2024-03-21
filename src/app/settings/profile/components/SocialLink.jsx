@@ -1,11 +1,23 @@
 import React from "react";
 import styles from "./SocialLink.module.css";
 import { ReactDOM } from "react";
-function SocialLink({ children , wasClicked, svgDisplayed = '&#43;'}) {
+
+
+function SocialLink({logo,name, wasClicked, id, isDeletor})
+
+{const handleClick = (event) => {
+  console.log(id);
+  wasClicked(id);
+};
 
   return (
-    <li class={styles.buttonround} onClick={wasClicked} tabIndex="0" role="button"> 
-    <img src="https://www.redditstatic.com/desktop2x/img/social-links/facebook.png" className={styles.iconMargin} />{children}</li>
+    <>
+     {!isDeletor && (<li className={`${styles.buttonround} ${styles.limargin}`} onClick={handleClick} tabIndex="0" role="button"> 
+    <img src={logo} className={styles.iconMargin} />{name}</li>)}
+
+    {isDeletor && <li className={`${styles.buttonroundd} ${styles.limargin}`} onClick={handleClick} tabIndex="0" role="button"> 
+    <img src={logo} className={styles.iconMargin} />{name}</li>}
+    </>
   );
 }
 
