@@ -1,13 +1,10 @@
 import React from "react";
 import styles from "./GrayButton.module.css";
 
-function GrayButton({ children }) {
-  const handleClick = () => {
-    console.log(children , "clicked!");
-  };
+function GrayButton({ children , wasClicked, svgDisplayed = '&#43;'}) {
 
   return (
-    <li class={styles.buttonround} onClick={handleClick} tabIndex="0" role="button"> 
+    <li class={styles.buttonround} onClick={wasClicked} tabIndex="0" role="button"> 
     <i className="icon">&#43;</i>{children}</li>
   );
 }
