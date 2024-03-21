@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import styles from "./GrayOutMenu.module.css";
-import SocialButton from "./SocialButton";
+import SocialLink from "./SocialLink";
 import OutlineButton from "@/app/components/UI/OutlineButton";
+import social from "../../social";
 
 function GrayOutMenu({ onClose, onSelectGray , addSocial}) {
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -74,14 +75,9 @@ function GrayOutMenu({ onClose, onSelectGray , addSocial}) {
 
   const renderChoices = () => {
     return (
-      <SocialButton
-        choseLink={handleLinkClick}
-        nameOption={"custom"}
-        iconUrl={
-          "https://www.redditstatic.com/desktop2x/img/social-links/custom.png"
-        }
-      />
-    );
+      <>{social.map(optionSocial => (
+        <SocialLink key = {optionSocial.id} id = {optionSocial.id} logo={optionSocial.logo} name={optionSocial.name} wasClicked={handleLinkClick}/> ) )}
+    </>);
   };
 
   return (
