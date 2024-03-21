@@ -34,12 +34,13 @@ export default function SettingItem(props) {
     }
   }, [props.isLocked]); // Trigger effect when props.isLocked changes
 
+
   return (
     <div>
       <div className={styles.settingOption}>
         <div className={styles.settingOptionLeft}>
-          <h3 className="settings--h3">{props.option.title}</h3>
-          <p className="settings--p">{props.option.description}</p>
+          <h3 className={`settings--h3 ${props.isLocked ? styles.grayedOut : ""}`}>{props.option.title}</h3>
+          <p className={`settings--p ${props.isLocked ? styles.grayedOut : ""}`}>{props.option.description}</p>
         </div>
         <div className={styles.settingOptionRight}>
           <div className={styles.settingOptionRightButtonFloat}>
