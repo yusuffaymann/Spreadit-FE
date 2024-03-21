@@ -5,11 +5,12 @@ import SocialLink from "./SocialLink";
 import OutlineButton from "@/app/components/UI/OutlineButton";
 import social from "../../social";
 
-function GrayOutMenu({ onClose, onSelectGray , addSocial}) {
+function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isChoicesOpen, setChoicesOpen] = useState(true);
   const [displayName, setDisplayName] = useState("");
   const [socialUrl, setUrl] = useState("");
+  const [selectedLinkId, setSelectedLinkId] = useState(-1);
 
   function handleDispInputChange(event) {
     const { value } = event.target;
@@ -29,8 +30,10 @@ function GrayOutMenu({ onClose, onSelectGray , addSocial}) {
   };
 
   const handleSave = () => {
-    if (displayName.trim() !== "") { // Check if displayName is not empty
-      addSocial({ displayName }); // Pass an object with displayName to addSocial function
+    if (displayName.trim() !== "") {
+      // Check if displayName is not empty
+      const tempFinder = social.find((finder) => finder.id === selectedLinkId)
+      addSocial(selectedLinkId,displayName, socialUrl, tempFinder.logo); // Pass an object with displayName to addSocial function
       onClose();
     }
   };
@@ -42,17 +45,15 @@ function GrayOutMenu({ onClose, onSelectGray , addSocial}) {
 
   const handleLinkClick = (id) => {
     handleToggleStates();
+    setSelectedLinkId(id);
+    console.log(id);
   };
 
   const renderDialog = () => {
     return (
       <>
-        <SocialButton
-          nameOption={"testst"}
-          iconUrl={
-            "https://www.redditstatic.com/desktop2x/img/social-links/custom.png"
-          }
-        />
+        {social.map(optionSocial => (
+        (optionSocial.id === selectedLinkId) && <SocialLink key = {optionSocial.id} id = {optionSocial.id} logo={optionSocial.logo} name={optionSocial.name} wasClicked={handleLinkClick}/> ) )}
         <div>
           <input
             placeholder="Display text"
@@ -114,7 +115,11 @@ function GrayOutMenu({ onClose, onSelectGray , addSocial}) {
               )}
               {isDialogOpen && (
                 <div className={styles.flexX} style={{ flexBasis: "16px" }}>
-                  <OutlineButton children={'Save'} isDisabled={displayName === '' || socialUrl === ''} btnClick={handleSave}/>
+                  <OutlineButton
+                    children={"Save"}
+                    isDisabled={displayName === "" || socialUrl === ""}
+                    btnClick={handleSave}
+                  />
                 </div>
               )}
             </div>
@@ -145,7 +150,11 @@ function GrayOutMenuWrapper({ isOpen, onClose, onSelectWrapper, addFunc }) {
 
   // Use ReactDOM.createPortal to render the menu outside of its parent components
   return ReactDOM.createPortal(
-    <GrayOutMenu onClose={onClose} onSelectGray={onSelectWrapper} addSocial={addFunc}/>,
+    <GrayOutMenu
+      onClose={onClose}
+      onSelectGray={onSelectWrapper}
+      addSocial={addFunc}
+    />,
     document.body // Render the menu as a direct child of the document body
   );
 }
