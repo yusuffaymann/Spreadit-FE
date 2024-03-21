@@ -8,6 +8,7 @@ const Deleteaccount=(props)=>{
     const [UserName, setUserName] = useState('');
     const [CheckBox,setCheckBox]=useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showModal2, setShowModal2] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [isUserNameValid, setIsUserNameValid] = useState(true);
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
@@ -46,6 +47,18 @@ const Deleteaccount=(props)=>{
         setIsFormValid(true);
       }
     }
+
+    const closeconfirmmodal = (event) => {
+      event.preventDefault();
+      setShowModal2(false);
+    }
+    
+    const handleconfirmSubmit = (event) => {
+      event.preventDefault();
+      deleteaccount();
+    }
+    
+
     async function post(url, data) {
       try {
         const response = await fetch(url, {
@@ -67,9 +80,9 @@ const Deleteaccount=(props)=>{
         if (!response.ok) {
           setIsPasswordValid(false);
           setPasswordErrorMessage('Incorrect password.');
-        }else{
-          deleteaccount();
-          closeModal();  
+        }else{       
+          closeModal();
+          setShowModal2(true);  
         }
       } catch (error) {
         console.error('Error ', error.message);
@@ -155,6 +168,25 @@ const Deleteaccount=(props)=>{
                     </div>
                 </div>
             )}
+            {showModal2&&(
+              <div className={Styles.modaloverlay}>
+                <div className={Styles.modal}>
+                    <button className={Styles.Xbutton} onClick={closeconfirmmodal}>X</button>
+                    <h2 className={Styles.deleteformlabel}>Delete account</h2>
+                    <hr className={Styles.line}></hr>
+                    <p>Be absolutely sure before deleting your account</p>
+                    <p>Deleting your account removes it from Reddit and our administrators won’t be able to bring it back for you.</p>
+                    <div className={Styles.deleteform}>
+                      <div className={Styles.leftflex}>
+                          <button className={Styles.brightbutton} onClick={closeconfirmmodal}>CANCEL</button>
+                          <button className={Styles.smalldarkbutton} disabled={false} onClick={handleconfirmSubmit}>DELETE</button>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            )
+
+            }
         </div>
     );
   }
