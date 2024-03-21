@@ -8,6 +8,7 @@ const Deleteaccount=(props)=>{
     const [UserName, setUserName] = useState('');
     const [CheckBox,setCheckBox]=useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showModal2, setShowModal2] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [isUserNameValid, setIsUserNameValid] = useState(true);
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
@@ -30,10 +31,8 @@ const Deleteaccount=(props)=>{
       if (currentPassword.trim().length < 8) {
         setIsPasswordValid(false);
         setPasswordErrorMessage('Password must be at least 8 characters long.');
-      } else if(currentPassword!=props.password) {
-        setIsPasswordValid(false);
-        setPasswordErrorMessage('Incorrect password.');
-      }else{
+      } 
+      else{
         setIsPasswordValid(true);
         setPasswordErrorMessage('');
       }
@@ -48,11 +47,70 @@ const Deleteaccount=(props)=>{
         setIsFormValid(true);
       }
     }
+
+    const closeconfirmmodal = (event) => {
+      event.preventDefault();
+      setShowModal2(false);
+    }
+    
+    const handleconfirmSubmit = (event) => {
+      event.preventDefault();
+      deleteaccount();
+    }
+    
+
+    async function post(url, data) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        return response;
+      } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Failed to make POST request');
+      }
+    }
+    async function checkpassword() {
+      try {
+        const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
+        if (!response.ok) {
+          setIsPasswordValid(false);
+          setPasswordErrorMessage('Incorrect password.');
+        }else{       
+          closeModal();
+          setShowModal2(true);  
+        }
+      } catch (error) {
+        console.error('Error ', error.message);
+      }
+    }
+    async function deleteaccount() {
+      try {
+          const response = await fetch(`http://localhost:3002/settings/account/${UserName}`, {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+          });
+          if (!response.ok) {
+              throw new Error('Failed to alter connection');
+          }
+    
+          //const data = await response.json();
+          console.log("Accountdeleted");
+          alert("redirect to the home page without an account");
+      } catch (error) {
+          console.error('Error deleting:', error.message);
+      }
+    }
     useEffect(() => {
       // Submit form 
       if (isFormValid&&isUserNameValid&&isPasswordValid) {
-        console.log("deleted");  
-        closeModal();
+        checkpassword();  
       }
     }, [isFormValid, isPasswordValid, isUserNameValid]);
     // Disable the button if either input is empty
@@ -110,6 +168,25 @@ const Deleteaccount=(props)=>{
                     </div>
                 </div>
             )}
+            {showModal2&&(
+              <div className={Styles.modaloverlay}>
+                <div className={Styles.modal}>
+                    <button className={Styles.Xbutton} onClick={closeconfirmmodal}>X</button>
+                    <h2 className={Styles.deleteformlabel}>Delete account</h2>
+                    <hr className={Styles.line}></hr>
+                    <p>Be absolutely sure before deleting your account</p>
+                    <p>Deleting your account removes it from Reddit and our administrators won’t be able to bring it back for you.</p>
+                    <div className={Styles.deleteform}>
+                      <div className={Styles.leftflex}>
+                          <button className={Styles.brightbutton} onClick={closeconfirmmodal}>CANCEL</button>
+                          <button className={Styles.smalldarkbutton} disabled={false} onClick={handleconfirmSubmit}>DELETE</button>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            )
+
+            }
         </div>
     );
   }
