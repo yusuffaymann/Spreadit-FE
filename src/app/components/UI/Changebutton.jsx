@@ -24,7 +24,7 @@ const Changeemailpassword= (props)=>{
       <div className={Styles.smallcontainer}>
         <div className={Styles.changecontainer}>
           <h3 className={Styles.subsectiontitle}>{props.type}</h3>
-          <button className={Styles.brightbutton} onClick={openModal}>{props.display}</button>
+          <button className={Styles.brightbutton} onClick={() => {openModal,props.activate()}}>{props.display}</button>
         </div>
         <p className={Styles.description}>{currentDescription}</p>
         {props.type==="Email address" &&showModal && (<ChangeEmailmodal close={()=>closeModal()} updatetext={(newdescription) => updateupdatedescription(newdescription)} />) }
