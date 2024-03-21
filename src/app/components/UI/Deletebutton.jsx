@@ -63,7 +63,7 @@ const Deleteaccount=(props)=>{
     }
     async function checkpassword() {
       try {
-        const response = await post('http://localhost:3001/settings/layout/check-password',{currentPassword});
+        const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
         if (!response.ok) {
           setIsPasswordValid(false);
           setPasswordErrorMessage('Incorrect password.');
@@ -77,7 +77,7 @@ const Deleteaccount=(props)=>{
     }
     async function deleteaccount() {
       try {
-          const response = await fetch('http://localhost:3001/settings/account', {
+          const response = await fetch(`http://localhost:3002/settings/account/${UserName}`, {
               method: 'DELETE',
               headers: {
                   'Content-Type': 'application/json'
@@ -89,6 +89,7 @@ const Deleteaccount=(props)=>{
     
           //const data = await response.json();
           console.log("Accountdeleted");
+          alert("redirect to the home page without an account");
       } catch (error) {
           console.error('Error deleting:', error.message);
       }

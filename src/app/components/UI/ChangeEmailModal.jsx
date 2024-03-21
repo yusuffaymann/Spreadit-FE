@@ -5,6 +5,7 @@ import { useState,useEffect } from 'react';
 import  Styles from "./ChangeEmailModal.module.css";
 
 const ChangeEmailmodal =(props)=>{
+    
     const [currentPassword, setCurrentPassword] = useState('');
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [currentPasswordErrorMessage, setCurrentPasswordErrorMessage] = useState('');
@@ -52,8 +53,8 @@ const ChangeEmailmodal =(props)=>{
 
       async function updateEmail(newEmail) {
         try {
-            const response = await fetch('http://localhost:3001/settings/account', {
-                method: 'PUT',
+            const response = await fetch('http://localhost:3002/settings/account', {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -67,6 +68,7 @@ const ChangeEmailmodal =(props)=>{
             }
       
             //const data = await response.json();
+            props.updatetext(newEmail);
             console.log("email changed to "+newEmail);
         } catch (error) {
             console.error('Error updating email:', error.message);
@@ -89,7 +91,7 @@ const ChangeEmailmodal =(props)=>{
       }
       async function checkpassword() {
         try {
-          const response = await post('http://localhost:3001/settings/layout/check-password',{currentPassword});
+          const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
           if (!response.ok) {
             setIsPasswordValid(false);
             setCurrentPasswordErrorMessage('Incorrect password.');

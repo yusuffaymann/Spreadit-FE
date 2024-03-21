@@ -6,25 +6,22 @@ import Blockmute from "../../components/UI/Blockmute";
 import Blockedmuted from "../../components/UI/Blockedmuted";
 
 export default function Home() {
-    const [userData, setUserData] = useState(null);
-    
-    
-  const [blockedUsers, setBlockedUsers] = useState([]); 
-  const [mutedCommunities, setMutedCommunities] = useState([]);
+    const [userData, setUserData] = useState(null); 
+    const [blockedUsers, setBlockedUsers] = useState([]); 
+    const [mutedCommunities, setMutedCommunities] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3001/settings/privacy');
+        const response = await fetch('http://localhost:3002/settings/privacy');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
         console.log(data);
         setUserData(data);
-        setBlockedUsers(data.blockedUsers)
-        setMutedCommunities(data.mutedCommunities)
-        /* setYgender(data.gender); */
+        setBlockedUsers(data.blockedUsers);
+        setMutedCommunities(data.mutedCommunities);
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -36,15 +33,78 @@ export default function Home() {
     // Render loading state or return null
     return <div>Loading...</div>;
   }
-  /* const blockedUsers=userData.blockedUsers;
-  const mutedCommunities=userData.mutedCommunities; */
-  const removeProfile = (profilenameToRemove) => {
-    setBlockedUsers(blockedUsers.filter(profile => profile.profilename !== profilenameToRemove));
-  };
 
-  const removeProfile2 = (profilenameToRemove) => {
-    setMutedCommunities(mutedCommunities.filter(profile => profile.profilename !== profilenameToRemove));
+  const updateblocked=(newName)=>{
+    const newBlockedUsers = [...blockedUsers, { profilename: newName }];
+    updatePrivacySettings(newBlockedUsers, mutedCommunities);
+    setBlockedUsers(newBlockedUsers);
+  }
+
+  const updatemuted=(newName)=>{
+    const newMutedCommunities = [...mutedCommunities, { profilename: newName }];
+    updatePrivacySettings(blockedUsers, newMutedCommunities);
+    setMutedCommunities(newMutedCommunities);
+  }
+  
+  const updatePrivacySettings= async (newBlockedUsers, newMutedCommunities)=> {
+    try {
+      const response = await fetch('http://localhost:3002/settings/privacy', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ blockedUsers: newBlockedUsers, mutedCommunities: newMutedCommunities })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update privacy settings');
+      }
+  
+      // Handle success response
+      console.log('Privacy settings updated successfully');
+    } catch (error) {
+      console.error('Error updating privacy settings:', error.message);
+    }
+  }
+
+  const removeProfile = async (profilenameToRemove) => {
+    const newBlockedUsers = blockedUsers.filter(profile => profile.profilename !== profilenameToRemove);
+    updatePrivacySettings(newBlockedUsers, mutedCommunities);
+    setBlockedUsers(newBlockedUsers);
+    /* try {
+      const response = await fetch(`http://localhost:3002/settings/privacy/blockedUsers/${profilenameToRemove}
+      `, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to remove profile');
+      }
+      // Remove the profile from the local state
+      setBlockedUsers(blockedUsers.filter(profile => profile.profilename !== profilenameToRemove));
+    } catch (error) {
+      console.error('Error removing profile:', error.message);
+    } */
   };
+  
+  const removeProfile2 = async (profilenameToRemove) => {
+    /* const newMutedCommunities = mutedCommunities.filter(profile => profile.profilename !== profilenameToRemove);
+    updatePrivacySettings(blockedUsers, newMutedCommunities);
+    setMutedCommunities(newMutedCommunities); */
+    try {
+      const response = await fetch(`http://localhost:3002/settings/privacy/mutedCommunities/${profilenameToRemove}
+      `, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('Failed to remove profile');
+      }
+      // Remove the profile from the local state
+      setMutedCommunities(mutedCommunities.filter(profile => profile.profilename !== profilenameToRemove));
+    } catch (error) {
+      console.error('Error removing profile:', error.message);
+    } 
+  };
+  
   return (
     <div className={styles.App}>
             <div className={styles.bigcontainer}>
@@ -57,13 +117,13 @@ export default function Home() {
                         <h3 className={styles.subheader}>SAFETY</h3>
                         <hr className={styles.line}></hr>
                     </div>
-                    <Blockmute type="People You’ve Blocked" description="Blocked people can’t send you chat requests or private messages." inputmsg="BLOCK NEW USER" />
+                    <Blockmute type="People You’ve Blocked" description="Blocked people can’t send you chat requests or private messages." onAdd={(newName) => updateblocked(newName)} inputmsg="BLOCK NEW USER" />
                     {
                       blockedUsers.map((profile,index)=>(
                         <Blockedmuted key={index} profilename={profile.profilename} path={index%2==0 ? 1 : 2} onRemove={removeProfile}/>
                       ))
                     }
-                    <Blockmute type="Communities You've Muted" description="Posts from muted communities won't show up in your feeds or recommendations." inputmsg="MUTE NEW COMMUNITY"/>
+                    <Blockmute type="Communities You've Muted" description="Posts from muted communities won't show up in your feeds or recommendations." onAdd={(newName) => updatemuted(newName)} inputmsg="MUTE NEW COMMUNITY"/>
                     {
                       mutedCommunities.map((profile,index)=>(
                         <Blockedmuted key={index} profilename={profile.profilename} path={index%2==0 ? 1 : 2} onRemove={removeProfile2} />

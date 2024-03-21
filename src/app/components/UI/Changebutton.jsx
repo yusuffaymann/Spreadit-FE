@@ -6,10 +6,15 @@ import  Styles from "./Changebutton.module.css";
 
 const Changeemailpassword= (props)=>{
     const [showModal,setShowModal]=useState(false);
+    const [currentDescription,setCurrentDescription]=useState(props.description)
 
     const openModal = () => {
       setShowModal(true);
     };
+
+    const updateupdatedescription=(newdescription)=>{
+      setCurrentDescription(newdescription);
+    }
   
     const closeModal = () => {
       setShowModal(false);
@@ -19,10 +24,10 @@ const Changeemailpassword= (props)=>{
       <div className={Styles.smallcontainer}>
         <div className={Styles.changecontainer}>
           <h3 className={Styles.subsectiontitle}>{props.type}</h3>
-          <button className={Styles.brightbutton} onClick={openModal}>change</button>
+          <button className={Styles.brightbutton} onClick={openModal}>{props.display}</button>
         </div>
-        <p className={Styles.description}>{props.description}</p>
-        {props.type==="Email address" &&showModal && (<ChangeEmailmodal close={()=>closeModal()} />) }
+        <p className={Styles.description}>{currentDescription}</p>
+        {props.type==="Email address" &&showModal && (<ChangeEmailmodal close={()=>closeModal()} updatetext={(newdescription) => updateupdatedescription(newdescription)} />) }
         {props.type==="Password" &&showModal && (<ChangePasswordModal close={()=>closeModal()} />)}
       </div>
     );

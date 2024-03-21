@@ -19,7 +19,7 @@ const Home=()=> {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3001/settings/account');
+        const response = await fetch('http://localhost:3002/settings/account');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -42,8 +42,8 @@ const Home=()=> {
   const {username, email, password, gender, country, connected } = userData;
   async function updateGender(newgender) {
     try {
-        const response = await fetch('http://localhost:3001/settings/account', {
-            method: 'PUT',
+        const response = await fetch('http://localhost:3002/settings/account', {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -64,8 +64,8 @@ const Home=()=> {
 }
 async function updateCountry(newcountry) {
   try {
-      const response = await fetch('http://localhost:3001/settings/account', {
-          method: 'PUT',
+      const response = await fetch('http://localhost:3002/settings/account', {
+          method: 'PATCH',
           headers: {
               'Content-Type': 'application/json'
           },
@@ -125,8 +125,8 @@ async function updateCountry(newcountry) {
               <h3 className={Styles.subheader}>ACCOUNT PREFERENCES</h3>
               <hr className={Styles.line}></hr>
             </div>
-            <Changeemailpassword type="Email address" description={email} />
-            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" />
+            <Changeemailpassword type="Email address" description={email} display="Change" />
+            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" display="Change" />
             <Changegendercountry list={genders} initialv={gender} type={"Gender"}   choose={(newgender) => updateGender(newgender)} />
             <Changegendercountry list={countries} initialv={country} type={"Country"} choose={(newcountry) => updateCountry(newcountry)} />
         </div>
