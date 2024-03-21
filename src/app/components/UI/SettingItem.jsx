@@ -52,14 +52,7 @@ export default function SettingItem(props) {
               />
             )}
             {props.option.type === "dropdown" && (
-
-            {option.type === 'switch' && <Switch />}
-            {option.type === 'dropdown' && <Dropdown pId = {option.id} />}
-            {option.type === 'button' && <OutlineButton> {option.buttontext} </OutlineButton>}
-
-
-
-            </div>
+              <Dropdown pId={props.option.id} defId={3}/>
             )}
             {props.option.type === "button" && (
               <OutlineButton btnClick={handleClick}>
