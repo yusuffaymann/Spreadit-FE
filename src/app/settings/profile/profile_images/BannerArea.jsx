@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./BannerArea.module.css";
 import PlusIcon from "./PlusIcon";
-import "./Profile.css";
+import "../Profile.css";
 
 export default function BannerArea() {
   const [bannerImage, setBannerImage] = useState(null);

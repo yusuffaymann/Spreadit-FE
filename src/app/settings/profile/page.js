@@ -9,6 +9,7 @@ import SettingItem from "../../components/UI/SettingItem.jsx"
 import BlueButton from "../../components/UI/BlueButton.jsx"
 import SettingsLayout from "../SettingsLayout.jsx"
 import optionData from "../options.js";
+import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
 
 function Profile() {
   

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React from "react";
 import "./Profile.css";
-import AvatarArea from "./AvatarArea";
-import BannerArea from "./BannerArea"
+import AvatarArea from "./profile_images/AvatarArea";
+import BannerArea from "./profile_images/BannerArea"
 
 export default function ProfileImages() {
   return (

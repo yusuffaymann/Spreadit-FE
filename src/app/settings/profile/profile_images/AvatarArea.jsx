@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./AvatarArea.module.css";
 import PlusIcon from "./PlusIcon";
-import "./Profile.css";
+import "../Profile.css";
 
 export default function AvatarArea() {
   const [avatarImage, setAvatarImage] = useState(null);
