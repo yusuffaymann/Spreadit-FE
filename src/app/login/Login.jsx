@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
-import Validation from "../Validation";
+import Validation from "../utils/Validation.js";
 import Script from "next/script";
 import "./Login.css";
 import { signIn } from "next-auth/react";
@@ -22,16 +22,17 @@ function Login() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    loginSubmit(JSON.stringify(formData));
-    submitToAPI(formData);
-    setErrors(Validation(formData));
+  async function handleSubmit(event) {
+    await event.preventDefault();
+    const valErrors = Validation(formData)
+    console.log(valErrors);
+    setErrors(valErrors);
+    if(valErrors.username === "" && valErrors.password === "")
+    {
+      await loginSubmit(JSON.stringify(formData));
+    }
   }
 
-  function submitToAPI(formData) {
-    console.log("data submitted");
-  }
 
   const url = "http://localhost:3001/login";
   const loginSubmit = async (values) => {

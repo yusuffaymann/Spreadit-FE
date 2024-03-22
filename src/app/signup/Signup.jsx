@@ -3,7 +3,7 @@ import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import Script from 'next/script';
 import Home from "../home/Home";
-import Validation from "../Validation"
+import Validation from "../utils/Validation.js"
 import ContinueWith from "../ContinueWith";
 import "./Signup.css";
 
