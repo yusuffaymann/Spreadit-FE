@@ -158,6 +158,17 @@ function Feed() {
     setDefMarkdown(status);
   }
 
+  if (loading) {
+    return (
+      <div className="window">
+        <div className="setting--page">
+            <SettingsLayout index={3} />
+            <div>Loading...</div>
+          </div>
+        </div>
+    ); ;
+  }
+
   return (
     <div className = "window">
       <div className="settings--page">

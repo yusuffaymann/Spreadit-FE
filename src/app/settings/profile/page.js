@@ -176,7 +176,7 @@ function Profile() {
     return (
       <div className="window">
         <div className="setting--page">
-            <SettingsLayout index={3} />
+            <SettingsLayout index={1} />
             <div>Loading...</div>
           </div>
         </div>
