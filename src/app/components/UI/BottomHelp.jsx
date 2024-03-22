@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link.js";
 
 function BottomHelp(props) {
   return (
@@ -6,21 +7,21 @@ function BottomHelp(props) {
       {props.children || (
         <div className="bottom-text">
           Don't have an email or need assistance logging in?
-          <a href="#" className="bottom-link">
+          <Link href="https://www.reddit.com/wiki/index/" className="bottom-link">
             {" "}
             get help
-          </a>
+          </Link>
         </div>
       )}
 
       <div className="bottom-text">
-        <a href="#" className="bottom-link">
+        <Link href="./login" className="bottom-link">
           Log in
-        </a>
+        </Link>
         <span className="link-separator">•</span>
-        <a href="#" className="bottom-link">
+        <Link href="./signup" className="bottom-link">
           sign up
-        </a>
+        </Link>
       </div>
     </>
   );

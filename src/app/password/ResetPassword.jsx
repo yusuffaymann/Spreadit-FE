@@ -5,6 +5,7 @@ import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 import submitToApi from "../utils/submitToApi.js";
 import { useRouter } from "next/navigation";
+import Link from "next/link.js";
 
 function ResetPassword() {
   const url = "http://localhost:3002/forgot-password";
@@ -57,9 +58,9 @@ function ResetPassword() {
             />
           </div>
           <BlueButton>Reset Password</BlueButton>
-          <a href="#" className="bottom-link">
+          <Link href="./username" className="bottom-link">
             forgot username?
-          </a>
+          </Link>
         </form>
         <BottomHelp />
       </div>

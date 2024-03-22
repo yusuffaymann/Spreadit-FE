@@ -41,9 +41,6 @@ function RecoverUsername() {
             />
           </div>
           <BlueButton>Email Me</BlueButton>
-          <a href="#" className="bottom-link">
-            forgot username?
-          </a>
         </form>
         <BottomHelp />
       </div>

@@ -102,13 +102,13 @@ function Login() {
           <BlueButton>Log in</BlueButton>
           <div className="bottom-text">
             <span className="link-text">Forgot your </span>
-            <a href="#" className="bottom-link">
+            <Link href="./username" className="bottom-link">
               username
-            </a>
+            </Link>
             <span className="link-text"> or </span>
-            <a href="#" className="bottom-link">
+            <Link href="./password" className="bottom-link">
               password
-            </a>
+            </Link>
             <span className="link-text">? </span>
           </div>
         </form>
