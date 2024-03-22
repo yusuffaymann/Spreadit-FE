@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfileName from "./Profile_name.jsx";
 import ProfileAbout from "./Profile_about.jsx";
 import ProfileSocial from "./Profile_social.jsx";
@@ -12,6 +12,64 @@ import optionData from "../options.js";
 import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
 
 function Profile() {
+  const [nsfwProfile, setNsfwProfile] = useState(false); // Assuming default value is false
+  const [allowFollow, setAllowFollow] = useState(false); // Assuming default value is false
+  const [contentVisibility, setContentVisibility] = useState(false); // Assuming default value is false
+  const [displayName, setDisplayName] = useState(''); // Assuming default value is false
+  const [about, setAbout] = useState(''); // Assuming default value is false
+  const [loading, setLoading] = useState(true); // Loading indicator
+  
+
+
+  useEffect(() => {
+      async function fetchData() {
+          setLoading(true);
+        try {
+          // Fetch user preferences
+          const prefsData = await handler("/api/v1/me/prefs", "GET")
+          setNsfwProfile(prefsData.nsfwprofile);
+          setAllowFollow(prefsData.allowfollow);
+          setContentVisibility(prefsData.contentvisibility);
+          setDisplayName(prefsData.displayname);
+          setAbout(prefsData.about);
+  
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          // Handle error (e.g., show error message, retry mechanism)
+        } finally {
+          setLoading(false); // Set loading state to false regardless of success or error
+        }
+      }
+      fetchData();
+    }, []);
+
+
+  async function patchData() {
+
+      let newPrefsData = {
+        nsfwprofile: nsfwProfile,
+        allowfollow: allowFollow,
+        contentvisibility: contentVisibility,
+        displayname: displayName,
+        about: about,
+      };
+      
+      try {
+        // Fetch user preferences
+        const prefsData = await handler("/api/v1/me/prefs", "PATCH", newPrefsData);
+        console.log(prefsData);
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle error (e.g., show error message, retry mechanism)
+      }
+    }
+  
+    useEffect(() => {
+      if(!loading)
+        patchData();
+    }, [nsfwProfile, allowFollow, contentVisibility, displayName, about]);
+
 
   // State to track if gray overlay is on
   const [isOpen, setIsOpen] = useState(false);
