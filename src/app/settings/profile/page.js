@@ -15,6 +15,7 @@ function Profile() {
   const [nsfwProfile, setNsfwProfile] = useState(false); // Assuming default value is false
   const [allowFollow, setAllowFollow] = useState(false); // Assuming default value is false
   const [contentVisibility, setContentVisibility] = useState(false); // Assuming default value is false
+  const [activeVisibility, setActiveVisibility] = useState(false); // Assuming default value is false
   const [displayName, setDisplayName] = useState(''); // Assuming default value is false
   const [about, setAbout] = useState(''); // Assuming default value is false
   const [socialLinks, setSocialLinks] = useState([]);
@@ -34,6 +35,7 @@ function Profile() {
           setNsfwProfile(prefsData.nsfwprofile);
           setAllowFollow(prefsData.allowfollow);
           setContentVisibility(prefsData.contentvisibility);
+          setActiveVisibility(prefsData.activevisibility);
           setDisplayName(prefsData.displayname);
           setAbout(prefsData.about);
           setAvatarUrl(prefsData.avatarurl)
@@ -56,6 +58,7 @@ function Profile() {
         nsfwprofile: nsfwProfile,
         allowfollow: allowFollow,
         contentvisibility: contentVisibility,
+        activevisibility: activeVisibility,
         displayname: displayName,
         about: about,
         avatarurl: avatarUrl,
@@ -76,7 +79,7 @@ function Profile() {
     useEffect(() => {
       if(!loading)
         patchData();
-    }, [nsfwProfile, allowFollow, contentVisibility, displayName, about, avatarUrl, bannerUrl]);
+    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, displayName, about, avatarUrl, bannerUrl]);
 
 
   // State to track if gray overlay is on
