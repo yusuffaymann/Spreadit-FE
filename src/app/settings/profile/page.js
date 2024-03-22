@@ -38,15 +38,16 @@ function Profile() {
         try {
           // Fetch user preferences
           const prefsData = await handler(API_URL, "GET")
-          setNsfwProfile(prefsData.nsfwprofile);
-          setAllowFollow(prefsData.allowfollow);
-          setContentVisibility(prefsData.contentvisibility);
-          setActiveVisibility(prefsData.activevisibility);
-          setDisplayName(prefsData.displayname);
+          setNsfwProfile(prefsData.nsfw);
+          setAllowFollow(prefsData.allowFollow);
+          setContentVisibility(prefsData.contentVisibility);
+          setActiveVisibility(prefsData.activeInCommunityVisibility);
+          setDisplayName(prefsData.displayName);
           setAbout(prefsData.about);
-          setAvatarUrl(prefsData.avatarurl)
-          setBannerUrl(prefsData.bannerurl)
-          setSocialLinks(prefsData.sociallinks); // Assuming sociallinks is the array containing social links
+          setAvatarUrl(prefsData.profilePicture)
+          setBannerUrl(prefsData.banner)
+          setSocialLinks(prefsData.socialLinks); // Assuming sociallinks is the array containing social links
+          setClearHistory(prefsData.clearHistory)
           /*
             assuming sociallinks structure is like this
             "sociallinks": [
@@ -72,15 +73,16 @@ function Profile() {
   async function patchData() {
 
       let newPrefsData = {
-        nsfwprofile: nsfwProfile,
-        allowfollow: allowFollow,
-        contentvisibility: contentVisibility,
-        activevisibility: activeVisibility,
-        displayname: displayName,
+        nsfw: nsfwProfile,
+        allowFollow: allowFollow,
+        contentVisibility: contentVisibility,
+        activeInCommunityVisibility: activeVisibility,
+        displayName: displayName,
         about: about,
-        avatarurl: avatarUrl,
-        bannerurl: bannerUrl,
-        sociallinks: socialLinks,
+        profilePicture: avatarUrl,
+        banner: bannerUrl,
+        socialLinks: socialLinks,
+        clearHistory: clearHistory,
       };
       
       try {
@@ -97,7 +99,7 @@ function Profile() {
     useEffect(() => {
       if(!loading)
         patchData();
-    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, avatarUrl, bannerUrl, socialLinks]);
+    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, avatarUrl, bannerUrl, socialLinks, clearHistory]);
 
     useEffect(() => {
       const delay = setTimeout(() => {
