@@ -5,6 +5,90 @@ import optionData from "../options.js";
 import SettingsLayout from "../SettingsLayout";
 
 function Feed() {
+
+  const [nsfw, setNsfw] = useState(false); // Assuming default value is false
+  const [blurNsfw, setBlurNsfw] = useState(false); // Assuming default value is false
+  const [homeRecommend, setHomeRecommend] = useState(false); // Assuming default value is false
+  const [autoplay, setAutoplay] = useState(false); // Assuming default value is false
+  const [reduceAnim, setReduceAnim] = useState(false); // Assuming default value is false
+  const [communityThemes, setCommunityThemes] = useState(false); // Assuming default value is false
+  const [contentSort, setContentSort] = useState(1); // Assuming default value is 1
+  const [csRemember, setCSRemember] = useState(false); // Assuming default value is false
+  const [globalView, setGlobalView] = useState(1); // Assuming default value is 1
+  const [gvRemember, setGVRemember] = useState(false); // Assuming default value is false
+  const [newTab, setNewTab] = useState(false); // Assuming default value is false
+  const [defMarkdown, setDefMarkdown] = useState(false); // Assuming default value is false
+  const [loading, setLoading] = useState(true); // Loading indicator
+  
+
+
+  useEffect(() => {
+      async function fetchData() {
+          setLoading(true);
+        try {
+          // Fetch user preferences
+          const prefsData = await handler("/api/v1/me/prefs", "GET")
+          setNsfw(prefsData.nsfw);
+          setBlurNsfw(prefsData.blurnsfw);
+          setHomeRecommend(prefsData.homerecommend);
+          setAutoplay(prefsData.autoplay);
+          setReduceAnim(prefsData.reduceanim);
+          setCommunityThemes(prefsData.communitythemes);
+          setContentSort(prefsData.contentsort);
+          setCSRemember(prefsData.csremember);
+          setGlobalView(prefsData.globalview);
+          setGVRemember(prefsData.gvremember);
+          setNewTab(prefsData.newtab);
+          setDefMarkdown(prefsData.defmarkdown);
+  
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          // Handle error (e.g., show error message, retry mechanism)
+        } finally {
+          setLoading(false); // Set loading state to false regardless of success or error
+        }
+      }
+      fetchData();
+    }, []);
+
+
+  async function patchData() {
+
+      let newPrefsData = {
+        nsfw: nsfw,
+        blurnsfw: blurNsfw,
+        homerecommend: homeRecommend,
+        autoplay: autoplay,
+        reduceanim: reduceAnim,
+        communitythemes: communityThemes,
+        contentsort: contentSort,
+        csremember: csRemember,
+        globalview: globalView,
+        gvremember: gvRemember,
+        newtab: newTab,
+        defmarkdown: defMarkdown,
+      };
+      
+      try {
+        // Fetch user preferences
+        const prefsData = await handler("/api/v1/me/prefs", "PATCH", newPrefsData);
+        console.log(prefsData);
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle error (e.g., show error message, retry mechanism)
+      }
+    }
+  
+    useEffect(() => {
+      if(!loading)
+        patchData();
+    }, [nsfw, blurNsfw, homeRecommend, autoplay, reduceAnim, communityThemes,
+       contentSort, csRemember, globalView, gvRemember, newTab, defMarkdown]);
+
+
+
+
   const [option1Toggled, setOption1Toggled] = useState(false); // Placeholder value for option 1 toggle state
   useEffect(() => {
     // Placeholder value for option 1 toggle state (always false for now)
