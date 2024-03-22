@@ -151,7 +151,7 @@ const ChangePasswordModal =(props)=>{
                 <label for="">CONFIRM NEW PASSWORD</label>
                 {!isNewPassword2Valid && <p className={Styles.errorMessage}>{newPassword2ErrorMessage}</p>}
               </div>
-              <Toogle optionTitle="Log me out everywhere" />
+              <Toogle optionTitle="Log me out everywhere" optionDescription="Changing your password logs you out of all browsers on your device(s). Checking this box also logs you out of all apps you have authorized." />
               <button className={Styles.savebutton} disabled={false} onClick={handleSubmit} >Save</button>
             </div>
           </div>

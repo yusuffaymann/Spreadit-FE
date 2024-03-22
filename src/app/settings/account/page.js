@@ -6,9 +6,33 @@ import Layout from "../SettingsLayout";
 import Changeemailpassword from "../../components/UI/Changebutton";
 import Changegendercountry from "../../components//UI/Listbutton";
 import Connectbutton from "../../components/UI/Connectbutton";
+import ChangeEmailmodal from "../../components/UI/ChangeEmailModal";
+import ChangePasswordModal from "../../components/UI/ChangePasswordModal";
 
 const Home=()=> {
   const [userData, setUserData] = useState(null);
+  const [showEmailModal,setShowEmailModal]=useState(false);
+  const [showPasswordModal,setShowPasswordModal]=useState(false);
+  const [currentDescription,setCurrentDescription]=useState("")
+
+    const openEmailModal = () => {
+      setShowEmailModal(true);
+    };
+    const openPasswordModal = () => {
+      setShowPasswordModal(true);
+    };
+
+    const updateupdatedescription=(newdescription)=>{
+      setCurrentDescription(newdescription);
+    }
+  
+    const closeEmailModal = () => {
+      setShowEmailModal(false);
+    };
+
+    const closePasswordModal = () => {
+      setShowPasswordModal(false);
+    };
 /*   const [Ygender,setYgender]=useState("MAN");
   const handleItemClick = (item) => {
     setYgender(item);
@@ -40,6 +64,7 @@ const Home=()=> {
   }
 
   const {username, email, password, gender, country, connected } = userData;
+  /* setCurrentDescription(email); */
   async function updateGender(newgender) {
     try {
         const response = await fetch('http://localhost:3002/settings/account', {
@@ -125,10 +150,12 @@ async function updateCountry(newcountry) {
               <h3 className={Styles.subheader}>ACCOUNT PREFERENCES</h3>
               <hr className={Styles.line}></hr>
             </div>
-            <Changeemailpassword type="Email address" description={email} display="Change" />
-            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" display="Change" />
-            <Changegendercountry list={genders} initialv={gender} type={"Gender"}   choose={(newgender) => updateGender(newgender)} />
-            <Changegendercountry list={countries} initialv={country} type={"Country"} choose={(newcountry) => updateCountry(newcountry)} />
+            <Changeemailpassword type="Email address" description={currentDescription==""?email:currentDescription} display="Change" activate={() => {openEmailModal()}} />
+            {showEmailModal && (<ChangeEmailmodal close={()=>closeEmailModal()} updatetext={(newdescription) => updateupdatedescription(newdescription)} />) }
+            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" display="Change" activate={() => {openPasswordModal()}} />
+            {showPasswordModal && (<ChangePasswordModal close={()=>closePasswordModal()} />)}
+            <Changegendercountry list={genders} initialv={gender} type={"Gender"}  displayedColor={"blue"} choose={(newgender) => updateGender(newgender)} />
+            <Changegendercountry list={countries} initialv={country} type={"Country"} displayedColor={"blue"} choose={(newcountry) => updateCountry(newcountry)} />
         </div>
         <div className={Styles.sectioncontainer}>
             <div className={Styles.sectionname}>
