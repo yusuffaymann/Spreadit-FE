@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import handler from "@/app/utils/apiHandler.js";
 import ProfileName from "./Profile_name.jsx";
 import ProfileAbout from "./Profile_about.jsx";
 import ProfileSocial from "./Profile_social.jsx";
@@ -22,6 +23,7 @@ function Profile() {
   const [counter, setCounter] = useState(0);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [bannerUrl, setBannerUrl] = useState('');
+  const [clearHistory, setClearHistory] = useState(false);
   const [loading, setLoading] = useState(true); // Loading indicator
   
 
@@ -40,7 +42,7 @@ function Profile() {
           setAbout(prefsData.about);
           setAvatarUrl(prefsData.avatarurl)
           setBannerUrl(prefsData.bannerurl)
-  
+
         } catch (error) {
           console.error('Error fetching data:', error);
           // Handle error (e.g., show error message, retry mechanism)
@@ -91,6 +93,7 @@ function Profile() {
 
   const handleItemClick = (id, status) => {
     console.log(`SettingItem with ID ${id} clicked. ${status}`);
+    handleAPIput(id,status)
     if (id === 1 && status === false) {
       handleLockComponent(2, true);
       console.log("locked");
@@ -99,6 +102,19 @@ function Profile() {
       console.log("unlocked");
     }
   };
+
+  const handleAPIput = (id, status) => {
+    if (id === 13)
+    setNsfwProfile(status);
+    else if (id === 14)
+    setAllowFollow(status);
+    else if (id === 15)
+    setContentVisibility(status);
+    else if (id === 16)
+    setActiveVisibility(status);
+    else if (id === 17)
+    setClearHistory(true);
+  }
 
   const handleLinkSelection = (id) => {
     console.log(`Link with ID ${id} clicked.`);
