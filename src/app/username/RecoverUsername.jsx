@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
+import submitToApi from "../utils/submitToApi.js";
 
 function RecoverUsername() {
+  const url = "http://localhost:3002/forgot-username";
   const [email, setEmail] = useState("");
 
   function handleInputChange(event) {
@@ -12,15 +14,13 @@ function RecoverUsername() {
     setEmail(value);
   }
 
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    submitToAPI(formData);
+    const data = { email };
+    const response = await submitToApi(url, "POST", data);
+    console.log(response);
     setEmail("");
-  }
-
-  function submitToAPI(formData) {
-    console.log("data submitted");
-  }
+  };
 
   return (
     <div className="pageColumn__right">
@@ -29,11 +29,12 @@ function RecoverUsername() {
           title="Recover your username"
           description="Tell us the email address associated with your Reddit account, and we'll send you an email with your username."
         />
-        <form onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
           <div>
             <input
+              className="form-input"
               name="email"
-              type="text"
+              type="email"
               placeholder="Email"
               onChange={handleInputChange}
               value={email}

@@ -66,3 +66,26 @@ body{
   color: #0079d3;
   margin: 0 4px;
 }
+
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-input{
+  width: 100%;
+  height: 48px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 4px;
+  background-color: #fcfcfb;
+}
+
+.input-error{
+  border: 1px solid #ff0000;
+}
+
+.error-message{
+  color: #ff0000;
+  margin: 0;
+}
