@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
 import Validation from "../utils/Validation.js";
-import Script from "next/script";
 import "./Login.css";
 import { signIn } from "next-auth/react";
+import Link from "next/link.js";
+
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ function Login() {
 
   function HandleRememberMe() {
     setRememberMe(!rememberMe);
-  }
+  };
 
   const handleGoogleSignIn = async () => {
     await signIn("google");
@@ -64,7 +65,7 @@ function Login() {
           title="Log in"
           description="Tell us the username and email address. By continuing, you agree to our User Agreement and Privacy Policy."
         />
-        <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+        <button className="continue_with" onClick={handleGoogleSignIn}>Sign in with Google</button>
         <p className="or_spliter">______________ OR ______________</p>
         <form onSubmit={handleSubmit}>
           <div>
@@ -113,10 +114,7 @@ function Login() {
         </form>
         <div className="bottom-text">
           New to Spreadit?
-          <a href="#" className="bottom-link">
-            {" "}
-            SIGN UP
-          </a>
+          <Link href="./signup" className="bottom-link"> SIGN UP </Link>
         </div>
       </div>
     </div>

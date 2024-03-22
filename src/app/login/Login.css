@@ -12,6 +12,30 @@ form{
     
 }
 
+.continue_with{
+    font-size: 14px;
+    font-weight: 350;
+    letter-spacing: .5px;
+    color: black;
+    border-color: grey ;
+    border-radius: 20px;
+    text-align: center;
+    background: transparent;
+    line-height: unset;
+    min-height: 35px;
+    min-width: 260px;
+    padding: 5px 10px;
+    margin: 5px;
+    transition: box-shadow 0.3s ease;
+}
+.continue_with:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    background: #f5f3f3db;
+  }
+.continue_with:active {
+    background: #b4b2b2;
+}
+
 .or_spliter{
     color: rgb(125, 125, 125);
     margin: 25px 0px;

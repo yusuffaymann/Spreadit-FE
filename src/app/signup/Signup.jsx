@@ -1,28 +1,29 @@
 import React, {useState} from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BlueButton from "../components/UI/BlueButton.jsx";
-import Script from 'next/script';
-import Home from "../home/Home";
 import Validation from "../utils/Validation.js"
-import ContinueWith from "../ContinueWith";
 import "./Signup.css";
+import Link from "next/link.js";
 
 
 function Signup() {
     const [formData, setFormData] = useState({username:"", password:"", email:""})
     const [errors, setErrors] = useState({username:"", password:"", email:""})
-    const [ googleToken, setGoogleToken]= useState("")
 
     function handleInputChange(event) {
         const {name, value} = event.target;
         setFormData(prevFormData => ({...prevFormData, [name]: value}))
     }
 
-    function handleSubmit(event) {
-        event.preventDefault()
-        loginSubmit(JSON.stringify(formData))
-        submitToAPI(formData)
-        setErrors(Validation(formData))
+    async function handleSubmit(event) {
+      await event.preventDefault();
+      const valErrors = Validation(formData)
+      console.log(valErrors);
+      setErrors(valErrors);
+      if(valErrors.username === "" && valErrors.password === "")
+      {
+        await loginSubmit(JSON.stringify(formData));
+      }
     }
 
     function submitToAPI(formData) {
@@ -42,21 +43,18 @@ function Signup() {
            fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
         };
 
+    const handleGoogleSignIn = async () => {
+      await signIn("google");
+     };
 
     return (
-      <>
-      <Script
-         src="https://accounts.google.com/gsi/client"
-         strategy="beforeInteractive"
-         async
-      />
       <div className="pageColumn__right">
         <div className="userFormContainer"> 
             <FormInfo 
             title="Sign up" 
             description="By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy."
             />
-            <ContinueWith setGoogleToken= {setGoogleToken}/>
+             <button className="continue_with" onClick={handleGoogleSignIn}>Sign in with Google</button>
             <p className="or_spliter">______________ OR ______________</p>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -93,11 +91,10 @@ function Signup() {
             </form>
             <div className="bottom-text">
               Already a spreaditor?
-             <a href="#" className="bottom-link"> Log In </a>
+             <Link href="./login" className="bottom-link"> Log In </Link>
             </div>
         </div>
       </div>
-      </>
     );
   }
 
