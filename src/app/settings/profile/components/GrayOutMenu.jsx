@@ -29,8 +29,14 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
     setChoicesOpen((prevState) => !prevState);
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSave();
+    }
+  };
+
   const handleSave = () => {
-    if (displayName.trim() !== "") {
+    if (displayName.trim() !== "" && socialUrl.trim() !== "") {
       // Check if displayName is not empty
       const tempFinder = social.find((finder) => finder.id === selectedLinkId)
       addSocial(selectedLinkId,displayName, socialUrl, tempFinder.logo); // Pass an object with displayName to addSocial function
@@ -60,6 +66,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
             className={styles.txtBox}
             value={displayName}
             data-tribute="true"
+            onKeyDown={handleKeyPress}
             onChange={handleDispInputChange}
           />
           <input
@@ -68,6 +75,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
             className={styles.txtBox}
             value={socialUrl}
             data-tribute="true"
+            onKeyDown={handleKeyPress}
           />
         </div>
       </>
