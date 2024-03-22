@@ -20,7 +20,7 @@ function Signup() {
       const valErrors = Validation(formData)
       console.log(valErrors);
       setErrors(valErrors);
-      if(valErrors.username === "" && valErrors.password === "")
+      if(valErrors.username === "" && valErrors.password === "" && valErrors.email === "")
       {
         await loginSubmit(JSON.stringify(formData));
       }

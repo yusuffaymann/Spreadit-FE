@@ -11,10 +11,6 @@ function FormInfo({title, description}) {
         </div>
         <h1 className={styles.title}>{title}</h1>
         <p className={styles.description}>{description}</p>
-
-      </div>
-      <h1 className={styles.title}>{title}</h1>
-      <p className={styles.description}>{description}</p>
     </div>
   );
 }
