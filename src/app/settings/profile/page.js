@@ -21,34 +21,32 @@ function Profile() {
   const [allowFollow, setAllowFollow] = useState(false); // Assuming default value is false
   const [contentVisibility, setContentVisibility] = useState(false); // Assuming default value is false
   const [activeVisibility, setActiveVisibility] = useState(false); // Assuming default value is false
-  const [displayName, setDisplayName] = useState(''); // Assuming default value is false
-  const [about, setAbout] = useState(''); // Assuming default value is false
+  const [displayName, setDisplayName] = useState(""); // Assuming default value is false
+  const [about, setAbout] = useState(""); // Assuming default value is false
   const [socialLinks, setSocialLinks] = useState([]);
   const [counter, setCounter] = useState(0);
-  const [avatarUrl, setAvatarUrl] = useState('');
-  const [bannerUrl, setBannerUrl] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [bannerUrl, setBannerUrl] = useState("");
   const [clearHistory, setClearHistory] = useState(false);
   const [loading, setLoading] = useState(true); // Loading indicator
-  
 
-  
   useEffect(() => {
-      async function fetchData() {
-          setLoading(true);
-        try {
-          // Fetch user preferences
-          const prefsData = await handler(API_URL, "GET")
-          setNsfwProfile(prefsData.nsfw);
-          setAllowFollow(prefsData.allowFollow);
-          setContentVisibility(prefsData.contentVisibility);
-          setActiveVisibility(prefsData.activeInCommunityVisibility);
-          setDisplayName(prefsData.displayName);
-          setAbout(prefsData.about);
-          setAvatarUrl(prefsData.profilePicture)
-          setBannerUrl(prefsData.banner)
-          setSocialLinks(prefsData.socialLinks); // Assuming sociallinks is the array containing social links
-          setClearHistory(prefsData.clearHistory)
-          /*
+    async function fetchData() {
+      setLoading(true);
+      try {
+        // Fetch user preferences
+        const prefsData = await handler(API_URL, "GET");
+        setNsfwProfile(prefsData.nsfw);
+        setAllowFollow(prefsData.allowFollow);
+        setContentVisibility(prefsData.contentVisibility);
+        setActiveVisibility(prefsData.activeInCommunityVisibility);
+        setDisplayName(prefsData.displayName);
+        setAbout(prefsData.about);
+        setAvatarUrl(prefsData.profilePicture);
+        setBannerUrl(prefsData.banner);
+        setSocialLinks(prefsData.socialLinks); // Assuming sociallinks is the array containing social links
+        setClearHistory(prefsData.clearHistory);
+        /*
             assuming sociallinks structure is like this
             "sociallinks": [
                 {
@@ -58,59 +56,60 @@ function Profile() {
                   "logo": "https://example.com/facebook_logo.png"
                 },
           */
-
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          // Handle error (e.g., show error message, retry mechanism)
-        } finally {
-          setLoading(false); // Set loading state to false regardless of success or error
-        }
-      }
-      fetchData();
-    }, []);
-
-
-  async function patchData() {
-
-      let newPrefsData = {
-        nsfw: nsfwProfile,
-        allowFollow: allowFollow,
-        contentVisibility: contentVisibility,
-        activeInCommunityVisibility: activeVisibility,
-        displayName: displayName,
-        about: about,
-        profilePicture: avatarUrl,
-        banner: bannerUrl,
-        socialLinks: socialLinks,
-        clearHistory: clearHistory,
-      };
-      
-      try {
-        // Fetch user preferences
-        const prefsData = await handler(API_URL, "PATCH", newPrefsData);
-        console.log(prefsData);
-  
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         // Handle error (e.g., show error message, retry mechanism)
+      } finally {
+        setLoading(false); // Set loading state to false regardless of success or error
       }
     }
-  
-    useEffect(() => {
-      if(!loading)
-        patchData();
-    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, avatarUrl, bannerUrl, socialLinks, clearHistory]);
+    fetchData();
+  }, []);
 
-    useEffect(() => {
-      const delay = setTimeout(() => {
-        if(!loading)
-        patchData();
-      }, DEBOUNCE_DELAY);
+  async function patchData() {
+    let newPrefsData = {
+      nsfw: nsfwProfile,
+      allowFollow: allowFollow,
+      contentVisibility: contentVisibility,
+      activeInCommunityVisibility: activeVisibility,
+      displayName: displayName,
+      about: about,
+      profilePicture: avatarUrl,
+      banner: bannerUrl,
+      socialLinks: socialLinks,
+      clearHistory: clearHistory,
+    };
 
-      return () => clearTimeout(delay);
-    }, [about, displayName]); // Only trigger when about or displayName changes
-  
+    try {
+      // Fetch user preferences
+      const prefsData = await handler(API_URL, "PATCH", newPrefsData);
+      console.log(prefsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle error (e.g., show error message, retry mechanism)
+    }
+  }
 
+  useEffect(() => {
+    if (!loading) patchData();
+  }, [
+    nsfwProfile,
+    allowFollow,
+    contentVisibility,
+    activeVisibility,
+    avatarUrl,
+    bannerUrl,
+    socialLinks,
+    clearHistory,
+  ]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (!loading) patchData();
+    }, DEBOUNCE_DELAY);
+
+    return () => clearTimeout(delay);
+  }, [about, displayName]); // Only trigger when about or displayName changes
 
   // State to track if gray overlay is on
   const [isOpen, setIsOpen] = useState(false);
@@ -121,7 +120,7 @@ function Profile() {
 
   const handleItemClick = (id, status) => {
     console.log(`SettingItem with ID ${id} clicked. ${status}`);
-    handleAPIput(id,status)
+    handleAPIput(id, status);
     if (id === 1 && status === false) {
       handleLockComponent(2, true);
       console.log("locked");
@@ -132,31 +131,23 @@ function Profile() {
   };
 
   useEffect(() => {
-    if (clearHistory)
-    {
-      console.log('History cleared')
-      setClearHistory(false)
+    if (clearHistory) {
+      console.log("History cleared");
+      setClearHistory(false);
     }
   }, [clearHistory]);
 
   const handleAPIput = (id, status) => {
-    if (id === 13)
-    setNsfwProfile(status);
-    else if (id === 14)
-    setAllowFollow(status);
-    else if (id === 15)
-    setContentVisibility(status);
-    else if (id === 16)
-    setActiveVisibility(status);
-    else if (id === 17)
-    setClearHistory(true);
-  }
+    if (id === 13) setNsfwProfile(status);
+    else if (id === 14) setAllowFollow(status);
+    else if (id === 15) setContentVisibility(status);
+    else if (id === 16) setActiveVisibility(status);
+    else if (id === 17) setClearHistory(true);
+  };
 
   const handleLinkSelection = (id) => {
     console.log(`Link with ID ${id} clicked.`);
   };
-
-  
 
   const addSocialLink = (id, name, url, logo) => {
     if (counter < MAX_SOCIAL_LINKS) {
@@ -178,57 +169,75 @@ function Profile() {
     return (
       <div className="window">
         <div className="setting--page">
-            <SettingsLayout index={1} />
-            <div>Loading...</div>
-          </div>
+          <div>Loading...</div>
         </div>
-    ); ;
+      </div>
+    );
   }
 
   const initialStateArray = {
     13: nsfwProfile,
-  14: allowFollow,
-  15: contentVisibility,
-  16: activeVisibility,
+    14: allowFollow,
+    15: contentVisibility,
+    16: activeVisibility,
   };
 
   return (
     <>
-      <SettingsLayout />
-      <div className="settings--container">
-        <div className="settings--content">
-          <h2 className="settings--h2">Customize profile</h2>
-          <h3 className="uppercase-h3-description">Profile Information</h3>
-          <ProfileName displayName={displayName} setDisplayName={setDisplayName} handleSubmit={patchData}/>
-          <ProfileAbout about={about} setAbout={setAbout} handleSubmit={patchData}/>
-          <ProfileSocial
-            isOpen={isOpen} onClose={handleOverlay} onSelectSocial={handleLinkSelection} addSocialLink={addSocialLink}
-            deleteSocialLink={deleteSocialLink} socialLinks={socialLinks} counter={counter}
-          />
-          <h3 className="uppercase-h3-description">Images</h3>
-          <ProfileImages setAvatarUrl={setAvatarUrl} setBannerUrl={setBannerUrl} />
-          <h3 className="uppercase-h3-description">Profile Category</h3>
-          {optionData.map(
-            (option) =>
-              option.id === 13 && (
-                <SettingItem
-                  key={option.id}
-                  option={option}
-                  isToggled = {nsfwProfile}
-                  onItemClick={handleItemClick}
-                />
-              )
-          )}
-          <h3 className="uppercase-h3-description">Advanced</h3>
+      <div className="settings--page">
+        <SettingsLayout index={1}/>
+        <div className="settings--container">
+          <div className="settings--content">
+            <h2 className="settings--h2">Customize profile</h2>
+            <h3 className="uppercase-h3-description">Profile Information</h3>
+            <ProfileName
+              displayName={displayName}
+              setDisplayName={setDisplayName}
+              handleSubmit={patchData}
+            />
+            <ProfileAbout
+              about={about}
+              setAbout={setAbout}
+              handleSubmit={patchData}
+            />
+            <ProfileSocial
+              isOpen={isOpen}
+              onClose={handleOverlay}
+              onSelectSocial={handleLinkSelection}
+              addSocialLink={addSocialLink}
+              deleteSocialLink={deleteSocialLink}
+              socialLinks={socialLinks}
+              counter={counter}
+            />
+            <h3 className="uppercase-h3-description">Images</h3>
+            <ProfileImages
+              setAvatarUrl={setAvatarUrl}
+              setBannerUrl={setBannerUrl}
+            />
+            <h3 className="uppercase-h3-description">Profile Category</h3>
+            {optionData.map(
+              (option) =>
+                option.id === 13 && (
+                  <SettingItem
+                    key={option.id}
+                    option={option}
+                    isToggled={nsfwProfile}
+                    onItemClick={handleItemClick}
+                  />
+                )
+            )}
+            <h3 className="uppercase-h3-description">Advanced</h3>
 
-          <ProfileAdvanced
-            clickEvent={handleItemClick} array = {initialStateArray}
-          />
-          <h3 className="uppercase-h3-description">Profile Moderation</h3>
-          <div />
-          <div>
-            For moderation tools please visit our{" "}
-            <a href="/moderation">Profile Moderation page</a>
+            <ProfileAdvanced
+              clickEvent={handleItemClick}
+              array={initialStateArray}
+            />
+            <h3 className="uppercase-h3-description">Profile Moderation</h3>
+            <div />
+            <div>
+              For moderation tools please visit our{" "}
+              <a href="/moderation">Profile Moderation page</a>
+            </div>
           </div>
         </div>
       </div>

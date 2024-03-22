@@ -170,7 +170,6 @@ function Feed() {
     return (
       <div className="window">
         <div className="setting--page">
-            <SettingsLayout index={3} />
             <div>Loading...</div>
           </div>
         </div>
