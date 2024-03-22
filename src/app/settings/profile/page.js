@@ -103,6 +103,14 @@ function Profile() {
     }
   };
 
+  useEffect(() => {
+    if (clearHistory)
+    {
+      console.log('History cleared')
+      setClearHistory(false)
+    }
+  }, [clearHistory]);
+
   const handleAPIput = (id, status) => {
     if (id === 13)
     setNsfwProfile(status);
