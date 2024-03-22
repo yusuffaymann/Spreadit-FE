@@ -1,5 +1,18 @@
 
 
+:root{
+  --mainblackcolor:#1c1c1c;
+  --brightcolor:#0079D3;
+  --graycolor:#7c7c7c;
+  --buttonbackground:#FFFFFF;
+  --hoverbrightcolor: rgba(0, 121, 211, 0.05);
+  --modaloverlaybackground:rgba(0, 0, 0, 0.5);
+  --enabledbuttonbackground:#0079D3;
+  --disabledbuttonbackground:#7e7c7c;
+  --disabledbuttoncolor:#c3c1c1;
+  --deletebuttonbackground:#ff585b;
+} 
+
 body{
     margin: 0;
     padding: 0;
@@ -26,6 +39,10 @@ body{
   height: 100vh;
   min-height: 430px;
   width: 90%;
+}
+
+.modal-art{
+  height: 650px;
 }
 
 .userFormContainer {
@@ -81,6 +98,108 @@ body{
   background-color: #fcfcfb;
 }
 
+/* Global Styiling for Settings pages */
+
+.uppercase-h3-description {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  line-height: 12px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #CBCCCD;
+  color: #7e7e7e;
+  margin-bottom: 32px;
+  padding-bottom: 6px;
+}
+
+.settings--container
+{
+    max-width: 1200px;
+    display: flex;
+    padding: 0px 16px;
+    margin: 0 auto;
+}
+
+.settings--content
+{
+    flex: 1 1 auto;
+    max-width: 700px;
+}
+
+.settings--flex
+{
+  flex-direction: column;
+  display: flex;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.settings--flexheader {
+    display: flex;
+    flex-direction: column;
+    margin-right: 8px;
+    max-width: 80%;
+  }
+
+.settings--flexoption
+{
+        display: flex;
+        align-items: flex-start;
+        margin-top: 12px;
+        -ms-flex-direction: column;
+        flex-direction: column;
+}
+
+.settings--h2 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--newCommunityTheme-bodyText);
+    padding: 40px 0;
+  }
+
+.settings--p
+{
+    font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #aaa9a9;
+  margin: 0;
+}
+
+.settings--h3
+{
+    font-size: 16px;
+  font-weight: 570;
+  line-height: 20px;
+  margin: 0;
+  margin-bottom: 4px;
+
+  display: flex;
+}
+
+.settings--page {
+  margin: 0 auto; 
+  padding: 0 8px;
+  max-width: 1200px;
+  font-family: 'IBM Plex Sans', Arial, sans-serif;
+}
+
+/* Global Styiling for Create page (the most likely to be not exclusive) */
+
+.create--h1
+{
+  color: black;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+body.modal-open {
+  pointer-events: none;
+}
+
+=======
 .input-error{
   border: 1px solid #ff0000;
 }
