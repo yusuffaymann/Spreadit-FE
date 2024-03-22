@@ -42,6 +42,17 @@ function Profile() {
           setAbout(prefsData.about);
           setAvatarUrl(prefsData.avatarurl)
           setBannerUrl(prefsData.bannerurl)
+          setSocialLinks(prefsData.sociallinks); // Assuming sociallinks is the array containing social links
+          /*
+            assuming sociallinks structure is like this
+            "sociallinks": [
+                {
+                  "id": 1,
+                  "name": "Facebook",
+                  "url": "https://www.facebook.com",
+                  "logo": "https://example.com/facebook_logo.png"
+                },
+          */
 
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -65,6 +76,7 @@ function Profile() {
         about: about,
         avatarurl: avatarUrl,
         bannerurl: bannerUrl,
+        sociallinks: socialLinks,
       };
       
       try {
@@ -81,7 +93,7 @@ function Profile() {
     useEffect(() => {
       if(!loading)
         patchData();
-    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, displayName, about, avatarUrl, bannerUrl]);
+    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, displayName, about, avatarUrl, bannerUrl, socialLinks]);
 
 
   // State to track if gray overlay is on
