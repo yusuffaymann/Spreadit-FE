@@ -2,8 +2,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import "./Profile.css";
 
-export default function ProfileAbout() {
-  const [about, setAbout] = useState("");
+export default function ProfileAbout({ about, setAbout, handleSubmit }) {
   const maxChars = 200;
 
   function handleInputChange(event) {
@@ -11,16 +10,6 @@ export default function ProfileAbout() {
     if (value.length <= maxChars) {
       setAbout(value);
     }
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    submitToAPI(formData);
-    setAbout("");
-  }
-
-  function submitToAPI(formData) {
-    console.log("data submitted");
   }
 
   return (

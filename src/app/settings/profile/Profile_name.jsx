@@ -2,25 +2,14 @@ import Image from "next/image";
 import React, { useState } from "react";
 import "./Profile_name";
 
-export default function ProfileName() {
-  const [displayname, setName] = useState("");
+export default function ProfileName({ displayName, setDisplayName, handleSubmit }) {
   const maxChars = 30;
 
   function handleInputChange(event) {
     const { value } = event.target;
     if (value.length <= maxChars) {
-      setName(value);
+      setDisplayName(value);
     }
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    submitToAPI(formData);
-    setName("");
-  }
-
-  function submitToAPI(formData) {
-    console.log("data submitted");
   }
 
   return (
@@ -39,11 +28,11 @@ export default function ProfileName() {
                 type="text"
                 className="profile--textbox"
                 onChange={handleInputChange}
-                value={displayname}
+                value={displayName}
                 maxLength={maxChars}
               ></input>
               <p className="textboxlettercount">
-                {maxChars - displayname.length} Characters remaining
+                {maxChars - displayName.length} Characters remaining
               </p>
             </form>
           </div>
