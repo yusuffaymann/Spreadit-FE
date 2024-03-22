@@ -3,7 +3,7 @@ export default async function handler(url, method, body) {
   /*     const base_url = 'https://oauth.reddit.com';
       const token = `bearer ${""}`;
       const headers = { 'Authorization': token, 'User-Agent': 'spreadit by Common-Winter-7186' }; */
-      const base_url = 'http://localhost:3010';
+      const base_url = 'http://localhost:3002';
   /*     const token = `bearer 1`; */
   
   
