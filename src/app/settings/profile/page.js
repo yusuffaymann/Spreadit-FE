@@ -101,6 +101,7 @@ function Profile() {
 
     useEffect(() => {
       const delay = setTimeout(() => {
+        if(!loading)
         patchData();
       }, DEBOUNCE_DELAY);
 
@@ -170,6 +171,17 @@ function Profile() {
     setSocialLinks(updatedSocialLinks);
     setCounter(counter - 1);
   };
+
+  if (loading) {
+    return (
+      <div className="window">
+        <div className="setting--page">
+            <SettingsLayout index={3} />
+            <div>Loading...</div>
+          </div>
+        </div>
+    ); ;
+  }
 
   return (
     <>
