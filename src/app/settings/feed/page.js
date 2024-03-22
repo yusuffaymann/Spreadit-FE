@@ -31,17 +31,18 @@ function Feed() {
         try {
           // Fetch user preferences
           const prefsData = await handler(API_URL, "GET")
-          setNsfw(prefsData.nsfw);
+          console.log(prefsData);
+          setNsfw(prefsData.adultContent);
           setBlurNsfw(prefsData.blurnsfw);
           setHomeRecommend(prefsData.homerecommend);
-          setAutoplay(prefsData.autoplay);
+          setAutoplay(prefsData.autoplayMedia);
           setReduceAnim(prefsData.reduceanim);
-          setCommunityThemes(prefsData.communitythemes);
-          setContentSort(prefsData.contentsort);
+          setCommunityThemes(prefsData.communityThemes);
+          setContentSort(prefsData.communityContentSort);
           setCSRemember(prefsData.csremember);
-          setGlobalView(prefsData.globalview);
+          setGlobalView(prefsData.globalContentView);
           setGVRemember(prefsData.gvremember);
-          setNewTab(prefsData.newtab);
+          setNewTab(prefsData.openPostsInNewTab);
           setDefMarkdown(prefsData.defmarkdown);
           setPrevBlur(prefsData.prevblur)
   
@@ -59,17 +60,17 @@ function Feed() {
   async function patchData() {
 
       let newPrefsData = {
-        nsfw: nsfw,
+        adultContent: nsfw,
         blurnsfw: blurNsfw,
         homerecommend: homeRecommend,
-        autoplay: autoplay,
+        autoplayMedia: autoplay,
         reduceanim: reduceAnim,
-        communitythemes: communityThemes,
+        communityThemes: communityThemes,
         contentsort: contentSort,
         csremember: csRemember,
-        globalview: globalView,
+        globalContentView: globalView,
         gvremember: gvRemember,
-        newtab: newTab,
+        openPostsInNewTab: newTab,
         defmarkdown: defMarkdown,
         prevblur: prevBlur,
       };
