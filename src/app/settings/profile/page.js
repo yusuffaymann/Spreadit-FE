@@ -93,7 +93,16 @@ function Profile() {
     useEffect(() => {
       if(!loading)
         patchData();
-    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, displayName, about, avatarUrl, bannerUrl, socialLinks]);
+    }, [nsfwProfile, allowFollow, contentVisibility, activeVisibility, avatarUrl, bannerUrl, socialLinks]);
+
+    useEffect(() => {
+      const delay = setTimeout(() => {
+        patchData();
+      }, 1500);
+      
+      return () => clearTimeout(delay);
+    }, [about, displayName]); // Only trigger when about or displayName changes
+  
 
 
   // State to track if gray overlay is on
