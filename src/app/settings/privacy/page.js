@@ -30,7 +30,6 @@ export default function Home() {
   }, []);
 
   if (!userData) {
-    // Render loading state or return null
     return <div>Loading...</div>;
   }
 
@@ -59,8 +58,6 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Failed to update privacy settings');
       }
-  
-      // Handle success response
       console.log('Privacy settings updated successfully');
     } catch (error) {
       console.error('Error updating privacy settings:', error.message);

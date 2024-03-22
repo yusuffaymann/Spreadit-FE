@@ -86,8 +86,6 @@ const ChangePasswordModal =(props)=>{
           if (!response.ok) {
               throw new Error('Failed to change password');
           }
-    
-          //const data = await response.json();
           console.log("password changed to "+newPassword);
       } catch (error) {
           console.error('Error changing password:', error.message);

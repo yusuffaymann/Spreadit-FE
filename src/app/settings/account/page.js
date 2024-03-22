@@ -33,12 +33,6 @@ const Home=()=> {
     const closePasswordModal = () => {
       setShowPasswordModal(false);
     };
-/*   const [Ygender,setYgender]=useState("MAN");
-  const handleItemClick = (item) => {
-    setYgender(item);
-    console.log(item);
-  }; */
-
 
   useEffect(() => {
     async function fetchData() {
@@ -50,7 +44,6 @@ const Home=()=> {
         const data = await response.json();
         console.log(data);
         setUserData(data);
-        /* setYgender(data.gender); */
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -59,12 +52,10 @@ const Home=()=> {
   }, []);
 
   if (!userData) {
-    // Render loading state or return null
     return <div>Loading...</div>;
   }
 
   const {username, email, password, gender, country, connected } = userData;
-  /* setCurrentDescription(email); */
   async function updateGender(newgender) {
     try {
         const response = await fetch('http://localhost:3002/settings/account', {
@@ -80,8 +71,6 @@ const Home=()=> {
         if (!response.ok) {
             throw new Error('Failed to update gender');
         }
-
-        //const data = await response.json();
         console.log("gender changed to "+newgender);
     } catch (error) {
         console.error('Error updating gender:', error.message);

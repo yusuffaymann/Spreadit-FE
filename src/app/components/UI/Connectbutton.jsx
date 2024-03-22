@@ -77,8 +77,6 @@ const Connectbutton=(props)=>{
             if (!response.ok) {
                 throw new Error('Failed to alter connection');
             }
-      
-            //const data = await response.json();
             console.log("connected changed to "+isConnected);
         } catch (error) {
             console.error('Error altering connection:', error.message);
