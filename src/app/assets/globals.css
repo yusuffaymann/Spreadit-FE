@@ -41,6 +41,10 @@ body{
   width: 90%;
 }
 
+.modal-art{
+  height: 650px;
+}
+
 .userFormContainer {
   padding: 24px;
   min-width: 260px;

@@ -122,7 +122,7 @@ const Connectbutton=(props)=>{
                         {!isPasswordValid && <p className={Styles.errorMessage}>{passwordErrorMessage}</p>}
                         <div className={Styles.leftflex}>
                             <button className={Styles.brightbutton} onClick={closeModal}>CANCEL</button>
-                            <button className={Styles.darkbutton} disabled={isButtonDisabled} onClick={handleSubmit}>Reset password</button>
+                            <button className={Styles.darkbutton} disabled={isButtonDisabled} onClick={handleSubmit}>Disconnect</button>
                         </div>
                     </div>
                 </form>

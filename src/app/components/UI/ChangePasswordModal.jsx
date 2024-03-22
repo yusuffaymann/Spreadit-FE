@@ -131,22 +131,22 @@ const ChangePasswordModal =(props)=>{
         <div className={Styles.modaloverlay}>
         <div className={Styles.passwordmodal}>
           <div className={Styles.rowflex}>
-            <SideArt />
+            <SideArt className="modal-art" />
             <div className={Styles.formcontainer}>
               <FormInfo title="Update your password" description=""/>
               <div className={Styles.inputwrap}>
                 <input className={isPasswordValid ? Styles.inputs : Styles.invalidInput} type="password" required placeholder=" " onChange={handleCurrentPasswordChange}></input>
-                <label for="">OLD PASSWORD</label>
+                <label htmlFor="">OLD PASSWORD</label>
                 {!isPasswordValid && <p className={Styles.errorMessage}>{currentPasswordErrorMessage}</p>}
               </div>
               <div className={Styles.inputwrap}>
                 <input className={isNewPasswordValid ? Styles.inputs : Styles.invalidInput} type="password" required placeholder=" " onChange={handlenewPasswordChange}></input>
-                <label for="">NEW PASSWORD</label>
+                <label htmlFor="">NEW PASSWORD</label>
                 {!isNewPasswordValid && <p className={Styles.errorMessage}>{newPasswordErrorMessage}</p>}
               </div>
               <div className={Styles.inputwrap}>
                 <input className={isNewPassword2Valid ? Styles.inputs : Styles.invalidInput} type="password" required placeholder=" " onChange={handlenewPassword2Change}></input>
-                <label for="">CONFIRM NEW PASSWORD</label>
+                <label htmlFor="">CONFIRM NEW PASSWORD</label>
                 {!isNewPassword2Valid && <p className={Styles.errorMessage}>{newPassword2ErrorMessage}</p>}
               </div>
               <Toogle optionTitle="Log me out everywhere" optionDescription="Changing your password logs you out of all browsers on your device(s). Checking this box also logs you out of all apps you have authorized." />
