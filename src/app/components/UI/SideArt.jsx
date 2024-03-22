@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import sideArt from "../../assets/reddit-side-art.png"
+import sideArt from "../../assets/reddit-side-art.png";
 
 function SideArt() {
     return (
@@ -9,5 +9,4 @@ function SideArt() {
       </div>
     );
   }
-
-  export default SideArt;
+export default SideArt;

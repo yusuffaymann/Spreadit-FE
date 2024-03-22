@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import logo from "../../assets/logoSpreadIt.svg"
-import styles from "./FormInfo.module.css"
+import logo from "../../assets/logoSpreadIt.svg";
+import styles from "./FormInfo.module.css";
 
 function FormInfo({title, description}) {
     return (
@@ -11,8 +11,12 @@ function FormInfo({title, description}) {
         </div>
         <h1 className={styles.title}>{title}</h1>
         <p className={styles.description}>{description}</p>
-      </div>
-    );
-  }
 
-  export default FormInfo; 
+      </div>
+      <h1 className={styles.title}>{title}</h1>
+      <p className={styles.description}>{description}</p>
+    </div>
+  );
+}
+
+export default FormInfo;
