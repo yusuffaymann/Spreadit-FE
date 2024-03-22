@@ -29,4 +29,3 @@ export default async function handler(url, method, body) {
       throw error; // Re-throw for further handling
     }
   }
-  
