@@ -1,10 +1,12 @@
 import Image from "next/image";
-import React from "react";
+import React,{useState, useEffect} from "react";
 import "./Profile.css";
 import AvatarArea from "./profile_images/AvatarArea";
 import BannerArea from "./profile_images/BannerArea"
 
-export default function ProfileImages() {
+export default function ProfileImages({setAvatarUrl, setBannerUrl}) {
+
+  
   return (
     <div>
       <div className="settings--flex">
@@ -14,8 +16,8 @@ export default function ProfileImages() {
         </div>
         <div class="settings--flexoption">
           <div className="profile--images-flexdrag">
-            <AvatarArea/>
-            <BannerArea/>
+            <AvatarArea setAvatarUrl={setAvatarUrl}/>
+            <BannerArea setBannerUrl={setBannerUrl}/>
           </div>
         </div>
       </div>

@@ -1,11 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./AvatarArea.module.css";
 import PlusIcon from "./PlusIcon";
 import "../Profile.css";
 
-export default function AvatarArea() {
+export default function AvatarArea({setAvatarUrl}) {
   const [avatarImage, setAvatarImage] = useState(null);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (avatarImage) {
+      setAvatarUrl(URL.createObjectURL(avatarImage));
+    }
+  }, [avatarImage, setAvatarUrl]);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];

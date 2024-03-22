@@ -1,11 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./BannerArea.module.css";
 import PlusIcon from "./PlusIcon";
 import "../Profile.css";
 
-export default function BannerArea() {
+export default function BannerArea({setBannerUrl}) {
   const [bannerImage, setBannerImage] = useState(null);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (bannerImage) {
+      setBannerUrl(URL.createObjectURL(bannerImage));
+    }
+  }, [bannerImage, setBannerUrl]);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
