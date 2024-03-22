@@ -6,15 +6,33 @@ import Layout from "../SettingsLayout";
 import Changeemailpassword from "../../components/UI/Changebutton";
 import Changegendercountry from "../../components//UI/Listbutton";
 import Connectbutton from "../../components/UI/Connectbutton";
+import ChangeEmailmodal from "../../components/UI/ChangeEmailModal";
+import ChangePasswordModal from "../../components/UI/ChangePasswordModal";
 
 const Home=()=> {
   const [userData, setUserData] = useState(null);
-/*   const [Ygender,setYgender]=useState("MAN");
-  const handleItemClick = (item) => {
-    setYgender(item);
-    console.log(item);
-  }; */
+  const [showEmailModal,setShowEmailModal]=useState(false);
+  const [showPasswordModal,setShowPasswordModal]=useState(false);
+  const [currentDescription,setCurrentDescription]=useState("")
 
+    const openEmailModal = () => {
+      setShowEmailModal(true);
+    };
+    const openPasswordModal = () => {
+      setShowPasswordModal(true);
+    };
+
+    const updateupdatedescription=(newdescription)=>{
+      setCurrentDescription(newdescription);
+    }
+  
+    const closeEmailModal = () => {
+      setShowEmailModal(false);
+    };
+
+    const closePasswordModal = () => {
+      setShowPasswordModal(false);
+    };
 
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +44,6 @@ const Home=()=> {
         const data = await response.json();
         console.log(data);
         setUserData(data);
-        /* setYgender(data.gender); */
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -35,7 +52,6 @@ const Home=()=> {
   }, []);
 
   if (!userData) {
-    // Render loading state or return null
     return <div>Loading...</div>;
   }
 
@@ -55,8 +71,6 @@ const Home=()=> {
         if (!response.ok) {
             throw new Error('Failed to update gender');
         }
-
-        //const data = await response.json();
         console.log("gender changed to "+newgender);
     } catch (error) {
         console.error('Error updating gender:', error.message);
@@ -125,10 +139,12 @@ async function updateCountry(newcountry) {
               <h3 className={Styles.subheader}>ACCOUNT PREFERENCES</h3>
               <hr className={Styles.line}></hr>
             </div>
-            <Changeemailpassword type="Email address" description={email} display="Change" />
-            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" display="Change" />
-            <Changegendercountry list={genders} initialv={gender} type={"Gender"}   choose={(newgender) => updateGender(newgender)} />
-            <Changegendercountry list={countries} initialv={country} type={"Country"} choose={(newcountry) => updateCountry(newcountry)} />
+            <Changeemailpassword type="Email address" description={currentDescription==""?email:currentDescription} display="Change" activate={() => {openEmailModal()}} />
+            {showEmailModal && (<ChangeEmailmodal close={()=>closeEmailModal()} updatetext={(newdescription) => updateupdatedescription(newdescription)} />) }
+            <Changeemailpassword type="Password" description="Password must be at least 8 characters long" display="Change" activate={() => {openPasswordModal()}} />
+            {showPasswordModal && (<ChangePasswordModal close={()=>closePasswordModal()} />)}
+            <Changegendercountry list={genders} initialv={gender} type={"Gender"}  displayedColor={"blue"} choose={(newgender) => updateGender(newgender)} />
+            <Changegendercountry list={countries} initialv={country} type={"Country"} displayedColor={"blue"} choose={(newcountry) => updateCountry(newcountry)} />
         </div>
         <div className={Styles.sectioncontainer}>
             <div className={Styles.sectionname}>

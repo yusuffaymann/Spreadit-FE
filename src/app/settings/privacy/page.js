@@ -30,7 +30,6 @@ export default function Home() {
   }, []);
 
   if (!userData) {
-    // Render loading state or return null
     return <div>Loading...</div>;
   }
 
@@ -59,8 +58,6 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Failed to update privacy settings');
       }
-  
-      // Handle success response
       console.log('Privacy settings updated successfully');
     } catch (error) {
       console.error('Error updating privacy settings:', error.message);
@@ -87,10 +84,10 @@ export default function Home() {
   };
   
   const removeProfile2 = async (profilenameToRemove) => {
-    /* const newMutedCommunities = mutedCommunities.filter(profile => profile.profilename !== profilenameToRemove);
+    const newMutedCommunities = mutedCommunities.filter(profile => profile.profilename !== profilenameToRemove);
     updatePrivacySettings(blockedUsers, newMutedCommunities);
-    setMutedCommunities(newMutedCommunities); */
-    try {
+    setMutedCommunities(newMutedCommunities);
+    /* try {
       const response = await fetch(`http://localhost:3002/settings/privacy/mutedCommunities/${profilenameToRemove}
       `, {
         method: 'DELETE'
@@ -102,8 +99,8 @@ export default function Home() {
       setMutedCommunities(mutedCommunities.filter(profile => profile.profilename !== profilenameToRemove));
     } catch (error) {
       console.error('Error removing profile:', error.message);
-    } 
-  };
+    }*/ 
+  }; 
   
   return (
     <div className={styles.App}>

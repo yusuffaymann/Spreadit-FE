@@ -99,8 +99,6 @@ const Deleteaccount=(props)=>{
           if (!response.ok) {
               throw new Error('Failed to alter connection');
           }
-    
-          //const data = await response.json();
           console.log("Accountdeleted");
           alert("redirect to the home page without an account");
       } catch (error) {

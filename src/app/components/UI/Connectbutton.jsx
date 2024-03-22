@@ -49,13 +49,13 @@ const Connectbutton=(props)=>{
       }
       async function checkpassword() {
         try {
-          const response = await post('http://localhost:3001/settings/layout/check-password',{currentPassword});
+          const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
           if (!response.ok) {
             setIsPasswordValid(false);
             setPasswordErrorMessage('Incorrect password.');
           }else{
             setIsConnected(false);
-            alterconnect(isConnected); 
+            alterconnect(false); 
             closeModal();  
           }
         } catch (error) {
@@ -64,8 +64,8 @@ const Connectbutton=(props)=>{
       }
       async function alterconnect(isConnected) {
         try {
-            const response = await fetch('http://localhost:3001/settings/account', {
-                method: 'PUT',
+            const response = await fetch('http://localhost:3002/settings/account', {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -77,8 +77,6 @@ const Connectbutton=(props)=>{
             if (!response.ok) {
                 throw new Error('Failed to alter connection');
             }
-      
-            //const data = await response.json();
             console.log("connected changed to "+isConnected);
         } catch (error) {
             console.error('Error altering connection:', error.message);

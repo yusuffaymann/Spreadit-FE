@@ -3,13 +3,10 @@
   height: 100%;
 }
 .bigcontainer{
- /*  display:grid;
-  grid-template-columns: 20% 55% 25%; */
   margin: 0 auto; 
   padding: 0 8px;
   max-width: 1200px;
   font-family: 'IBM Plex Sans', Arial, sans-serif;
-/*   font-family: 'IBMPlexSans'; */
 }
 .sectioncontainer{
   display: flex;

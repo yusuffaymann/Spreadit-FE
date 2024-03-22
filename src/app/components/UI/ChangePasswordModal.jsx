@@ -86,8 +86,6 @@ const ChangePasswordModal =(props)=>{
           if (!response.ok) {
               throw new Error('Failed to change password');
           }
-    
-          //const data = await response.json();
           console.log("password changed to "+newPassword);
       } catch (error) {
           console.error('Error changing password:', error.message);
@@ -151,7 +149,7 @@ const ChangePasswordModal =(props)=>{
                 <label for="">CONFIRM NEW PASSWORD</label>
                 {!isNewPassword2Valid && <p className={Styles.errorMessage}>{newPassword2ErrorMessage}</p>}
               </div>
-              <Toogle optionTitle="Log me out everywhere" />
+              <Toogle optionTitle="Log me out everywhere" optionDescription="Changing your password logs you out of all browsers on your device(s). Checking this box also logs you out of all apps you have authorized." />
               <button className={Styles.savebutton} disabled={false} onClick={handleSubmit} >Save</button>
             </div>
           </div>
