@@ -7,15 +7,26 @@ import submitToApi from "../utils/submitToApi.js";
 function RecoverUsername() {
   const url = "http://localhost:3002/forgot-username";
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   function handleInputChange(event) {
     const { value } = event.target;
-    console.log(value);
     setEmail(value);
+    setEmailError("");
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const emailPattern =/^[a-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+    if(email === ""){
+      setEmailError("Email is required");
+      return;
+    }else if(!emailPattern.test(email)){
+      setEmailError("Invalid email address");
+      return;
+    }else{
+      setEmailError("");
+    }
     const data = { email };
     const response = await submitToApi(url, "POST", data);
     console.log(response);
@@ -32,13 +43,18 @@ function RecoverUsername() {
         <form className="form" onSubmit={handleSubmit}>
           <div>
             <input
-              className="form-input"
+              className={!emailError ? "form-input" : "form-input input-error"}
               name="email"
               type="email"
               placeholder="Email"
               onChange={handleInputChange}
               value={email}
             />
+            {emailError ? (
+              <p className="error-message">
+                {emailError}
+              </p>
+            ) : null}
           </div>
           <BlueButton>Email Me</BlueButton>
         </form>
