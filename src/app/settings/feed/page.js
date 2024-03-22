@@ -66,7 +66,7 @@ function Feed() {
         autoplayMedia: autoplay,
         reduceanim: reduceAnim,
         communityThemes: communityThemes,
-        contentsort: contentSort,
+        communityContentSort: contentSort,
         csremember: csRemember,
         globalContentView: globalView,
         gvremember: gvRemember,
@@ -164,7 +164,7 @@ function Feed() {
       handleLockComponent(2, false);
     }
   }, [nsfw]);
-  
+
 
   if (loading) {
     return (
