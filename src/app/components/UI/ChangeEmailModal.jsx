@@ -66,8 +66,6 @@ const ChangeEmailmodal =(props)=>{
             if (!response.ok) {
                 throw new Error('Failed to change email');
             }
-      
-            //const data = await response.json();
             props.updatetext(newEmail);
             console.log("email changed to "+newEmail);
         } catch (error) {

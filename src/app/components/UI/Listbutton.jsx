@@ -1,9 +1,10 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useRef, useEffect} from 'react';
 import  Styles from "./Listbutton.module.css";
 
 const Changegendercountry= (props)=>{
     const [showList, setShowList] = useState(false);
+
     const [selectedItem, setSelectedItem] = useState(props.initialv);
 
 
@@ -27,8 +28,9 @@ const Changegendercountry= (props)=>{
       setSelectedItem(item);
       props.choose(item);
       setShowList(false);
+      props.choose(item);
     };
-  
+
     return(
       <div className={Styles.smallcontainer}>
         <div className={Styles.changecontainer}>
@@ -41,7 +43,9 @@ const Changegendercountry= (props)=>{
               {showList && (
             <ul className={Styles.unorderedlist} ref = {ref} >
               {props.list.map((item, index) => (
+
                 <li className={`${Styles.listitem} ${selectedItem === item ? Styles.selected : ""}`} key={index} onClick={() => handleItemClick(item)} >
+
                   {item}
                 </li>
               ))}
