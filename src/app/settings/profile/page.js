@@ -12,7 +12,7 @@ import SettingsLayout from "../SettingsLayout.jsx";
 import optionData from "../options.js";
 import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
 
-const API_URL = "/api/v1/me/prefs";
+const API_URL = "/settings/profile/";
 const DEBOUNCE_DELAY = 1500;
 const MAX_SOCIAL_LINKS = 5;
 
@@ -31,7 +31,7 @@ function Profile() {
   const [loading, setLoading] = useState(true); // Loading indicator
   
 
-
+  
   useEffect(() => {
       async function fetchData() {
           setLoading(true);
@@ -182,6 +182,7 @@ function Profile() {
         </div>
     ); ;
   }
+
   const initialStateArray = {
     13: nsfwProfile,
   14: allowFollow,
