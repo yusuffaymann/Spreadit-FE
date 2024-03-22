@@ -12,6 +12,10 @@ import SettingsLayout from "../SettingsLayout.jsx";
 import optionData from "../options.js";
 import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
 
+const API_URL = "/api/v1/me/prefs";
+const DEBOUNCE_DELAY = 1500;
+const MAX_SOCIAL_LINKS = 5;
+
 function Profile() {
   const [nsfwProfile, setNsfwProfile] = useState(false); // Assuming default value is false
   const [allowFollow, setAllowFollow] = useState(false); // Assuming default value is false
@@ -33,7 +37,7 @@ function Profile() {
           setLoading(true);
         try {
           // Fetch user preferences
-          const prefsData = await handler("/api/v1/me/prefs", "GET")
+          const prefsData = await handler(API_URL, "GET")
           setNsfwProfile(prefsData.nsfwprofile);
           setAllowFollow(prefsData.allowfollow);
           setContentVisibility(prefsData.contentvisibility);
@@ -81,7 +85,7 @@ function Profile() {
       
       try {
         // Fetch user preferences
-        const prefsData = await handler("/api/v1/me/prefs", "PATCH", newPrefsData);
+        const prefsData = await handler(API_URL, "PATCH", newPrefsData);
         console.log(prefsData);
   
       } catch (error) {
@@ -98,8 +102,8 @@ function Profile() {
     useEffect(() => {
       const delay = setTimeout(() => {
         patchData();
-      }, 1500);
-      
+      }, DEBOUNCE_DELAY);
+
       return () => clearTimeout(delay);
     }, [about, displayName]); // Only trigger when about or displayName changes
   
@@ -152,7 +156,7 @@ function Profile() {
   
 
   const addSocialLink = (id, name, url, logo) => {
-    if (counter < 5) {
+    if (counter < MAX_SOCIAL_LINKS) {
       // Spread the existing socialLinks array and add the new object to it
       setSocialLinks([...socialLinks, { id, name, url, logo }]);
       setCounter(counter + 1);
