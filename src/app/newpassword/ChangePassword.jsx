@@ -29,9 +29,11 @@ function ChangePassword() {
             title="Reset your password" 
             description="Choose a new password here, then log in to your account."
             />
-            <form onSubmit={handleSubmit}>
+            <form className="form" onSubmit={handleSubmit}>
                 <div>
-                    <input name="password" 
+                    <input
+                        className="form-input"
+                        name="password" 
                         type="password"
                         placeholder="New Password"
                         onChange={handleInputChange}
@@ -40,7 +42,9 @@ function ChangePassword() {
                 </div>
 
                 <div>
-                    <input name="password2" 
+                    <input
+                        className="form-input"
+                        name="password2" 
                         type="password" 
                         placeholder="Verify Password" 
                         onChange={handleInputChange}
