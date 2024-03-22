@@ -182,6 +182,12 @@ function Profile() {
         </div>
     ); ;
   }
+  const initialStateArray = {
+    13: nsfwProfile,
+  14: allowFollow,
+  15: contentVisibility,
+  16: activeVisibility,
+  };
 
   return (
     <>
@@ -205,6 +211,7 @@ function Profile() {
                 <SettingItem
                   key={option.id}
                   option={option}
+                  isToggled = {nsfwProfile}
                   onItemClick={handleItemClick}
                 />
               )
@@ -212,7 +219,7 @@ function Profile() {
           <h3 className="uppercase-h3-description">Advanced</h3>
 
           <ProfileAdvanced
-            clickEvent={handleItemClick}
+            clickEvent={handleItemClick} array = {initialStateArray}
           />
           <h3 className="uppercase-h3-description">Profile Moderation</h3>
           <div />

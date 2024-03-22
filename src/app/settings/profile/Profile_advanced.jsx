@@ -8,7 +8,8 @@ export default function ProfileAdvanced(props)
     return (
       <div>
         {optionData.map(option => (
-                    (option.id < 18) && (13 < option.id ) && <SettingItem key={option.id} option={option} onItemClick={props.clickEvent}/>
+                    (option.id < 18) && (13 < option.id ) && <SettingItem key={option.id} option={option} onItemClick={props.clickEvent}
+                    isToggled = {props.array[option.id]}/>
                 ))}
         </div>
     )

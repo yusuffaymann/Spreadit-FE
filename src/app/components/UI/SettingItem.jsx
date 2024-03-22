@@ -39,6 +39,10 @@ export default function SettingItem(props) {
     }
   }, [props.isLocked]); // Trigger effect when props.isLocked changes
 
+  useEffect(() => {
+    setIsSwitchToggled(props.isToggled)
+  },[]);
+
 
   return (
     <div>
