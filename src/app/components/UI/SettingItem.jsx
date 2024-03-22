@@ -6,8 +6,8 @@ import Dropdown from "./Dropdown";
 import OutlineButton from "./OutlineButton";
 
 export default function SettingItem(props) {
-  const [isSwitchToggled, setIsSwitchToggled] = useState(false);
-  const [previousSwitchState, setPreviousSwitchState] = useState(false);
+  const [isSwitchToggled, setIsSwitchToggled] = useState(props.isToggled);
+  const [previousSwitchState, setPreviousSwitchState] = useState(props.prevBlur);
 
   const handleClick = () => {
     // Call the callback function provided by the parent
@@ -38,10 +38,6 @@ export default function SettingItem(props) {
       setIsSwitchToggled(previousSwitchState);
     }
   }, [props.isLocked]); // Trigger effect when props.isLocked changes
-
-  useEffect(() => {
-    setIsSwitchToggled(props.isToggled)
-  },[]);
 
 
   return (

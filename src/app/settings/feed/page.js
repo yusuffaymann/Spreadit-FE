@@ -5,7 +5,7 @@ import optionData from "../options.js";
 import handler from "../../utils/apiHandler"
 import SettingsLayout from "../SettingsLayout";
 
-const API_URL = "/api/v1/me/prefs";
+const API_URL = "/settings/feed";
 
 function Feed() {
 
@@ -22,7 +22,7 @@ function Feed() {
   const [newTab, setNewTab] = useState(false); // Assuming default value is false
   const [defMarkdown, setDefMarkdown] = useState(false); // Assuming default value is false
   const [loading, setLoading] = useState(true); // Loading indicator
-  
+  const [prevBlur, setPrevBlur] = useState(blurNsfw);
 
 
   useEffect(() => {
@@ -43,6 +43,7 @@ function Feed() {
           setGVRemember(prefsData.gvremember);
           setNewTab(prefsData.newtab);
           setDefMarkdown(prefsData.defmarkdown);
+          setPrevBlur(prefsData.prevblur)
   
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -70,6 +71,7 @@ function Feed() {
         gvremember: gvRemember,
         newtab: newTab,
         defmarkdown: defMarkdown,
+        prevblur: prevBlur,
       };
       
       try {
@@ -89,20 +91,6 @@ function Feed() {
     }, [nsfw, blurNsfw, homeRecommend, autoplay, reduceAnim, communityThemes,
        contentSort, csRemember, globalView, gvRemember, newTab, defMarkdown]);
 
-
-
-
-  const [option1Toggled, setOption1Toggled] = useState(false); // Placeholder value for option 1 toggle state
-  useEffect(() => {
-    // Placeholder value for option 1 toggle state (always false for now)
-    setOption1Toggled(false);
-
-    // Lock option 2 if option 1 is toggled off
-    if (!option1Toggled) {
-      handleLockComponent(2, true);
-    }
-  }, []);
-
   // State to track locked components
   const [lockedComponents, setLockedComponents] = useState({});
 
@@ -120,6 +108,7 @@ function Feed() {
     handleAPIput(id,status)
     if (id === 1 && status === false) {
       handleLockComponent(2, true);
+      setBlurNsfw(false);
       console.log("locked");
     } else if (id === 1 && status === true) {
       handleLockComponent(2, false);
@@ -137,7 +126,10 @@ function Feed() {
     if (id === 1)
     setNsfw(status);
     else if (id === 2)
-    setBlurNsfw(status);
+    {
+      setBlurNsfw(status);
+      setPrevBlur(status);
+    }
     else if (id === 3)
     setHomeRecommend(status);
     else if (id === 4)
@@ -160,6 +152,19 @@ function Feed() {
     setDefMarkdown(status);
   }
 
+  useEffect(() => {
+    if (!nsfw) {
+      handleLockComponent(2, true);
+      setBlurNsfw(false);
+    }
+    else
+    {
+      setBlurNsfw(prevBlur);
+      handleLockComponent(2, false);
+    }
+  }, [nsfw]);
+  
+
   if (loading) {
     return (
       <div className="window">
@@ -170,6 +175,25 @@ function Feed() {
         </div>
     ); ;
   }
+  
+
+  const initialStateArray = {
+  1: nsfw,
+  2: blurNsfw,
+  3: homeRecommend,
+  4: autoplay,
+  5: reduceAnim,
+  6: communityThemes,
+  8: csRemember,
+  10: gvRemember,
+  11: newTab,
+  12: defMarkdown,
+  };
+
+  const dropDownInitial = {
+    7: contentSort,
+    9: globalView,
+    };
 
   return (
     <div className = "window">
@@ -188,9 +212,10 @@ function Feed() {
                   option={option}
                   onItemClick={handleItemClick}
                   dropDownClick={handleDropdownClick}
-                  isToggled={false}
                   isLocked={lockedComponents[option.id]}
-                  defaultDropdown={contentSort}
+                  defaultDropdown={dropDownInitial[option.id]}
+                  isToggled = {initialStateArray[option.id]}
+                  prevState = {prevBlur}
                 />
               )
           )}
@@ -202,6 +227,7 @@ function Feed() {
                   key={option.id}
                   option={option}
                   onItemClick={handleItemClick}
+                  isToggled={defMarkdown}
                 />
               )
           )}
