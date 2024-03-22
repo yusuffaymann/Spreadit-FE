@@ -3,8 +3,7 @@ import "./dropdown.css";
 import Dropdownmenu from "./dropdownmenu";
 import dropdownOptions from "./dropdownOptions";
 
-function DropdownItem({ toggleMenu ,pId = -1, selectedId = 0}) {
-  
+function DropdownItem({ toggleMenu ,pId = -1, selectedId = 1}) {
   const parentObject = dropdownOptions.find(option => option.parentId === pId);
   const childObject = parentObject && parentObject.choices && parentObject.choices.length > 0 ? parentObject.choices[selectedId - 1] : null;
   return (
