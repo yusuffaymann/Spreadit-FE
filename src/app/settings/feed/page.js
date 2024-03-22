@@ -5,6 +5,8 @@ import optionData from "../options.js";
 import handler from "../../utils/apiHandler"
 import SettingsLayout from "../SettingsLayout";
 
+const API_URL = "/api/v1/me/prefs";
+
 function Feed() {
 
   const [nsfw, setNsfw] = useState(false); // Assuming default value is false
@@ -28,7 +30,7 @@ function Feed() {
           setLoading(true);
         try {
           // Fetch user preferences
-          const prefsData = await handler("/api/v1/me/prefs", "GET")
+          const prefsData = await handler(API_URL, "GET")
           setNsfw(prefsData.nsfw);
           setBlurNsfw(prefsData.blurnsfw);
           setHomeRecommend(prefsData.homerecommend);
@@ -72,7 +74,7 @@ function Feed() {
       
       try {
         // Fetch user preferences
-        const prefsData = await handler("/api/v1/me/prefs", "PATCH", newPrefsData);
+        const prefsData = await handler(API_URL, "PATCH", newPrefsData);
         console.log(prefsData);
   
       } catch (error) {
