@@ -12,23 +12,12 @@ import optionData from "../options.js";
 import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
 
 function Profile() {
-  // State to track locked components
-  const [lockedComponents, setLockedComponents] = useState({});
 
   // State to track if gray overlay is on
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOverlay = () => {
     setIsOpen(!isOpen); // Toggle the isOpen state
-  };
-
-  // Callback function to lock/unlock component
-  const handleLockComponent = (id, isLocked) => {
-    // Update locked components state based on ID and lock status
-    setLockedComponents((prevLockedComponents) => ({
-      ...prevLockedComponents,
-      [id]: isLocked,
-    }));
   };
 
   const handleItemClick = (id, status) => {
@@ -77,7 +66,6 @@ function Profile() {
 
           <ProfileAdvanced
             clickEvent={handleItemClick}
-            lockedList={lockedComponents}
           />
           <h3 className="uppercase-h3-description">Profile Moderation</h3>
           <div />

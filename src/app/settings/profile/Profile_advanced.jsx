@@ -8,8 +8,7 @@ export default function ProfileAdvanced(props)
     return (
       <div>
         {optionData.map(option => (
-                    (option.id < 18) && (13 < option.id ) && <SettingItem key={option.id} option={option} onItemClick={props.clickEvent} 
-                    isLocked={props.lockedList[option.id]}/>
+                    (option.id < 18) && (13 < option.id ) && <SettingItem key={option.id} option={option} onItemClick={props.clickEvent}/>
                 ))}
         </div>
     )
