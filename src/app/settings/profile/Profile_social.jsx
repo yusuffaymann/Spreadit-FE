@@ -20,7 +20,7 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial }) {
 
   const deleteSocialLink = (id) => {
     // Filter out the social link with the given id
-    const updatedSocialLinks = socialLinks.filter(link => link.id !== id);
+    const updatedSocialLinks = socialLinks.filter((link) => link.id !== id);
     // Update the state with the new array
     setSocialLinks(updatedSocialLinks);
     setCounter(counter - 1);
@@ -39,13 +39,17 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial }) {
           <nav className="profile--social-nav">
             <ul>
               {socialLinks.map((link, index) => (
-                <div style={{display: "flex", alignItems: "center"}}>
-                <a href={link.link} style={{ textDecoration: "none" }}>
-                  <SocialLink key={index} logo={link.logo} name={link.name} />
-                </a>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <a href={link.link} style={{ textDecoration: "none" }}>
+                    <SocialLink key={index} logo={link.logo} name={link.name} />
+                  </a>
                 </div>
               ))}
-              <GrayButton children={"Add social link"} wasClicked={onClose} isDisabled={counter === 5}/>
+              <GrayButton
+                children={"Add social link"}
+                wasClicked={onClose}
+                isDisabled={counter === 5}
+              />
               <GrayOutMenuWrapper
                 isOpen={isOpen}
                 onClose={onClose}
@@ -54,11 +58,20 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial }) {
               />{" "}
               {/* Pass onClose instead of onClick */}
             </ul>
-            <ul>{socialLinks.map((link, index) => (
-                <div style={{display: "flex", alignItems: "center"}}>
-                  <SocialLink key={index} id={link.id} logo={link.logo} name={link.name} wasClicked={deleteSocialLink} isDeletor={true}/>
+            <ul>
+              {socialLinks.map((link, index) => (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <SocialLink
+                    key={index}
+                    id={link.id}
+                    logo={link.logo}
+                    name={link.name}
+                    wasClicked={deleteSocialLink}
+                    isDeletor={true}
+                  />
                 </div>
-              ))}</ul>
+              ))}
+            </ul>
           </nav>
         </div>
       </div>

@@ -38,8 +38,8 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const handleSave = () => {
     if (displayName.trim() !== "" && socialUrl.trim() !== "") {
       // Check if displayName is not empty
-      const tempFinder = social.find((finder) => finder.id === selectedLinkId)
-      addSocial(selectedLinkId,displayName, socialUrl, tempFinder.logo); // Pass an object with displayName to addSocial function
+      const tempFinder = social.find((finder) => finder.id === selectedLinkId);
+      addSocial(selectedLinkId, displayName, socialUrl, tempFinder.logo); // Pass an object with displayName to addSocial function
       onClose();
     }
   };
@@ -58,8 +58,18 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const renderDialog = () => {
     return (
       <>
-        {social.map(optionSocial => (
-        (optionSocial.id === selectedLinkId) && <SocialLink key = {optionSocial.id} id = {optionSocial.id} logo={optionSocial.logo} name={optionSocial.name} wasClicked={handleLinkClick}/> ) )}
+        {social.map(
+          (optionSocial) =>
+            optionSocial.id === selectedLinkId && (
+              <SocialLink
+                key={optionSocial.id}
+                id={optionSocial.id}
+                logo={optionSocial.logo}
+                name={optionSocial.name}
+                wasClicked={handleLinkClick}
+              />
+            )
+        )}
         <div>
           <input
             placeholder="Display text"
@@ -84,9 +94,18 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
 
   const renderChoices = () => {
     return (
-      <>{social.map(optionSocial => (
-        <SocialLink key = {optionSocial.id} id = {optionSocial.id} logo={optionSocial.logo} name={optionSocial.name} wasClicked={handleLinkClick}/> ) )}
-    </>);
+      <>
+        {social.map((optionSocial) => (
+          <SocialLink
+            key={optionSocial.id}
+            id={optionSocial.id}
+            logo={optionSocial.logo}
+            name={optionSocial.name}
+            wasClicked={handleLinkClick}
+          />
+        ))}
+      </>
+    );
   };
 
   return (
