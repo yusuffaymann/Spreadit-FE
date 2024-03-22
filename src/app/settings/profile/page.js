@@ -17,6 +17,10 @@ function Profile() {
   const [contentVisibility, setContentVisibility] = useState(false); // Assuming default value is false
   const [displayName, setDisplayName] = useState(''); // Assuming default value is false
   const [about, setAbout] = useState(''); // Assuming default value is false
+  const [socialLinks, setSocialLinks] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [bannerUrl, setBannerUrl] = useState('');
   const [loading, setLoading] = useState(true); // Loading indicator
   
 
@@ -32,6 +36,8 @@ function Profile() {
           setContentVisibility(prefsData.contentvisibility);
           setDisplayName(prefsData.displayname);
           setAbout(prefsData.about);
+          setAvatarUrl(prefsData.avatarurl)
+          setBannerUrl(prefsData.bannerurl)
   
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -52,6 +58,8 @@ function Profile() {
         contentvisibility: contentVisibility,
         displayname: displayName,
         about: about,
+        avatarurl: avatarUrl,
+        bannerurl: bannerUrl,
       };
       
       try {
@@ -68,7 +76,7 @@ function Profile() {
     useEffect(() => {
       if(!loading)
         patchData();
-    }, [nsfwProfile, allowFollow, contentVisibility, displayName, about]);
+    }, [nsfwProfile, allowFollow, contentVisibility, displayName, about, avatarUrl, bannerUrl]);
 
 
   // State to track if gray overlay is on
@@ -93,6 +101,24 @@ function Profile() {
     console.log(`Link with ID ${id} clicked.`);
   };
 
+  
+
+  const addSocialLink = (id, name, url, logo) => {
+    if (counter < 5) {
+      // Spread the existing socialLinks array and add the new object to it
+      setSocialLinks([...socialLinks, { id, name, url, logo }]);
+      setCounter(counter + 1);
+    }
+  };
+
+  const deleteSocialLink = (id) => {
+    // Filter out the social link with the given id
+    const updatedSocialLinks = socialLinks.filter((link) => link.id !== id);
+    // Update the state with the new array
+    setSocialLinks(updatedSocialLinks);
+    setCounter(counter - 1);
+  };
+
   return (
     <>
       <SettingsLayout />
@@ -100,15 +126,14 @@ function Profile() {
         <div className="settings--content">
           <h2 className="settings--h2">Customize profile</h2>
           <h3 className="uppercase-h3-description">Profile Information</h3>
-          <ProfileName />
-          <ProfileAbout />
+          <ProfileName displayName={displayName} setDisplayName={setDisplayName} handleSubmit={patchData}/>
+          <ProfileAbout about={about} setAbout={setAbout} handleSubmit={patchData}/>
           <ProfileSocial
-            isOpen={isOpen}
-            onClose={handleOverlay}
-            onSelectSocial={handleLinkSelection}
+            isOpen={isOpen} onClose={handleOverlay} onSelectSocial={handleLinkSelection} addSocialLink={addSocialLink}
+            deleteSocialLink={deleteSocialLink} socialLinks={socialLinks} counter={counter}
           />
           <h3 className="uppercase-h3-description">Images</h3>
-          <ProfileImages />
+          <ProfileImages setAvatarUrl={setAvatarUrl} setBannerUrl={setBannerUrl} />
           <h3 className="uppercase-h3-description">Profile Category</h3>
           {optionData.map(
             (option) =>
