@@ -147,6 +147,13 @@ body{
   display: flex;
 }
 
+.settings--page {
+  margin: 0 auto; 
+  padding: 0 8px;
+  max-width: 1200px;
+  font-family: 'IBM Plex Sans', Arial, sans-serif;
+}
+
 /* Global Styiling for Create page (the most likely to be not exclusive) */
 
 .create--h1
