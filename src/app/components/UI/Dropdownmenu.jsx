@@ -7,7 +7,7 @@ function Dropdownmenu({ closeMenu, pId, onSelect, selectedId : initialSelectedId
   const [selectedId, setSelectedId] = useState(initialSelectedId); // State to track the selected ID
 
   const handleItemClick = (selectedItemId) => {
-    console.log("Item clicked:", selectedItemId); // Debugging
+    console.log("Dropwdownmenu: Item clicked:", selectedItemId); // Debugging
     setSelectedId(selectedItemId);
     onSelect(selectedItemId);
   };
@@ -15,8 +15,6 @@ function Dropdownmenu({ closeMenu, pId, onSelect, selectedId : initialSelectedId
   const renderDropdownItems = () => {
     // Find the object with the matching parentId
     const parentObject = dropdownOptions.find(option => option.parentId === pId);
-    console.log(parentObject)
-    console.log(selectedId)
     
     // Map over the choices array of the found object
     return parentObject && parentObject.choices.map(option => (

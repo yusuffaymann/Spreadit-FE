@@ -22,6 +22,11 @@ export default function SettingItem(props) {
     props.onItemClick(props.option.id, !isSwitchToggled);
   };
 
+  const handleDrop = (id,selectedId) => {
+    console.log(`handleDrop: ${id} ${selectedId}`)
+    props.dropDownClick(id, selectedId);
+  };
+
   useEffect(() => {
     if (props.isLocked) {
       // If the component is being locked, store the current state of the switch toggle
@@ -52,7 +57,7 @@ export default function SettingItem(props) {
               />
             )}
             {props.option.type === "dropdown" && (
-              <Dropdown pId={props.option.id} defId={3}/>
+              <Dropdown pId={props.option.id} defId={props.defaultDropdown} selectedDropItem={handleDrop}/>
             )}
             {props.option.type === "button" && (
               <OutlineButton btnClick={handleClick}>
@@ -67,7 +72,7 @@ export default function SettingItem(props) {
       {props.option.subOptions &&
         props.option.subOptions.map((subOption) => (
           <div className={styles.settingSuboption}>
-            <SettingItem key={subOption.id} option={subOption} onItemClick={props.onItemClick}/>
+            <SettingItem key={subOption.id} option={subOption} onItemClick={props.onItemClick} dropDownClick={props.dropDownClick}/>
           </div>
         ))}
     </div>

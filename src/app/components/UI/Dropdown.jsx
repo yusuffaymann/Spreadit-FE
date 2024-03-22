@@ -30,7 +30,8 @@ function Dropdown(props) {
   const handleSelectedIdChange = (newSelectedId) => {
     // Update the selectedId state with the new value
     setSelectedId(newSelectedId);
-    console.log(`dropdown: ${newSelectedId}`);
+    console.log(`Dropdown: ${newSelectedId}`);
+    props.selectedDropItem(props.pId,newSelectedId)
     setIsMenuVisible(false);
   };
 

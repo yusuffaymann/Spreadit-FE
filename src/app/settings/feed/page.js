@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import SettingItem from "../../components/UI/SettingItem.jsx";
 import optionData from "../options.js";
+import handler from "../../utils/apiHandler"
 import SettingsLayout from "../SettingsLayout";
 
 function Feed() {
@@ -114,6 +115,7 @@ function Feed() {
 
   const handleItemClick = (id, status) => {
     console.log(`SettingItem with ID ${id} clicked. ${status}`);
+    handleAPIput(id,status)
     if (id === 1 && status === false) {
       handleLockComponent(2, true);
       console.log("locked");
@@ -123,9 +125,43 @@ function Feed() {
     }
   };
 
+  const handleDropdownClick = (id, selectedId) => {
+    console.log(`page.js: SettingItem with ID ${id} clicked. ${selectedId}`);
+    handleAPIput(id,selectedId)
+  };
+  
+
+  const handleAPIput = (id, status) => {
+    if (id === 1)
+    setNsfw(status);
+    else if (id === 2)
+    setBlurNsfw(status);
+    else if (id === 3)
+    setHomeRecommend(status);
+    else if (id === 4)
+    setAutoplay(status);
+    else if (id === 5)
+    setReduceAnim(status);
+    else if (id === 6)
+    setCommunityThemes(status);
+    else if (id === 7)
+    setContentSort(status);
+    else if (id === 8)
+    setCSRemember(status);
+    else if (id === 9)
+    setGlobalView(status);
+    else if (id === 10)
+    setGVRemember(status);
+    else if (id === 11)
+    setNewTab(status);
+    else if (id === 12)
+    setDefMarkdown(status);
+  }
+
   return (
-    <>
-      <SettingsLayout />
+    <div className = "window">
+      <div className="settings--page">
+      <SettingsLayout index={3}/>
       <div className="settings--container">
         <div className="settings--content">
           <h2 className="settings--h2">Feed settings</h2>
@@ -138,8 +174,10 @@ function Feed() {
                   key={option.id}
                   option={option}
                   onItemClick={handleItemClick}
+                  dropDownClick={handleDropdownClick}
                   isToggled={false}
                   isLocked={lockedComponents[option.id]}
+                  defaultDropdown={contentSort}
                 />
               )
           )}
@@ -156,8 +194,14 @@ function Feed() {
           )}
         </div>
       </div>
-    </>
+    </div>
+    </div>
   );
 }
 
 export default Feed;
+
+/*
+
+
+*/
