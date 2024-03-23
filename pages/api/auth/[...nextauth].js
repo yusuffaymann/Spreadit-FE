@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import submitToApi from "../../../src/app/utils/submitToApi";
 
 export const authOptions = {
   session: {
@@ -14,7 +15,8 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account.provider === "google") {
-        console.log(account.access_token); //Send Token to API here
+        const url = "http://localhost:3002/login";
+        const response = await submitToApi(url, "POST", account.access_token);
         return true;
       }
     },
