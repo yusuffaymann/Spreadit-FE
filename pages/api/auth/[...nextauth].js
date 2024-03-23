@@ -17,6 +17,7 @@ export const authOptions = {
       if (account.provider === "google") {
         const url = "http://localhost:3002/login";
         const response = await submitToApi(url, "POST", account.access_token);
+        console.log(response)
         return true;
       }
     },
