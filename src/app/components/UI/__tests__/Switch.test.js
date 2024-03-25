@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Toogle from "../UI/Switch";
+import Toogle from "../Switch";
 import '@testing-library/jest-dom'
 
 describe('Toggle component', () => {

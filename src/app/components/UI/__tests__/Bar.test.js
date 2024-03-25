@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Bar from "../UI/Bar";
+import Bar from "../Bar";
 import '@testing-library/jest-dom'
 
 describe("Bar component", () => {
