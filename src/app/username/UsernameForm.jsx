@@ -2,7 +2,7 @@ import React from "react";
 import BlueButton from "../components/UI/BlueButton";
 
 /**
- * Component for displaying PasswordForm.
+ * Component for displaying UsernameForm.
  * @component
  * @param   {Function} handleSubmit         Function to handle form submission.
  * @param   {Function} handleInputChange    Function to handle input change.
