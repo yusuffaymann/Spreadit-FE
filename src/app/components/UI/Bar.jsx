@@ -1,9 +1,20 @@
-// components/Bar.js
 import React from "react";
 import styles from "./Bar.module.css"; // Import CSS file
 import Link from "next/link";
 
-export default function Bar({ selected }) {
+/**
+ * Component for displaying the tab bar.
+ * @param   {int} selected   Index of currently selected tab
+ *
+ * @component
+ * @example
+ * const index = 5
+ * return (
+ *   <Bar selected={index} />
+ * )
+ */
+
+function Bar({ selected }) {
 
     return (
         <div className={styles.tabs}> 
@@ -34,3 +45,5 @@ export default function Bar({ selected }) {
         </div>
     );
 };
+
+export default Bar;
