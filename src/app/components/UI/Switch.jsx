@@ -1,7 +1,38 @@
 import React from "react";
-import styles from "./Switch.module.css"; // Import CSS module
+import styles from "./Switch.module.css";
 
-export default function Toogle(props) {
+/**
+ * Component for displaying the toogle switch.
+ * @component
+ * @param   {string} optionTitle         The title of the switch
+ * @param   {string} optionDescription   The description of the switch
+ * @param   {boolean} isToggled          The state of the switch (on or off)
+ * @param   {Function} onToggle          The function to be called upon clicking on the switch [Required*]
+ * @param   {boolean} disabled           Whether the switch is disabled or not if true the switch becomes unreactive and grayed out
+ * @returns {JSX.Element} The rendered Switch component.
+ *
+ * @example
+ * //renders a toogle with only a title, by default it is enabled and set to off
+ * const title = "Name"
+ * function print() {console.log("switched")}
+ * <Toogle optionTitle={title} onToggle={print()} />
+ * @example
+ * //renders a toogle with a title and a description, by default it is enabled and set to off
+ * const title = "Name"
+ * const description = "Description"
+ * function print() {console.log("switched")}
+ * <Toogle optionTitle={title} optionDescription={description} onToggle={print()} />
+ * @example
+ * //renders a toogle with a title and a description and set to on and disabled
+ * const title = "Name"
+ * const description = "Description"
+ * const toggled = true
+ * const inactive = true
+ * function print() {console.log("switched")}
+ * <Toogle optionTitle={title} optionDescription={description} isToggled={toggled} disabled={inactive} onToggle={print()} />
+ */
+
+function Toogle(props) {
 
     const optionClassName = props.disabled ? styles.disabledOption : "";
 
@@ -19,3 +50,4 @@ export default function Toogle(props) {
     );
 };
 
+export default Toogle;
