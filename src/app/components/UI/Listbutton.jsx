@@ -2,6 +2,34 @@ import React from "react";
 import { useState, useRef, useEffect} from 'react';
 import  Styles from "./Listbutton.module.css";
 
+/**
+ * toogles a menu and shows a list and chooses one from them 
+ * @component
+ * @param {list} list The list to be selected from
+ * @param {string} type The type of the list
+ * @param {string} initialv The intialization value
+ * @param {string} description  The description of the list
+ * @param {string} displayedColor The color of the list button
+ * @param {function} choose functon to be called when item is clicked
+ * @returns {JSX.Element} The rendered ChangeEmailModal component.
+ * 
+ * @example
+ * const list={["MAN","WOMAN"]}
+ * const listtype="gender"
+ * const intialValue="MAN"
+ * description="select the gender"
+ * const listColor={"blue"}
+ * function print() {console.log("Activated")}
+ * <Listbutton 
+                list={list}
+                type={listtype}
+                initialv={intialValue}
+                description={description}
+                displayedColor={listColor}
+                choose={print()}
+            /> 
+ */
+
 const Changegendercountry= (props)=>{
     const [showList, setShowList] = useState(false);
 

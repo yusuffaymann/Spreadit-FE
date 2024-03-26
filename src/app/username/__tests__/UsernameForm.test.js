@@ -27,5 +27,10 @@ describe("UsernameForm component", () => {
         await userEvent.click(btn)
         expect(handleSubmit).toHaveBeenCalledTimes(1)
     })
+
+    it("Chekcs if the error messages are displayed", () => {
+        const { getByText } = render(<UsernameForm emailError="invalid email" />);
+        expect(getByText("invalid email")).toBeInTheDocument();
+    })
 });
 
