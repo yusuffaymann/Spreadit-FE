@@ -1,11 +1,12 @@
 "use client"
 import React, { useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
+import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 import submitToApi from "../utils/submitToApi.js";
 import { useRouter } from "next/navigation";
+import Link from "next/link.js";
 import Validation from "../utils/Validation.js";
-import PasswordForm from "./PasswordForm";
 
 function ResetPassword() {
   const url = "http://localhost:3002/forgot-password";
@@ -40,14 +41,36 @@ function ResetPassword() {
           title="Reset your password"
           description="Tell us the username and email address associated with your Reddit account, and we'll send you an email with a link to reset your password."
         />
-        <PasswordForm
-          handleSubmit={handleSubmit}
-          handleInputChange={handleInputChange}
-          username={formData.username}
-          email={formData.email}
-          usernameError={validationErrors.username}
-          emailError={validationErrors.email} 
-          />
+        <form className="form" onSubmit={handleSubmit}>
+          <div>
+            <input
+              className={!validationErrors.username ? "form-input" : "form-input input-error"}
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Username"
+              onChange={handleInputChange}
+              value={formData.username}
+            />
+            {validationErrors.username ? (<p className="error-message">{validationErrors.username}</p>) : null}
+          </div>
+
+          <div>
+            <input
+              className={!validationErrors.email ? "form-input" : "form-input input-error"}
+              name="email"
+              type="email"
+              placeholder="Email"
+              onChange={handleInputChange}
+              value={formData.email}
+            />
+            {validationErrors.email ? (<p className="error-message">{validationErrors.email}</p>) : null}
+          </div>
+          <BlueButton>Reset Password</BlueButton>
+          <Link href="./username" className="bottom-link">
+            forgot username?
+          </Link>
+        </form>
         <BottomHelp />
       </div>
     </div>

@@ -1,34 +1,8 @@
-/**
- * Validates user input values for a signup or login form.
- * @param {Object} values  User input values.
- * @param {string} values.username  Username entered by the user.
- * @param {string} values.password  Password entered by the user.
- * @param {string} values.email  Email entered by the user.
- * @param {boolean} values.usernameTaken  Boolean indicating if the username is already taken.
- * @param {boolean} values.usernameExists  Boolean indicating if the username exists.
- * @param {boolean} values.incorrectPassword  Boolean indicating if the password is incorrect.
- * @returns {Object}  Object containing error messages for validation.
- *
- * @example
- * // Example usage of Validation function
- * const values = {
- *   username: "exampleuser",
- *   password: "12345678",
- *   email: "example@example.com",
- *   usernameTaken: false,
- *   usernameExists: false,
- *   incorrectPassword: false
- * };
- *
- * const errors = Validation(values);
- * // Output: { username: "", password: "", email: "" }
- */
-
 
 const Validation = (values) =>{
     let errors= {}
 
-        if(!values.username){
+  if(!values.username){
           errors.username="Username is Required."
         }
         else if (values.usernameTaken){

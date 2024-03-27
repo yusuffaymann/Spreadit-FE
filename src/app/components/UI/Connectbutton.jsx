@@ -5,27 +5,6 @@ import mailp from "../../assets/mailimage.png"
 import googlep from "../../assets/Google.png"
 import Styles from "./Connectbutton.module.css"
 
-/**
- * connect/disconnect button to google account
- * @component
- * @param {string} type The account type 
- * @param {string} description The description of Connect button
- * @param {boolean} condition The condition if it is connected or not
- * @returns {JSX.Element} The rendered Connectbutton component.
- * 
- * @example
- * const title = "Google"
- * const description = "Description"
- * const connected=true
- * <Connectbutton type={title} description={description} condition={connected} />
- * 
- * @example
- * const accountType = "Google"
- * const description = "Description"
- * const connected=false
- * <Connectbutton type={accountType} description={description} condition={connected} />
- */
-
 const Connectbutton=(props)=>{
     const [currentPassword, setCurrentPassword] = useState('');
     const [showModal, setShowModal] = useState(false);
