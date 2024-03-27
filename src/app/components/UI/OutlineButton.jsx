@@ -7,7 +7,6 @@ import styles from "./OutlineButton.module.css";
  * @component
  * @param {object} props  The props passed to the OutlineButton component
  * @param {boolean} props.isDisabled  Whether the button is disabled or not
- * @param {string} props.children Text inside button
  * @param {Function} props.btnClick The function to be called upon clicking the button
  * @returns {JSX.Element} The rendered OutlineButton component.
  *
