@@ -3,18 +3,6 @@ import "./dropdown.css";
 import Dropdownmenu from "./dropdownmenu";
 import dropdownOptions from "./dropdownOptions";
 
-/**
- * Component for rendering dropdown box (non expanded state)
- * @component
- * @param {Object} props  The props passed to the DropdownItem component
- * @param {Function} props.toggleMenu  The function to toggle the dropdown menu visibility
- * @param {number} [props.pId=-1]  The parent ID associated with the dropdown item (defaulted to -1 NULL special case)
- * @param {number} [props.selectedId=1]  The ID of the selected dropdown item (defaulted to 1)
- * @returns {JSX.Element} The rendered DropdownItem component.
- *
- * @example
- * <DropdownItem toggleMenu={toggleMenu} pId={2} selectedId={1} />
- */
 function DropdownItem({ toggleMenu ,pId = -1, selectedId = 1}) {
   const parentObject = dropdownOptions.find(option => option.parentId === pId);
   const childObject = parentObject && parentObject.choices && parentObject.choices.length > 0 ? parentObject.choices[selectedId - 1] : null;
