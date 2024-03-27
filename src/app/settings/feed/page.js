@@ -7,14 +7,6 @@ import SettingsLayout from "../SettingsLayout";
 
 const API_URL = "/settings/feed";
 
-/**
- * Component for rendering the Feed Settings page
- * @component
- * @returns {JSX.Element} The rendered Feed component
- *
- * @example
- * <Feed />
- */
 function Feed() {
 
   const [nsfw, setNsfw] = useState(false); // Assuming default value is false
@@ -64,9 +56,7 @@ function Feed() {
       fetchData();
     }, []);
 
-  /**
-   * Function to update user preferences via API call
-   */
+
   async function patchData() {
 
       let newPrefsData = {
@@ -105,11 +95,7 @@ function Feed() {
   // State to track locked components
   const [lockedComponents, setLockedComponents] = useState({});
 
-  /**
-   * Callback function to lock/unlock component.
-   * @param {number} id       The ID of the component
-   * @param {boolean} isLocked   Flag indicating whether the component is locked or not
-   */
+  // Callback function to lock/unlock component
   const handleLockComponent = (id, isLocked) => {
     // Update locked components state based on ID and lock status
     setLockedComponents((prevLockedComponents) => ({
@@ -118,11 +104,6 @@ function Feed() {
     }));
   };
 
-  /**
-   * General click handler for switch toggles
-   * @param {number} id      The ID of the option
-   * @param {boolean} status   The toggle status
-   */
   const handleItemClick = (id, status) => {
     console.log(`SettingItem with ID ${id} clicked. ${status}`);
     handleAPIput(id,status)
@@ -136,29 +117,18 @@ function Feed() {
     }
   };
 
-  /**
-   * Handles dropdown click event.
-   * @param {number} id           The ID of the dropdown
-   * @param {number} selectedId   The selected ID of the dropdown suboption
-   */
   const handleDropdownClick = (id, selectedId) => {
     console.log(`page.js: SettingItem with ID ${id} clicked. ${selectedId}`);
     handleAPIput(id,selectedId)
   };
   
-  /**
-   * General handler for API PUT request for updating preferences (can be all types of input)
-   * @param {number} id      Option ID
-   * @param {boolean} status   Toggle status
-   * @param {number} status   Selected option under a dropdown
-   */
+
   const handleAPIput = (id, status) => {
     if (id === 1)
     setNsfw(status);
     else if (id === 2)
     {
       setBlurNsfw(status);
-      // Store its previous state in case toggle id 1 is turned on again (which it depends on)
       setPrevBlur(status);
     }
     else if (id === 3)
