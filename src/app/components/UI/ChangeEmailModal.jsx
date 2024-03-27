@@ -4,6 +4,18 @@ import mailp from "../../assets/mailimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./ChangeEmailModal.module.css";
 
+/**
+ * modal that takes new email and password and checks on them then updates the email
+ * @component
+ * @param {function} close function called when X button is clicked to close the modal
+ * @param {function} updatetext function called to change the displaed email
+ * @returns {JSX.Element} The rendered ChangeEmailModal component.
+ * 
+ * @example
+ * function print() {console.log("closed")}
+ * <ChangeEmailModal close={print()} updatetext= {print()}/> 
+ */
+
 const ChangeEmailmodal =(props)=>{
     
     const [currentPassword, setCurrentPassword] = useState('');

@@ -3,6 +3,20 @@ import Image from "next/image";
 import logo from "../../assets/logoSpreadIt.svg";
 import styles from "./FormInfo.module.css";
 
+
+/**
+ * Component for displaying info about the form.
+ * @component
+ * @param   {string} title   Title of the form.
+ * @param   {string} description   Description of the form.
+ * @returns {JSX.Element} The rendered Info component.
+ *
+ * @example
+ * //renders a FormInfo component with title and description
+ * const title = "Title"
+ * const description = "Description"
+ * <FormInfo title={title} description={description}/>
+ */
 function FormInfo({title, description}) {
     return (
       <div> 
