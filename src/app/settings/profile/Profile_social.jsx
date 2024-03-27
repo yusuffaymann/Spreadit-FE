@@ -15,7 +15,7 @@ import social from "../social.js";
  * @param   {Function} onSelectSocial    Function triggered when a social link bubble is clicked (actually not necessary, a leftover from debugging)
  * @param   {Function} addSocialLink   The function to be called when the save button is clicked
  * @param   {Function} deleteSocialLink   The function to be called when the black parallel social link bubble is clicked
- * @param   {Object[]} socialLinks   An array of social links containing the id, display name, logo, and url linked passed down as a state from page.js
+ * @param   {Object} socialLinks   An array of social links containing the id, display name, logo, and url linked passed down as a state from page.js
  * @param   {number} counter       The current count of social links passed down as a state from page.js
  * @returns {JSX.Element} The rendered ProfileSocial component.
  *

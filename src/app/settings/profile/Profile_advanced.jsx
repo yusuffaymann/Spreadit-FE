@@ -8,7 +8,7 @@ import optionData from "../options.js";
  * @component
  * @param   {Object} props         The props passed
  * @param   {Function} props.clickEvent   The function to be called when a switch is clicked inside the SettingItem component/container
- * @param   {boolean[]} props.array     An array of API predetermined / saved true/false values for the switch components, created in Profile component
+ * @param   {Array.<boolean>} props.array     An array of API predetermined / saved true/false values for the switch components, created in Profile component
  * @returns {JSX.Element} The rendered ProfileAbout component.
  *
  * @example
