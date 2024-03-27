@@ -1,11 +1,6 @@
 import React from "react";
 import styles from "./PlusIcon.module.css";
 
-/**
- * Component rendering the plus icon used in the image upload areas
- * @component
- * @returns {JSX.Element} The rendered PlusIcon component.
- */
 export default function PlusIcon() {
 
   return (
