@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
-import NewPasswordForm from "./NewPasswordForm";
+import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 import submitToApi from "../utils/submitToApi.js";
 
@@ -41,14 +41,44 @@ function ChangePassword() {
           title="Reset your password"
           description="Choose a new password here, then log in to your account."
         />
-        <NewPasswordForm 
-          handleSubmit={handleSubmit}
-          handleInputChange={handleInputChange}
-          password={formData.password}
-          password2={formData.password2}
-          isLong={isLong}
-          isEqual={isEqual}
-        />
+        <form className="form" onSubmit={handleSubmit}>
+          <div>
+            <input
+              className={isLong ? "form-input" : "form-input input-error"}
+              name="password"
+              type="password"
+              placeholder="New Password"
+              onChange={handleInputChange}
+              value={formData.password}
+            />
+            {!isLong ? (
+              <p className="error-message">
+                Password must be at least 8 characters
+              </p>
+            ) : null}
+          </div>
+
+          <div>
+            <input
+              className={
+                isEqual && isLong ? "form-input" : "form-input input-error"
+              }
+              name="password2"
+              type="password"
+              placeholder="Verify Password"
+              onChange={handleInputChange}
+              value={formData.password2}
+            />
+            {!isEqual ? (
+              <p className="error-message">Passwords do not match</p>
+            ) : isLong ? null : (
+              <p className="error-message">
+                Password must be at least 8 characters
+              </p>
+            )}
+          </div>
+          <BlueButton>Set Password</BlueButton>
+        </form>
         <BottomHelp> </BottomHelp>
       </div>
     </div>

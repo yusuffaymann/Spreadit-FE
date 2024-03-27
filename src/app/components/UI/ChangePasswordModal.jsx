@@ -5,17 +5,6 @@ import Toogle from "./Switch";
 import { useState,useEffect } from 'react';
 import Styles from "./ChangePasswordModal.module.css"
 
-/**
- * a modal that checks the new password and updates it
- * @component
- * @param {function} close function called when Xbutton is clicked
- * @returns {JSX.Element} The rendered ChangePasswordModal component.
- * 
- * @example 
- * function print() {console.log("closed")}
- * <ChangePasswordModal close={print()} />
- */
-
 const ChangePasswordModal =(props)=>{
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setnewPassword] = useState('');

@@ -3,19 +3,6 @@ import Image from "next/image";
 import binp from"../../assets/binimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./Deletebutton.module.css";
-
-/**
- * Delete modal that checks on the inputs and deletes the account
- * @component
- * @param {string} username The username of this account to be deleted
- * @returns {JSX.Element} The rendered Deletebutton component.
- * 
- * @example
- * const userName = "Name"
- * <Deletebutton username={userName} /> 
- */
-
-
 const Deleteaccount=(props)=>{
     const [currentPassword, setCurrentPassword] = useState('');
     const [UserName, setUserName] = useState('');
