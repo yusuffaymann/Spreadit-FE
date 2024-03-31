@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
-import BlueButton from "../components/UI/BlueButton.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
+import UserNameForm from "./UsernameForm.jsx";
 import submitToApi from "../utils/submitToApi.js";
 
 function RecoverUsername() {
@@ -40,24 +40,12 @@ function RecoverUsername() {
           title="Recover your username"
           description="Tell us the email address associated with your Reddit account, and we'll send you an email with your username."
         />
-        <form className="form" onSubmit={handleSubmit}>
-          <div>
-            <input
-              className={!emailError ? "form-input" : "form-input input-error"}
-              name="email"
-              type="email"
-              placeholder="Email"
-              onChange={handleInputChange}
-              value={email}
-            />
-            {emailError ? (
-              <p className="error-message">
-                {emailError}
-              </p>
-            ) : null}
-          </div>
-          <BlueButton>Email Me</BlueButton>
-        </form>
+        <UserNameForm
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+          email={email}
+          emailError={emailError} 
+          />
         <BottomHelp />
       </div>
     </div>

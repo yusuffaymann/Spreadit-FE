@@ -1,19 +1,37 @@
-export default async function handler(url, method, body) {
+/**
+ * Component for handling fetch calls.
+ * @function
+ * @async
+ * @param   {string} url   The endpoint the request should be sent to [Required]
+ * @param   {string} method   The method of the request GET,PUT,etc.. [Required]
+ * @param   {string} body   The body of the request [Required (if not GET or DELETE)]
+ * @returns {JSON} The response pasrsed as a json.
+ *
+ * @example
+ * //gets the data at settings/emails endpoint
+ * const url = /settings/emails
+ * const method = GET
+ * return (handler(url, method));
+ * @example
+ * //post data to settings/notifications endpoint
+ * const url = /settings/notifications
+ * const method = Post
+ * const body = {          
+ *        mentions: true,
+          comments: false
+        }
+ * return (handler(url, method, body));
+ */
+
+async function handler(url, method, body) {
     try {
-  /*     const base_url = 'https://oauth.reddit.com';
-      const token = `bearer ${""}`;
-      const headers = { 'Authorization': token, 'User-Agent': 'spreadit by Common-Winter-7186' }; */
       const base_url = 'http://localhost:3002';
-  /*     const token = `bearer 1`; */
   
   
       // Conditionally include the body only when it's provided and the method is not 'GET'
       const requestOptions = {
         method: `${method}`,
-  /*       headers: { 'Authorization': token, 'User-Agent': 'spreadit by Common-Winter-7186' }, */
-        headers: { 
-  /*         'Authorization': token, */
-        },
+        headers: {},
         body: method !== ('GET' || 'DELETE') && body ? JSON.stringify(body) : undefined
       };
   
@@ -28,4 +46,6 @@ export default async function handler(url, method, body) {
       console.error('Error fetching data:', error);
       throw error; // Re-throw for further handling
     }
-  }
+  };
+
+  export default handler;

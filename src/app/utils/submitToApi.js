@@ -18,6 +18,7 @@ const submitToApi = async (url, method, data) => {
         return responseData;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 

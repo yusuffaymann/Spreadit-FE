@@ -3,6 +3,22 @@ import Image from "next/image";
 import pathPP1 from "../../assets/PP1.png"
 import pathPP2 from "../../assets/PP2.png" 
 import styles from "./Blockedmuted.module.css"
+
+/**
+ * component for showing and removing from a list of users or communities
+ * @component
+ * @param {string} profilename The profile name of the user or the community 
+ * @param {int} path Which path of the profile picture
+ * @param {function} onRemove Function to be called when remove button is clicked
+ * @returns {JSX.Element} The rendered Blockedmuted component.
+ *  
+ * @example
+ * const userName = "Name"
+ * const pathNumber = 1
+ * function print() {console.log("Removed")}
+ * <Blockedmuted profilename={userName} path= {pathNumber} onRemove={print()}/>
+ */
+
 const Blockedmuted=(props)=>{
     const removeProfile = () => {
         props.onRemove(props.profilename); // Call the function passed from the parent component
