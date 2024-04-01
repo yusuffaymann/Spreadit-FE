@@ -1,0 +1,19 @@
+.dropdown_item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3rem;
+    width: 100%;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.dropdown_item:hover{
+    background-color: #F2F4F5;
+    overflow: hidden;
+    border-radius: 5.6px;
+}
+
+.option{
+    display: flex;
+    gap: 0.5rem;
+}
