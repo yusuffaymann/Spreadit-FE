@@ -9,6 +9,8 @@ import upvoteOutlined from "@/app/assets/upvote-outline.svg";
 import downvoteOutlined from "@/app/assets/downvote-outline.svg";
 import upvoteHover from "@/app/assets/upvote-hover.svg";
 import downvoteHover from "@/app/assets/downvote-hover.svg";
+import commentIcon from "@/app/assets/comments.svg";
+import shareIcon from "@/app/assets/share.svg";
 
 function PostFooter() {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvote, downvoteIcon: downvote, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
@@ -66,7 +68,15 @@ function PostFooter() {
                 </button>
            </div>
 
-           
+           <button className={styles.btn}>
+                <Image width={16} height={16} src={commentIcon} alt="Comments Icon"/>
+                <span>{12}</span>
+           </button>
+
+           <button className={styles.btn}>
+                <Image width={16} height={16} src={shareIcon} alt="Comments Icon"/>
+                <span>Share</span>
+           </button>
         </div>
     );
 }
