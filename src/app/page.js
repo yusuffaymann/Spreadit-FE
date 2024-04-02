@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <h1>Hello World</h1>
-      <PostFooter />
+      <PostFooter upvote={() => {console.log("upvote")}} downvote={() => {console.log("downvote")}} voteCount={"1k"} commentCount={"2k"} isMo d={true} />
     </div>
   );
 }

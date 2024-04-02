@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./PostFooter.module.css"
-import upvote from "@/app/assets/post-images/upvote-arrow.svg";
-import downvote from "@/app/assets/post-images/downvote-arrow.svg";
+
+import upvoteIcon from "@/app/assets/post-images/upvote-arrow.svg";
+import downvoteIcon from "@/app/assets/post-images/downvote-arrow.svg";
 import upvoteFilled from "@/app/assets/post-images/upvote-filled.svg";
 import downvoteFilled from "@/app/assets/post-images/downvote-filled.svg";
 import upvoteOutlined from "@/app/assets/post-images/upvote-outline.svg";
@@ -12,15 +13,37 @@ import downvoteHover from "@/app/assets/post-images/downvote-hover.svg";
 import commentIcon from "@/app/assets/post-images/comments.svg";
 import shareIcon from "@/app/assets/post-images/share.svg";
 import shieldIcon from "@/app/assets/post-images/shield.svg";
-import PostDropDownItem from "./PostDropDownItem";
 
-function PostFooter() {
-    const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvote, downvoteIcon: downvote, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
+import cross from "@/app/assets/post-images/mod-icons/cross.svg";
+import spam from "@/app/assets/post-images/mod-icons/spam.svg";
+import star from "@/app/assets/post-images/mod-icons/star.svg";
+import starFilled from "@/app/assets/post-images/mod-icons/star-filled.svg";
+import pin from "@/app/assets/post-images/mod-icons/pin.svg";
+import pinFilled from "@/app/assets/post-images/mod-icons/pin-filled.svg";
+import lock from "@/app/assets/post-images/mod-icons/lock.svg";
+import lockFilled from "@/app/assets/post-images/mod-icons/lock-filled.svg";
+import flair from "@/app/assets/post-images/mod-icons/flair.svg";
+import nsfw from "@/app/assets/post-images/mod-icons/nsfw.svg";
+import nsfwFilled from "@/app/assets/post-images/mod-icons/nsfw-filled.svg";
+import spoiler from "@/app/assets/post-images/mod-icons/spoiler.svg";
+import spoilerFilled from "@/app/assets/post-images/mod-icons/spoiler-filled.svg";
+import croudControl from "@/app/assets/post-images/mod-icons/croudcontrol.svg";
+
+import PostDropDownItem from "./PostDropDownItem";
+import PostDropDownMenu from "./PostDropDownMenu";
+
+
+
+
+function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
+    const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
     }
+
+    //Todo? propably will make a function here for each mod action in the future
 
     return (
         <div className={styles.post_footer}>
@@ -29,9 +52,18 @@ function PostFooter() {
                     <button 
                     className={`${styles.circle} ${styles.upvotes_button} ${buttonState.type}${buttonState.upHover} }`} 
                     onClick={() => {
+                        if (buttonState.type === "upvoted") { // if post is upvoted and user clicks upvote, we need to downvote once
+                            downvote();
+                        } else if(buttonState.type === "downvoted") { // if post is downvoted and user clicks upvote, we need to upvote twice
+                            upvote();
+                            upvote();
+                        } else {   // if post is neutral and user clicks upvote, we need to upvote once
+                            upvote();
+                        }
+
                         setButtonState(prevButtonState => {
                             if ( prevButtonState.type === "upvoted" ) {
-                                return {...prevButtonState, type: "neutral", upvoteIcon: upvote, downvoteIcon: downvote};
+                                return {...prevButtonState, type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon};
                             } else{
                                 return {...prevButtonState, type: "upvoted", upvoteIcon: upvoteFilled, downvoteIcon: downvoteOutlined};
                             }
@@ -44,18 +76,27 @@ function PostFooter() {
                     }}
                     onMouseLeave={() => {
                         setButtonState(prevButtonState => {
-                            return {...prevButtonState, upvoteIcon: (prevButtonState.type === "neutral" ? upvote : (prevButtonState.type === "upvoted" ? upvoteFilled : upvoteOutlined)) ,upHover: "", downHover: ""};
+                            return {...prevButtonState, upvoteIcon: (prevButtonState.type === "neutral" ? upvoteIcon : (prevButtonState.type === "upvoted" ? upvoteFilled : upvoteOutlined)) ,upHover: "", downHover: ""};
                         })
                     }}>
                         <Image width={16} height={16} src={buttonState.upvoteIcon} alt="Upvote arrow" />
                     </button>
-                    <span className={`${styles.count} ${buttonState.type}`}>1</span>
+                    <span className={`${styles.count} ${buttonState.type}`}>{voteCount}</span>
                     <button
                     className={`${styles.circle} ${styles.downvotes_button} ${buttonState.type}${buttonState.downHover}`}
                     onClick={() => {
+                        if (buttonState.type === "downvoted") { // if post is downvoted and user clicks downvote, we need to upvote once
+                            upvote();
+                        } else if(buttonState.type === "upvoted") { // if post is upvoted and user clicks downvote, we need to downvote twice
+                            downvote();
+                            downvote();
+                        } else {   // if post is neutral and user clicks downvote, we need to downvote once
+                            downvote();
+                        }
+
                         setButtonState(prevButtonState => {
                             if ( prevButtonState.type === "downvoted" ) {
-                                return {...prevButtonState, type: "neutral", upvoteIcon: upvote, downvoteIcon: downvote};
+                                return {...prevButtonState, type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon};
                             } else{
                                 return {...prevButtonState, type: "downvoted", upvoteIcon: upvoteOutlined, downvoteIcon: downvoteFilled};
                             }
@@ -68,7 +109,7 @@ function PostFooter() {
                     }}
                     onMouseLeave={() => {
                         setButtonState(prevButtonState => {
-                            return {...prevButtonState, downvoteIcon: (prevButtonState.type === "neutral" ? downvote : (prevButtonState.type === "downvoted" ? downvoteFilled : downvoteOutlined)) ,downHover: "", upHover: ""};
+                            return {...prevButtonState, downvoteIcon: (prevButtonState.type === "neutral" ? downvoteIcon : (prevButtonState.type === "downvoted" ? downvoteFilled : downvoteOutlined)) ,downHover: "", upHover: ""};
                         })
                     }}>
                         <Image width={16} height={16} src={buttonState.downvoteIcon} alt="Downvote arrow"/>
@@ -78,7 +119,7 @@ function PostFooter() {
 
                 <button className={styles.btn}>
                         <Image width={16} height={16} src={commentIcon} alt="Comments Icon"/>
-                        <span>{12}</span>
+                        <span>{commentCount}</span>
                 </button>
 
                 <button className={styles.btn}>
@@ -89,15 +130,18 @@ function PostFooter() {
            <button className={styles.mod_interactions} onClick={toggleDropdown}>
             <Image width={22} height={22} src={shieldIcon} alt="mod shield Icon"/>
            </button>
-
-           <div className={`${styles.dropdown_menu} ${showDropdown ? styles.active : styles.inactive}`}>
-                <ul className={styles.no_style}>
-                    <PostDropDownItem icon={upvote} iconAlt="Upvote Icon" description="Upvote" />
-                    <PostDropDownItem icon={downvote} iconAlt="Downvote Icon" description="Downvote" />
-                    <PostDropDownItem icon={commentIcon} iconAlt="Comment Icon" description="Comment" />
-                    <PostDropDownItem icon={shareIcon} iconAlt="Share Icon" description="Share" />
-                </ul>
-           </div>
+            <PostDropDownMenu showDropdown={showDropdown}> 
+                <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" /> 
+                <PostDropDownItem icon={spam} iconAlt="Spam Icon" description="Mark as Spam" />
+                <PostDropDownItem icon={star} iconAlt="Star Icon" description="Distinguish as Mod" />
+                <PostDropDownItem icon={pin} iconAlt="Pin Icon" description="Sticky Post" />
+                <PostDropDownItem icon={lock} iconAlt="Lock Icon" description="Lock Comments" />
+                <PostDropDownItem icon={flair} iconAlt="Flair Icon" description="Add/Change post flair" />
+                <PostDropDownItem icon={nsfw} iconAlt="NSFW Icon" description="Mark as NSFW" />
+                <PostDropDownItem icon={spoiler} iconAlt="Spoiler Icon" description="Mark as Spoiler" />
+                <PostDropDownItem icon={croudControl} iconAlt="Cone Icon" description="Adjust Croud Control" />
+            </PostDropDownMenu>           
+           
         </div>
     );
 }
