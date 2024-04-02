@@ -60,6 +60,7 @@
     line-height: 30px;
     width: 32px;
     cursor: pointer;
+    position: relative;
 }
 
 .options:hover {
