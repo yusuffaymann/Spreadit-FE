@@ -12,9 +12,10 @@ function PostHeader ({subRedditName, subRedditPicture, time}) {
             <div className={styles.subRedditNameAndPicture}>
                 <Image className={styles.subRedditPicture}
                     src={subRedditPicture}
-                    width={24}
-                    height={24}
+                    width={256}
+                    height={256}
                     alt="The subReddit picture "
+                    quality={100}
                 />
                 <div className={styles.subRedditName}>{subRedditName}</div>
             </div>
