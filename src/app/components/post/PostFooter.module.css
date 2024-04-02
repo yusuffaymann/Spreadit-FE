@@ -13,7 +13,7 @@
 .post_footer{
     display: flex;
     align-items: center;
-    width: 724px;
+    width: 100%;
     position: relative;
 }
 

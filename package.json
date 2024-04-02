@@ -14,6 +14,10 @@
     "docs": "jsdoc -c jsdoc.conf.json"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.14",
+    "@mui/material": "^5.15.14",
     "axios": "^1.6.8",
     "better-docs": "^2.7.3",
     "bootstrap": "^5.3.3",
