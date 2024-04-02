@@ -130,7 +130,7 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
            <button className={styles.mod_interactions} onClick={toggleDropdown}>
             <Image width={22} height={22} src={shieldIcon} alt="mod shield Icon"/>
            </button>
-            <PostDropDownMenu showDropdown={showDropdown}> 
+            <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
                 <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" /> 
                 <PostDropDownItem icon={spam} iconAlt="Spam Icon" description="Mark as Spam" />
                 <PostDropDownItem icon={star} iconAlt="Star Icon" description="Distinguish as Mod" />

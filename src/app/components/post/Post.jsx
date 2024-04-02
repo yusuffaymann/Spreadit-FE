@@ -54,7 +54,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                         </div>
                     }
                 </div>
-                <PostFooter />
+                <PostFooter upvote={() => {console.log("upvote")}} downvote={() => {console.log("downvote")}} voteCount={upVotes} commentCount={comments} isMod={true} />
             </div>
         </div>
     );

@@ -22,9 +22,9 @@ video = convertToEmbedLink(video);
   return (
     <div>
       <h1>Hello World</h1>
-      <Post title={"Post example with multiple images"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} images={images} time={"2 days ago"} />
-      <Post title={"post example with a description only"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} description={"the description"} time={"1 day ago"} />
-      <Post title={"post example with an embeded youtube video"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} video={video} time={"now"} />
+      <Post title={"Post example with multiple images"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} images={images} time={"2 days ago"} upVotes={"11k"} comments={"976"} />
+      <Post title={"post example with a description only"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} description={"the description"} time={"1 day ago"} upVotes={"0"} comments={"35"} />
+      <Post title={"post example with an embeded youtube video"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} video={video} time={"now"} upVotes={"3k"} comments={"0"} />
     </div>
   );
 }
