@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./PostHeader.module.css";
 import Image from 'next/image'
+import SubRedditInfoModal from "./SubRedditInfoModal"
 import PostOptionsImage from "../../assets/three-dots-menu.svg"
 import PostDropDownMenu from "./PostDropDownMenu"
 import PostDropDownItem from "./PostDropDownItem"
@@ -9,19 +10,29 @@ import unsave from "../../assets/post-images/unsave.svg"
 import report from "../../assets/post-images/report.svg"
 import hide from "../../assets/post-images/hide.svg"
 
-function PostHeader ({subRedditName, subRedditPicture, time}) {
+function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription}) {
 
 
-    const [showDropdown, setShowDropdown] = React.useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
+    let timeOut;
+
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
     }
 
+    async function handleMouseLeave() {
+        timeOut = setTimeout(() => {
+            setShowSubRedditInfo(false);     
+        }, 200);
+    }
+
     return(
         <div className={styles.header}>
         <div className={styles.postHeaderInfo}>
-            <div className={styles.subRedditNameAndPicture}>
+            <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
+                {showSubRedditInfo && <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} > <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} /> </div>}
                 <Image className={styles.subRedditPicture}
                     src={subRedditPicture}
                     width={256}

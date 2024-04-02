@@ -22,6 +22,7 @@
 .subRedditNameAndPicture {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .subRedditNameAndPicture:hover .subRedditName {

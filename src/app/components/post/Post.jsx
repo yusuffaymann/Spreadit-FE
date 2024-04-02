@@ -13,7 +13,7 @@ import HiddenPost from "./HiddenPost";
  * @component
  */
 
-function Post({ title, description, subRedditName, subRedditPicture, video, images, upVotes, comments, time }) {
+function Post({ title, description, subRedditName, subRedditPicture, video, images, upVotes, comments, time, banner, subRedditDescription }) {
 
     const displayDescription = (video===undefined && images===undefined) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
@@ -24,7 +24,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
             <div className={styles.body}>
                 {hidden===true && <HiddenPost />}
                 {hidden ===false && <div>
-                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} />
+                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} />
                     <div className={styles.title}>{title}</div>
                     {displayDescription && <div className={styles.description}>{description}</div>}
                     <div className={styles.media}>
