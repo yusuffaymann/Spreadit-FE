@@ -2,10 +2,10 @@ import React from "react";
 import styles from "./Post.module.css";
 import Image from 'next/image'
 import { useState } from "react";
-import Video from 'next-video';
 import Header from "./PostHeader";
 import nextImage from "../../assets/right-chevron-svgrepo-com.svg"
 import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
+import PostFooter from "./PostFooter";
 
 /**
  * Component for displaying the post.
@@ -25,15 +25,14 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                 {displayDescription && <div className={styles.description}>{description}</div>}
                 <div className={styles.media}>
                     {video !== undefined &&
-                        <Video width="320" height="240" controls preload="none">
-                        <source src={video} type="video/mp4" />
-                        Your browser does not support the video tag.
-                        
-                        </Video>}
+                        <iframe className={styles.video} title="Posted video"
+                        allowFullScreen
+                        src={video}
+                    />}
                     {(video === undefined && images !==undefined) &&       
                         <div className={styles.image} >
                             <div className={styles.backgroundImage} style={{backgroundImage: `url(${images[imageIndex]})`}}></div>
-                            <Image src={images[imageIndex]} alt="posted image " width={540} height={540} />
+                            <Image src={images[imageIndex]} alt="posted image " fill style={{objectFit: "contain", maxWidth: "100%"}}  />
                             {(images.length > imageIndex+1) &&
                                 <button type="button" className={`${styles.changeImage} ${styles.nextImage}`} onClick={() => setImageIndex(imageIndex+1)}>
                                 <Image 
@@ -55,6 +54,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                         </div>
                     }
                 </div>
+                <PostFooter />
             </div>
         </div>
     );
