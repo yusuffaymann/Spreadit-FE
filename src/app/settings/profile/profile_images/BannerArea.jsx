@@ -51,8 +51,30 @@ export default function BannerArea({setBannerUrl}) {
     height: "200px", // Set your desired height
   };
 
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif"
+      ) {
+        setBannerImage(file);
+      }
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="profile--banner">
+    <div className="profile--banner"
+    onDrop={handleDrop}
+    onDragOver={handleDragOver}>
       <label className="profile--images-dragarea profile--images-border">
         <div
           style={bannerStyle}

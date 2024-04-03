@@ -41,8 +41,29 @@ export default function AvatarArea({setAvatarUrl}) {
     }
   };
 
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif"
+      ) {
+        setAvatarImage(file);
+      }
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="profile--avatar">
+    <div className="profile--avatar"
+    onDrop={handleDrop}
+    onDragOver={handleDragOver}>
       <label className="profile--images-dragarea profile--images-border">
         {avatarImage ? (
           <img className={`${styles.box} ${styles.color} ${styles.border} }`} src={URL.createObjectURL(avatarImage)} alt="Uploaded Avatar" />
