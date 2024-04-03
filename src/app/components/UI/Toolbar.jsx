@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect} from 'react';
+import Sidebar from "./Sidebar";
 import logo from "../../assets/logoSpreadIt.svg";
 import searchicon from "../../assets/search.svg"
 import listicon from "../../assets/list.svg"
@@ -96,6 +97,7 @@ const ToolBar =({page,loggedin})=>{
             </div>
             {showModal&&(
                 <div className={styles.modaloverlay}>
+                    <Sidebar/>
                 </div>
             )}   
         </div>
