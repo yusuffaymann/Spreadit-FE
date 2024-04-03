@@ -19,27 +19,55 @@
 
 .buttonGroup {
     position: absolute;
-    bottom: 20px;
-    right: 10px;
+    bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
-.addButton {
-    background-color: #007bff;
+.leftbuttons{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-end;
+}
+
+.addButton,.cancelButton {
+    background-color: #a50f03;
     color: white;
     border: none;
-    border-radius: 4px;
-    padding: 10px;
+    border-radius: 30px;
     margin-left: 5px;
+    padding: 5px;
+    
+}
+
+.cancelButton{
+    background-color: rgb(185 183 183);
+    color: black;
+}
+
+.addButton:hover{
+    background-color: #7e0b03;
     cursor: pointer;
 }
 
-.embeddedButton {
-    background-color: #f0f0f0;
-    color: #333;
-    z-index: 100;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    margin-left: 5px;
+.cancelButton:hover{
+    background-color: rgb(212, 211, 211);
     cursor: pointer;
+}
+
+.icons{
+    position: relative;
+    align-self: center;
+    width: 30px;
+    height: 25px;
+    padding: 3px;
+}
+
+.icons:hover{
+    cursor: pointer;
+    border-radius: 45px;
+    border:none;
+    background-color: rgb(212, 211, 211);
 }
