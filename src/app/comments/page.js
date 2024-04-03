@@ -2,13 +2,14 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { useState,useEffect } from 'react';
-import ToolBar from "../components/UI/Toolbar"
+import ToolBar from "../components/UI/Toolbar";
+import Sidebar from "../components/UI/Sidebar";
 import Comment from "../components/UI/Comment";
 import CommentInput from "../components/UI/CommentInput";
 import RightCommentsSidebar from "../components/UI/RightCommentsSidebar";
 
 const Home=()=> {
-  const UserName="Teachers";
+  const UserName="Engineers";
   const [userData, setUserData] = useState(null);
   const [addingComment,setAddingComment]=useState(false);
   const [comments,setComments]=useState(null);
@@ -55,11 +56,14 @@ const Home=()=> {
       <ToolBar page="spreadit"  loggedin={true} />
       <div className={styles.page}>
         <div className={styles.leftbar}>
-
+          <Sidebar />
         </div>
         <div className={styles.mainbar}>
-          {addingComment&&(<CommentInput onComment={onComment}/>)}
-          {!addingComment&&(<button className={styles.addcommentbutton} onClick={()=>{setAddingComment(true)}}>Add Comment</button>)}
+          <div className={styles.inputarea}>
+            {addingComment&&(<CommentInput onComment={onComment} close={()=>{setAddingComment(false)}}/>)}
+            {!addingComment&&(<button className={styles.addcommentbutton} onClick={()=>{setAddingComment(true)}}>Add Comment</button>)}
+          </div>
+          
           {comments.length!==0&&(
             <div>
               {comments.map((comment)=>(

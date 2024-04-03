@@ -23,6 +23,10 @@
   overflow-y: auto;
 }
 
+.inputarea{
+  margin: 10px;
+}
+
 .addcommentbutton{
   font-size: 14px;
   line-height: 1.5rem;
@@ -32,7 +36,6 @@
   border-radius: 999px;
   cursor: text;
   text-align: left;
-  margin: 10px;
   border: 0.0625rem solid rgba(0, 0, 0, 0.2);
   width: 97%;
 }
