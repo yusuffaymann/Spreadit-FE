@@ -1,0 +1,37 @@
+.commentbody{
+    display:flex;
+    flex-direction: column;
+    border: 1px solid ;
+    border-color:  transparent transparent transparent gray;
+    
+    margin: 5px;
+    padding-left: 25px;
+}
+
+.profilePicture{
+    width:30px;
+    height:30px;
+    border-radius: 20px;
+    border: none;
+}
+
+.icons{
+    position: relative;
+    align-self: center;
+    width: 22px;
+    height: 22px;
+    padding: 3px;
+}
+
+
+.icons:hover{
+    cursor: pointer;
+    border-radius: 45px;
+    border:none;
+    background-color: rgb(212, 211, 211);
+}
+
+.replybutton{
+    border-radius: 30px;
+    width:80px;
+}
