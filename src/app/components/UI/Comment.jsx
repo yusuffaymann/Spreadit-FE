@@ -10,42 +10,49 @@ const Comment=({comment})=>{
     const [isReplying,setIsReplying]=useState(false);
     const [showReply,setShowReply]=useState(true);
     const [replies,setReplies]=useState(comment.replies);
+    const [hidden,setHidden]=useState(comment.hidden)
     const onComment=(newReply)=>{
         setReplies((prev)=>[...prev,newReply])
         setIsReplying(false);
     };
     return( 
-       <div className={styles.commentbody}>
-                <div>
-                    <img className={styles.profilePicture} 
-                        alt="Profile Picture"
-                        src={comment.profilePicture} 
-                    />
-                    <span>{comment.userName}</span>
-                </div>
-                <span>{comment.body}</span>
-                {isReplying&&(<CommentInput onComment={onComment}/>)}
-                {isReplying ?(<button className={styles.replybutton} onClick={()=>setIsReplying(!isReplying)}>Cancel</button>):(<button className={styles.replybutton} onClick={()=>setIsReplying(!isReplying)}>Reply</button>)}
-                {replies.length !== 0 &&(
-                    <div>
-                        {showReply&&(
+       <div className={styles.commentcontainer}>
+            {!hidden&&(
+                    <div className={styles.commentbody}>
+                        <div>
+                            <img className={styles.profilePicture} 
+                                alt="Profile Picture"
+                                src={comment.userObject.profilePicture} 
+                            />
+                            <span>{comment.userObject.userName}</span>
+                        </div>
+                        <span>{comment.body}</span>
+                        {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(!isReplying)}/>)}
+                        {!isReplying &&(<button className={styles.replybutton} onClick={()=>setIsReplying(!isReplying)}>Reply</button>)}  
+                        {replies.length !== 0 &&(
                             <div>
-                                <Image src={dashicon} alt="dash icon" className={styles.icons} onClick={() => setShowReply(false)} />
-                                {replies.map((comment)=>(
-                                    <Comment comment={comment} />
-                                ))}
-                            </div>
-                        )
-                        }
-                        {!showReply&&(
-                            <Image src={plusicon} alt="plus icon" className={styles.icons} onClick={() => setShowReply(true)} />
-                        )
-                        }
+                                {showReply&&(
+                                    <div>
+                                        <Image src={dashicon} alt="dash icon" className={styles.icons} onClick={() => setShowReply(false)} />
+                                        {replies.map((comment)=>(
+                                            <Comment comment={comment} />
+                                        ))}
+                                    </div>
+                                )
+                                }
+                                {!showReply&&(<Image src={plusicon} alt="plus icon" className={styles.icons} onClick={() => setShowReply(true)} />)}
                     </div>
-                )}
-                
+                        )}
+            </div>
+        )}
+        {hidden&&(
+            <div className={styles.hiddencomment}>
+                <p>This comment is hidden</p>
+                <button className={styles.undobutton} onClick={()=>{setHidden(false)}}>undo</button>
+            </div>
+        )}        
         </div>
-        );    
+    );    
 }
 
 export default Comment;

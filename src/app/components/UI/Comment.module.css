@@ -35,3 +35,21 @@
     border-radius: 30px;
     width:80px;
 }
+
+.hiddencomment{
+    display: flex;
+}
+
+.undobutton{
+    background-color: rgb(185 183 183);
+    margin-left: 20px;
+    border-radius: 30px;
+    border: none;
+    width:50px;
+    height:30px;   
+}
+
+.undobutton:hover{
+    background-color: rgb(212, 211, 211);
+    cursor: pointer;
+}
