@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import styles from "./PostHeader.module.css";
 import Image from 'next/image'
 import SubRedditInfoModal from "./SubRedditInfoModal"
+import ProfileInfoModal from "./ProfileInfoModal";
 import ReportModal from "../UI/ReportModal";
 import PostOptionsImage from "../../assets/three-dots-menu.svg"
 import PostDropDownMenu from "./PostDropDownMenu"
@@ -11,7 +12,7 @@ import unsave from "../../assets/post-images/unsave.svg"
 import report from "../../assets/post-images/report.svg"
 import hide from "../../assets/post-images/hide.svg"
 
-function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription}) {
+function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow}) {
 
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -33,8 +34,12 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
         <div className={styles.header}>
         <div className={styles.postHeaderInfo}>
             <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
-                {showSubRedditInfo && <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} > <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} /> </div>}
-                <Image className={styles.subRedditPicture}
+                {showSubRedditInfo &&
+                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
+                    {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isfollowed={isFollowed} onFollow={onFollow} />}
+                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} /> }
+                </div>}
+                <img className={styles.subRedditPicture}
                     src={subRedditPicture}
                     width={256}
                     height={256}
@@ -46,6 +51,7 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
             <div>•</div>
             <div className={styles.time}>{time}</div>
         </div>
+        {!isProfile && 
         <button type="button" className={styles.options} onClick={toggleDropdown}>
             <Image 
             src={PostOptionsImage}
@@ -58,7 +64,7 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
                 <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" />
                 <PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" />
             </PostDropDownMenu>  
-        </button>      
+        </button>}    
     </div>
     );
 }

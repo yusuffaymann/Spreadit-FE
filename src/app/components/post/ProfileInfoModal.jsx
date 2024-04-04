@@ -3,7 +3,7 @@ import Link from "next/link";
 import plusicon from "../../assets/plus-circle.svg"
 import dashicon from "../../assets/dash-circle.svg"
 import chaticon from "../../assets/chat-dots.svg" 
-import cakeicon from "../../assets/cake.svg"
+/* import cakeicon from "../../assets/cake.svg" */
 import styles from "./ProfileInfoModal.module.css"
 
 function ProfileInfoModal ({userName, profilePicture,  cakeDate, isfollowed, onFollow}) {
