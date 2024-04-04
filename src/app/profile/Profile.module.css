@@ -1,0 +1,41 @@
+.profile_container{
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.main_container{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% auto;
+
+}
+
+.sidebar{
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 58px;
+    width: 272px;
+    grid-column: 1;
+}
+
+.profile{
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: max-content auto;
+    margin-top: 20px;
+}
+
+.posts{
+    margin-top: 58px;
+    margin-bottom: 20px;
+    width: 756px;
+    
+}
+
+.profile_info{
+    width: 305px;
+    margin-top: 65px;
+    margin-left: 10px;
+}

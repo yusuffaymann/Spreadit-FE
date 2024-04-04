@@ -10,7 +10,13 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'styles.redditmedia.com',
+            hostname: 'styles.redditmedia.com', 
+            port: '',
+            pathname: '/**',
+          },
+          {
+            protocol: 'https',
+            hostname: 'redditstatic.com',
             port: '',
             pathname: '/**',
           },
