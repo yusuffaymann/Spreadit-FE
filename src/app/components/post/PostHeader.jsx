@@ -11,8 +11,9 @@ import save from "../../assets/post-images/save.svg"
 import unsave from "../../assets/post-images/unsave.svg"
 import report from "../../assets/post-images/report.svg"
 import hide from "../../assets/post-images/hide.svg"
+import Button from "./Button";
 
-function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow}) {
+function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, handleJoin}) {
 
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -37,7 +38,7 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
                 {showSubRedditInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
                     {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isfollowed={isFollowed} onFollow={onFollow} />}
-                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} /> }
+                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} handleJoin={handleJoin} /> }
                 </div>}
                 <img className={styles.subRedditPicture}
                     src={subRedditPicture}
@@ -52,19 +53,26 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
             <div className={styles.time}>{time}</div>
         </div>
         {!isProfile && 
-        <button type="button" className={styles.options} onClick={toggleDropdown}>
-            <Image 
-            src={PostOptionsImage}
-            width={16}
-            height={16} 
-            viewBox="0 0 20 20"
-            alt="options" />
-            <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" /> 
-                <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" />
-                <PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" />
-            </PostDropDownMenu>  
-        </button>}    
+        <div className={styles.joinAndOptions} >
+            {!isMember &&
+            <div className={styles.joinButton}>
+                {!joined && <Button className={styles.myButton} name={"Join"} onClick={() => handleJoin()} active={true} />}
+                {joined && <Button className={styles.myButton} name={"Leave"} onClick={() => handleJoin()} active={true} />}
+            </div>}
+            <button type="button" className={styles.options} onClick={toggleDropdown}>
+                <Image 
+                src={PostOptionsImage}
+                width={16}
+                height={16} 
+                viewBox="0 0 20 20"
+                alt="options" />
+                <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
+                    <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" /> 
+                    <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" />
+                    <PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" />
+                </PostDropDownMenu>  
+            </button>
+        </div>}    
     </div>
     );
 }

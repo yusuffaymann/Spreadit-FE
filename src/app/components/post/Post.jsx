@@ -14,12 +14,17 @@ import close from "../../assets/close.svg";
  * @component
  */
 
-function Post({ title, description, subRedditName, subRedditPicture, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow }) {
+function Post({ title, description, subRedditName, subRedditPicture, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember }) {
 
     const displayDescription = (video===undefined && images===undefined) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
+    const [joined,setJoined] = useState(false);
     const hidden = false; //temporary until hidden functionality is implemented 
+
+    function handleJoin() {
+        setJoined(!joined);
+    }
 
     return (
         <div className={styles.post}>
@@ -59,7 +64,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
             <div className={styles.body}>
                 {hidden===true && <HiddenPost />}
                 {hidden ===false && <div>
-                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />
+                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} handleJoin={handleJoin} />
                     <div className={styles.title}>{title}</div>
                     {displayDescription && <div className={styles.description}>{description}</div>}
                     <div className={styles.media}>
