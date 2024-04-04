@@ -7,6 +7,7 @@ import nextImage from "../../assets/right-chevron-svgrepo-com.svg"
 import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
 import PostFooter from "./PostFooter";
 import HiddenPost from "./HiddenPost";
+import close from "../../assets/close.svg";
 
 /**
  * Component for displaying the post.
@@ -17,10 +18,44 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
 
     const displayDescription = (video===undefined && images===undefined) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const hidden = false; //temporary until hidden functionality is implemented 
 
     return (
         <div className={styles.post}>
+            {isFullScreen && 
+                    <div className={styles.fullImage}  >
+                        <button type="button" className={`${styles.changeImage} ${styles.exitFullScreen}`} onClick={() => setIsFullScreen(false)}>
+                            <Image style={{  filter: "brightness(100%) saturate(0%) invert(100%)"}}
+                            src={close}
+                            width={24}
+                            height={24} 
+                            viewBox="0 0 20 20"
+                            alt="exit full screen" />
+                        </button>
+                        <div className={styles.blurBackground}></div>
+                        <div className={styles.backgroundImage} style={{backgroundImage: `url(${images[imageIndex]})`}}>
+                        </div>
+                        <Image src={images[imageIndex]} alt="posted image " fill style={{objectFit: "contain", maxWidth: "100%"}}  />
+                        {(images.length > imageIndex+1) &&
+                            <button type="button" className={`${styles.changeImage} ${styles.nextImage}`} onClick={() => setImageIndex(imageIndex+1)}>
+                            <Image 
+                            src={nextImage}
+                            width={16}
+                            height={16} 
+                            viewBox="0 0 20 20"
+                            alt="next image" />
+                        </button>}
+                        {(imageIndex !== 0) &&                        
+                            <button type="button" className={`${styles.changeImage} ${styles.previousImage}`} onClick={() => setImageIndex(imageIndex-1)}>
+                            <Image 
+                            src={previousImage}
+                            width={16}
+                            height={16} 
+                            viewBox="0 0 20 20"
+                            alt="previous image" />
+                        </button>}
+            </div>}
             <div className={styles.body}>
                 {hidden===true && <HiddenPost />}
                 {hidden ===false && <div>
@@ -34,11 +69,16 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                             src={video}
                         />}
                         {(video === undefined && images !==undefined) &&       
-                            <div className={styles.image} >
+                            <div className={styles.image} onClick={() => setIsFullScreen(true)}  >
+                                <div className={styles.blurBackground}></div>
                                 <div className={styles.backgroundImage} style={{backgroundImage: `url(${images[imageIndex]})`}}></div>
                                 <Image src={images[imageIndex]} alt="posted image " fill style={{objectFit: "contain", maxWidth: "100%"}}  />
                                 {(images.length > imageIndex+1) &&
-                                    <button type="button" className={`${styles.changeImage} ${styles.nextImage}`} onClick={() => setImageIndex(imageIndex+1)}>
+                                    <button type="button" className={`${styles.changeImage} ${styles.nextImage}`}         
+                                        onClick={(e) => {
+                                        e.stopPropagation();
+                                        setImageIndex(imageIndex+1)}}
+                                    >
                                     <Image 
                                     src={nextImage}
                                     width={16}
@@ -47,7 +87,11 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                                     alt="next image" />
                                 </button>}
                                 {(imageIndex !== 0) &&                        
-                                    <button type="button" className={`${styles.changeImage} ${styles.previousImage}`} onClick={() => setImageIndex(imageIndex-1)}>
+                                    <button type="button" className={`${styles.changeImage} ${styles.previousImage}`}                                         
+                                        onClick={(e) => {
+                                        e.stopPropagation();
+                                        setImageIndex(imageIndex-1)}}
+                                    >
                                     <Image 
                                     src={previousImage}
                                     width={16}

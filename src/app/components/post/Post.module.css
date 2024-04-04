@@ -55,6 +55,28 @@
     transform: translateY(-50%);
 }
 
+.exitFullScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: auto;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 100%;
+    background-size: auto;
+    height: 48px;
+    line-height: 30px;
+    width: 48px;
+    cursor: pointer;
+    position: absolute;
+    top: 4%;
+    transform: translateY(-50%);
+    left: 96%;
+    z-index: 10;
+}
+
 .changeImage:hover {
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -87,7 +109,6 @@
     height: 100%;
     top: 50%;
     transform: translateY(-50%);
-    filter: blur(48px);
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover; 
@@ -100,4 +121,25 @@
   
 .nextImage {
     right: 10px;
+}
+
+.fullImage {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+
+
+.blurBackground
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(90px);
 }
