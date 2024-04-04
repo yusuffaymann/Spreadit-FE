@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import styles from "./PostHeader.module.css";
 import Image from 'next/image'
 import SubRedditInfoModal from "./SubRedditInfoModal"
+import ReportModal from "../UI/ReportModal";
 import PostOptionsImage from "../../assets/three-dots-menu.svg"
 import PostDropDownMenu from "./PostDropDownMenu"
 import PostDropDownItem from "./PostDropDownItem"
