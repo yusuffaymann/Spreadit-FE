@@ -74,7 +74,7 @@
     top: 4%;
     transform: translateY(-50%);
     left: 96%;
-    z-index: 10;
+    z-index: 30;
 }
 
 .changeImage:hover {
@@ -83,6 +83,8 @@
 
 .media {
     padding-bottom: 5px;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -130,7 +132,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10;
+    z-index: 30;
     pointer-events: auto;
     cursor: default;
 }
@@ -143,4 +145,49 @@
     width: 100%;
     height: 100%;
     backdrop-filter: blur(90px);
+}
+
+.overlay{
+    position: absolute;
+    display: flex;
+    backdrop-filter: blur(90px);
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    border-radius: 16px;
+    outline: 2px solid white;
+}
+
+.content {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+
+.description {
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.viewButton {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    overflow: hidden;
+    border-radius: 50px;
+    margin-left: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 50%;
+    transform: translateX(-50%);
+    filter: brightness(100%) saturate(0%) invert(0%);
+    z-index: 10;
+}
+
+.description.view {
+    min-height: 80px;
+    height: 100%;
 }

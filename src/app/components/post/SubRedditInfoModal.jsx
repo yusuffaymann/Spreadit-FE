@@ -27,8 +27,8 @@ function SubRedditInfoModal ({subRedditBanner, subRedditPicture, subRedditName, 
                 <div className={styles.subRedditName}>{subRedditName}</div>
                 {!isMember &&
                     <div className={styles.joinButton} >
-                        {!joined && <Button className={styles.myButton} name={"Join"} onClick={() => handleJoin()} active={true} />}
-                        {joined && <Button className={styles.myButton} name={"Leave"} onClick={() => handleJoin()} active={true} />}
+                        {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => handleJoin()} active={true} />}
+                        {joined && <Button className={styles.joinButton} name={"Leave"} onClick={() => handleJoin()} active={true} />}
                     </div>
                 }
             </div>

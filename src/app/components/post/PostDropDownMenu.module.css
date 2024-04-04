@@ -6,7 +6,7 @@
     border-radius: 5.6px;
     margin: 0; 
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); 
-    z-index: 1;
+    z-index: 20;
 }
 
 .no_style{
