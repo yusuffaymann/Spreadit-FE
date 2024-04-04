@@ -1,13 +1,15 @@
 import React from "react";
-import Image from "next/image";
 import styles from "./PillButton.module.css"
+import Image from "next/image";
 
-function PillButton({text, Image, onClick}) {
+function PillButton({text, image, onClick}) {
     return (
-        <button className={styles.btn} onClick={onClick}>
-            <Image width={16} height={16} src={Image} alt="Comments Icon"/>
-            <span>{text}</span>
-        </button>
+        <>
+            <button className={styles.btn} onClick={onClick}>
+                {image && <Image src={image} alt="button image" width={16} height={16} />}
+                <span>{text}</span>
+            </button>
+        </>
     );
 }
 
