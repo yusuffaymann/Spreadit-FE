@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from "react";
 import Header from "./PostHeader";
 import Button from "./Button";
+import Poll from "./Poll";
 import nextImage from "../../assets/right-chevron-svgrepo-com.svg"
 import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
 import PostFooter from "./PostFooter";
@@ -15,7 +16,7 @@ import close from "../../assets/close.svg";
  * @component
  */
 
-function Post({ title, description, subRedditName, subRedditPicture, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW }) {
+function Post({ title, description, subRedditName, subRedditPicture, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions }) {
 
     const displayDescription = (video===undefined && images===undefined) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
@@ -117,6 +118,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                             }
                         </div>
                     </div>
+                    {pollIsOpen !== undefined && <Poll isOpen={pollIsOpen} options={pollOptions} />}
                     <PostFooter upvote={() => {console.log("upvote")}} downvote={() => {console.log("downvote")}} voteCount={upVotes} commentCount={comments} isMod={true} />
                 </div>}
             </div>
