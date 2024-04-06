@@ -67,7 +67,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
             <div className={styles.body}>
                 {hidden===true && <HiddenPost />}
                 {hidden ===false && <div>
-                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} handleJoin={handleJoin} />
+                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} myPost={false} handleJoin={handleJoin} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {!view && <div className={styles.overlay}></div>}
