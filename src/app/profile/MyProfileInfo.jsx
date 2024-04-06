@@ -11,7 +11,6 @@ import plusIcon from "@/app/assets/post-images/mod-icons/plus.svg";
 import profilepicture from "@/app/assets/PP1.png"
 
 function MyProfileInfo() {
-    console.log(shareIcon);
   return (
     <div className={styles.info}>
       <div className={styles.banner}>

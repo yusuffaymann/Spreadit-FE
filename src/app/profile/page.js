@@ -5,7 +5,11 @@ import Post from "../components/post/Post";
 import Sidebar from "../components/UI/Sidebar";
 import ToolBar from "../components/UI/Toolbar";
 import MyProfileInfo from "./MyProfileInfo";
+import ProfileInfo from "./ProfileInfo";
+import ProfileBar from "./ProfileBar";
+import Image from "next/image";
 
+import profilepicture from "@/app/assets/PP1.png";
 import styles from "./Profile.module.css";
 
 function Profile() {
@@ -37,82 +41,107 @@ function Profile() {
         <div className={styles.sidebar}>
           <Sidebar />
         </div>
-        
+
         <div className={styles.profile}>
+          <div className={styles.profile_header}>
+            <div className={styles.profile_banner}>
+              <div className={styles.profile_picture}>
+                <Image
+                  src={profilepicture}
+                  width={64}
+                  height={64}
+                  style={{
+                    overflow: "hidden",
+                    borderRadius: "624.9375rem",
+                    borderStyle: "solid",
+                    borderColor: "#0000001a",
+                  }}
+                  alt="profile picture"
+                />
+              </div>
+
+              <div className={styles.profile_name}>
+                <h1 className={styles.username_header}>Username</h1>
+                <p className={styles.username}>u/Username</p>
+              </div>
+            </div>
+
+            <ProfileBar selected={0} />
 
             <div className={styles.posts}>
-            <Post
+              <Post
                 title={"Post example with multiple images"}
                 subRedditName={"r/aww"}
                 subRedditPicture={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
                 }
                 images={images}
                 time={"2 days ago"}
                 upVotes={"11k"}
                 comments={"976"}
                 banner={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
                 }
                 subRedditDescription={
-                "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
+                  "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
                 }
-            />
-            <Post
+              />
+              <Post
                 title={"Post example with multiple images"}
                 subRedditName={"r/aww"}
                 subRedditPicture={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
                 }
                 images={images}
                 time={"2 days ago"}
                 upVotes={"11k"}
                 comments={"976"}
                 banner={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
                 }
                 subRedditDescription={
-                "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
+                  "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
                 }
-            />
-            <Post
+              />
+              <Post
                 title={"Post example with multiple images"}
                 subRedditName={"r/aww"}
                 subRedditPicture={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
                 }
                 images={images}
                 time={"2 days ago"}
                 upVotes={"11k"}
                 comments={"976"}
                 banner={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
                 }
                 subRedditDescription={
-                "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
+                  "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
                 }
-            />
-            <Post
+              />
+              <Post
                 title={"post example with a description only"}
                 subRedditName={"r/aww"}
                 subRedditPicture={
-                "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
+                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
                 }
                 description={"the description"}
                 time={"1 day ago"}
                 upVotes={"0"}
                 comments={"35"}
                 banner={
-                "https://styles.redditmedia.com/t5_2qs0q/styles/bannerBackgroundImage_7glcgg5ymxp21.png"
+                  "https://styles.redditmedia.com/t5_2qs0q/styles/bannerBackgroundImage_7glcgg5ymxp21.png"
                 }
-            />
-
-                
+              />
             </div>
+          </div>
 
+          <div className={styles.profile_info_container}>
             <div className={styles.profile_info}>
-                <MyProfileInfo />
+              <ProfileInfo />
             </div>
+          </div>
 
         </div>
       </div>

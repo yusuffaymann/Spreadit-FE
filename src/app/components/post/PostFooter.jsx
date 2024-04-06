@@ -131,7 +131,7 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
             <Image width={22} height={22} src={shieldIcon} alt="mod shield Icon"/>
            </button>
             <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" /> 
+                <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" onClick={() => {console.log("I Love you")}} /> 
                 <PostDropDownItem icon={spam} iconAlt="Spam Icon" description="Mark as Spam" />
                 <PostDropDownItem icon={star} iconAlt="Star Icon" description="Distinguish as Mod" />
                 <PostDropDownItem icon={pin} iconAlt="Pin Icon" description="Sticky Post" />

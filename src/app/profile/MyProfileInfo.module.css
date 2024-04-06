@@ -10,8 +10,8 @@
 
 .info{
     width: 305px;
+    height: 100%;
     overflow-y: scroll;
-    overflow-x: hidden;
 }
 
 .banner{
@@ -25,6 +25,7 @@
 
 .main_body{
     padding: 1rem;
+    background-color: #f9fafa;
 }
 
 .username_container{
