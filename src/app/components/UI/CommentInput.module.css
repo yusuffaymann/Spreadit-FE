@@ -1,8 +1,143 @@
-.commentContainer {
-    position: relative;
+.inputcontainer {
+    display: flex;
+    flex-direction: column;
+    position: relative; 
+    margin-left: 5px;
 }
 
+.commentContent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* .commenttextarea {
+    height: 100px;
+    margin-bottom: 10px;
+    resize: vertical;
+    position: relative; 
+    height: auto;  
+    min-height: 100px; 
+} */
+
+.commenttextarea {
+    width: 100%;
+    flex-grow: 1;
+    outline: none;
+    overflow-y: auto;
+    min-height: 100px;
+    position: relative; 
+}
+
+.uploadedImage {
+    max-width: 200px;
+    width: auto;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
+
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    padding: 0px 10px 0px 10px;
+}
+
+.leftbuttons {
+    display: flex;
+    align-items: center;
+}
+
+.addButton, .cancelButton,.editButton {
+    background-color: #a50f03;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    margin-left: 5px;
+    padding: 5px;
+}
+
+.addButton:hover,.cancelButton:hover,.editButton:hover{
+    cursor: pointer;
+}
+
+.cancelButton {
+    background-color: rgb(185 183 183);
+    color: black;
+}
+
+.editButton{
+    background-color: rgb(2, 17, 186);
+}
+
+.editButton:hover{
+    background-color: rgb(2, 10, 102);
+}
+
+.addButton:hover {
+    background-color: #7e0b03;
+}
+
+.cancelButton:hover {
+    background-color: rgb(212, 211, 211);
+}
+
+.icons {
+    position: relative;
+    align-self: center;
+    width: 30px;
+    height: 25px;
+    padding: 3px;
+}
+
+.icons:hover {
+    cursor: pointer;
+    border-radius: 45px;
+    border: none;
+    background-color: rgb(212, 211, 211);
+} 
+
+.uploadbutton{
+    display: none;
+} 
+
+.disabled:hover{
+    cursor: not-allowed;
+    background-color: transparent;
+}
+/*
+
+
+.inputcontainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.commentContent {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+}
+
+
+.uploadedImage {
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+    object-fit: cover;
+}
+
+
 .inputcontainer{
+    display: flex;
+    flex-direction: column;
     position: relative;
 }
 
@@ -11,10 +146,15 @@
     height: 100px;
     margin-bottom: 10px;
     padding: 10px;
+    flex-grow: 1;
+    resize: vertical;
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
-    position: relative; /* Make sure the textarea has relative positioning */
+    position: relative; 
+    height: auto;  
+    min-height: 100px; 
+    overflow-y: hidden;
 }
 
 .buttonGroup {
@@ -71,3 +211,7 @@
     border:none;
     background-color: rgb(212, 211, 211);
 }
+
+.uploadbutton{
+    display: none;
+} */

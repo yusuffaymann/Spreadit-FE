@@ -3,9 +3,16 @@
     flex-direction: column;
     border: 1px solid ;
     border-color:  transparent transparent transparent gray;
-    
     margin: 5px;
     padding-left: 25px;
+}
+
+.commentcontent{
+    display: flex;
+    flex-direction: column;
+    max-width: 250px;
+    width: fit-content;
+    margin: 5px;
 }
 
 .profilePicture{

@@ -60,7 +60,7 @@ const Home=()=> {
         </div>
         <div className={styles.mainbar}>
           <div className={styles.inputarea}>
-            {addingComment&&(<CommentInput onComment={onComment} close={()=>{setAddingComment(false)}}/>)}
+            {addingComment&&(<CommentInput onComment={onComment} close={()=>{setAddingComment(false)}} buttonDisplay={"comment"}/>)}
             {!addingComment&&(<button className={styles.addcommentbutton} onClick={()=>{setAddingComment(true)}}>Add Comment</button>)}
           </div>
           
