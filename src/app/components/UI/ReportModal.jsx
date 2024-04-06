@@ -6,7 +6,7 @@ import Toogle from "./Switch";
 import close from "../../assets/close.svg"
 import back from "../../assets/back.svg"
 
-function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
+function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex, closeModal})
 {
 
     const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
@@ -17,7 +17,7 @@ function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
         <div >
             <div className={styles.header}>
                 <div className={styles.title}>Submit a report</div>
-                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => {console.log("close modal")}}>
+                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() =>  closeModal()}>
                     <Image 
                     src={close}
                     width={16}
@@ -63,7 +63,7 @@ function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
     );
 }
 
-function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
+function StageTwo({subRedditRules,reportIndex,reportReason,changeStage,closeModal})
 {
 
     const question=["Which community rule does this violate?","Who is the harassment towards?","Who is the threat towards?","Hate","What type of minor abuse or sexualization is this?","Whose personal information is it?","Who is the non-consensual intimate media of?","Prohibited transaction","Who is being impersonated?","Whose copyright is it?","Whose trademark is it?","What type of spam is this?"];
@@ -86,7 +86,7 @@ function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
                     alt="back" />
                 </button> 
                 <div className={styles.title}>Submit a report</div>
-                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => {console.log("close modal")}}>
+                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => closeModal()}>
                     <Image 
                     src={close}
                     width={16}
@@ -121,7 +121,7 @@ function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
 }
 
 
-function StageThree({reportedUser})
+function StageThree({reportedUser,closeModal})
 {
 
     const [blockUser,setBlockUser]= useState(false);
@@ -130,7 +130,7 @@ function StageThree({reportedUser})
         <div style={{height: "100%"}}>
             <div className={styles.header}>
                 <div className={styles.title}>Report Submitted</div>
-                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => {console.log("close modal")}}>
+                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => closeModal()}>
                     <Image 
                     src={close}
                     width={16}
@@ -147,7 +147,7 @@ function StageThree({reportedUser})
                         <div style={{width:"100%"}}>
                         <Toogle optionTitle={`Block ${reportedUser} `} optionDescription={"You won't be able to send direct messages or chat requests to each other "} isToggled={blockUser} onToggle={() => setBlockUser(!blockUser)} />
                         </div>
-                        <Button name={"Done"}  onClick={() => console.log("done")} />
+                        <Button name={"Done"}  onClick={() => closeModal()} />
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@ function StageThree({reportedUser})
 
 
 
-function ReportModal({subRedditPicture, subRedditName, subRedditRules}) {
+function ReportModal({subRedditPicture, subRedditName, subRedditRules, closeModal}) {
 
     const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
     const [stage,setStage] = useState(1);
@@ -173,9 +173,9 @@ function ReportModal({subRedditPicture, subRedditName, subRedditRules}) {
     return (
     <div className={styles.modelOverlay}>
         <div className={styles.modal}>
-            {stage === 1 && <StageOne reportIndex={reportIndex} subRedditPicture={subRedditPicture} subRedditName={subRedditName} changeStage={(newStage,chosenReason) => handleStateChange(newStage,chosenReason)}  />}
-            {stage === 2 && <StageTwo subRedditRules={subRedditRules} reportIndex={reportIndex} reportReason={reasons[reportIndex]} changeStage={(newStage,chosenReason) => handleStateChange(newStage,chosenReason)} />}
-            {stage === 3 && <StageThree reportedUser={"Gold_perception_2401"} />}
+            {stage === 1 && <StageOne closeModal={closeModal} reportIndex={reportIndex} subRedditPicture={subRedditPicture} subRedditName={subRedditName} changeStage={(newStage,chosenReason) => handleStateChange(newStage,chosenReason)}  />}
+            {stage === 2 && <StageTwo closeModal={closeModal} subRedditRules={subRedditRules} reportIndex={reportIndex} reportReason={reasons[reportIndex]} changeStage={(newStage,chosenReason) => handleStateChange(newStage,chosenReason)} />}
+            {stage === 3 && <StageThree closeModal={closeModal} reportedUser={"Gold_perception_2401"} />}
         </div>
     </div>
     );
