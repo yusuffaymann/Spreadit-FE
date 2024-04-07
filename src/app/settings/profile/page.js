@@ -222,7 +222,7 @@ function Profile() {
    */
   const deleteSocialLink = (id) => {
     // Filter out the social link with the given id
-    const updatedSocialLinks = socialLinks.filter((link) => link.id !== id);
+    const updatedSocialLinks = socialLinks.filter((link,index) => index !== id);
     // Update the state with the new array
     setSocialLinks(updatedSocialLinks);
   };

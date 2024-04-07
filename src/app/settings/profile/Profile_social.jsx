@@ -59,7 +59,7 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSoci
               {socialLinks.map((link, index) => (
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <a href={link.url} style={{ textDecoration: "none" }}>
-                    <SocialLink key={link.id} logo={link.logo} name={link.name} />
+                    <SocialLink key={index} logo={link.logo} name={link.name} id={index}/>
                   </a>
                 </div>
               ))}
@@ -81,7 +81,7 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSoci
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <SocialLink
                     key={index}
-                    id={link.id}
+                    id={index}
                     logo={link.logo}
                     name={link.name}
                     wasClicked={deleteSocialLink}
