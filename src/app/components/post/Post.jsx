@@ -24,6 +24,7 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
     const [joined,setJoined] = useState(false);
     const [hidden,setHidden] = useState(false);
     const [view, setView] = useState(false);
+    const [deleted,setDeleted] = useState(false);
 
     function handleJoin() {
         setJoined(!joined);
@@ -31,6 +32,11 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
 
     function handleHide() {
         setHidden(!hidden);
+    }
+
+    function handleDelete () {
+        setDeleted(true);
+
     }
 
     return (
@@ -69,9 +75,13 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                         </button>}
             </div>}
             <div className={styles.body}>
-                {hidden===true && <HiddenPost unHide={handleHide} />}
-                {hidden ===false && <div>
-                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} myPost={true} isNSFW={isNSFW} isSpoiler={isSpoiler} onHide={handleHide} onJoin={handleJoin} />
+                {deleted === true && 
+                <div className={styles.deleted}>
+                    <div className={styles.deletedText}>Post deleted</div>
+                </div>}
+                {hidden === true && <HiddenPost unHide={handleHide} />}
+                {(hidden === false && deleted === false) && <div>
+                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} myPost={true} isNSFW={isNSFW} isSpoiler={isSpoiler} onHide={handleHide} onDelete={handleDelete} onJoin={handleJoin} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {!view && <div className={styles.overlay}></div>}

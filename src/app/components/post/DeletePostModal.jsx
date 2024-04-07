@@ -4,7 +4,13 @@ import styles from "./DeletePostModal.module.css";
 import Image from 'next/image';
 
 
-function DeletePost({closeModal}) {
+function DeletePost({closeModal, onDelete}) {
+
+    function handleDelete () {
+        closeModal();
+        onDelete();
+
+    }
 
 return (
     <div className={styles.modelOverlay}>
@@ -26,7 +32,7 @@ return (
                     <Button name={"Go Back"} active={true} onClick={() => closeModal()} />
                 </div>
                 <div className={styles.delete}>
-                    <Button name={"Yes, Delete"} active={true} onClick={() => closeModal()} />
+                    <Button name={"Yes, Delete"} active={true} onClick={() => handleDelete()} />
                 </div>
             </div>
         </div>

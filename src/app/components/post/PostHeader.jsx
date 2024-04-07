@@ -79,7 +79,7 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
         
         <div className={styles.header}>
         {showReportModal && <ReportModal subRedditPicture={subRedditPicture} subRedditName={subRedditName} closeModal={() => setShowReportModal(false)} />}
-        {showDeleteModal && <DeletePost closeModal={() => setShowDeleteModal(false)} />}
+        {showDeleteModal && <DeletePost onDelete={onDelete} closeModal={() => setShowDeleteModal(false)} />}
         <div className={styles.postHeaderInfo}>
             <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
                 {showSubRedditInfo &&
