@@ -28,11 +28,17 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
     const [showDropdown, setShowDropdown] = useState(false);
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
+    const [followed,setFollowed]=useState(isFollowed);
     let timeOut;
 
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
+    }
+
+    const handleFollow=()=>{
+        setFollowed(!followed);
+        onFollow();
     }
 
     async function handleMouseLeave() {
@@ -49,7 +55,7 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
             <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
                 {showSubRedditInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
-                    {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isfollowed={isFollowed} onFollow={onFollow} />}
+                    {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isfollowed={followed} onFollow={handleFollow} />}
                     {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} handleJoin={handleJoin} /> }
                 </div>}
                 <img className={styles.subRedditPicture}
