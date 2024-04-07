@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import styles from "./Post.module.css";
 import Image from 'next/image'
 import { useState } from "react";
@@ -22,11 +22,15 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [joined,setJoined] = useState(false);
-    const hidden = false; //temporary until hidden functionality is implemented 
+    const [hidden,setHidden] = useState(false);
     const [view, setView] = useState(false);
 
     function handleJoin() {
         setJoined(!joined);
+    }
+
+    function handleHide() {
+        setHidden(!hidden);
     }
 
     return (
@@ -65,9 +69,9 @@ function Post({ title, description, subRedditName, subRedditPicture, video, imag
                         </button>}
             </div>}
             <div className={styles.body}>
-                {hidden===true && <HiddenPost />}
+                {hidden===true && <HiddenPost unHide={handleHide} />}
                 {hidden ===false && <div>
-                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} myPost={false} handleJoin={handleJoin} />
+                    <Header subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} isMember={isMember} joined={joined} myPost={false} onHide={handleHide} onJoin={handleJoin} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {!view && <div className={styles.overlay}></div>}

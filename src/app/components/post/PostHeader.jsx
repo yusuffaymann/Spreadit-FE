@@ -22,7 +22,7 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 
 import Button from "./Button";
 
-function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, handleJoin, onDelete, myPost}) {
+function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, onDelete, myPost, onHide}) {
 
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -87,14 +87,14 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
                 {myPost === false &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
                     <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" /> 
-                    <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" />
+                    <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
                     <PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" onClick={() => setShowReportModal(true)} />
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
                     <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit" /> 
                     <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" /> 
-                    <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" />
+                    <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
                     <PostDropDownItem icon={remove} iconAlt="Delete Icon" description="Delete" />
                     <PostDropDownItem icon={spoiler} iconAlt="Turn on Spoilers Icon" description="Spoilers" />
                     <PostDropDownItem icon={NSFW} iconAlt="Turn on NSFW Icon" description="NSFW" />
