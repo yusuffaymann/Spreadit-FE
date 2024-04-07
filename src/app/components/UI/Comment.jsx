@@ -5,6 +5,7 @@ import CommentInput from "./CommentInput";
 import plusicon from "../../assets/plus-circle.svg";
 import dashicon from "../../assets/dash-circle.svg";
 import PP1 from "../../assets/PP1.png"
+import CommentFooter from "./CommentFooter";
 import PostHeader from "../post/PostHeader";
 import styles from "./Comment.module.css"
 
@@ -31,6 +32,7 @@ const Comment=({comment})=>{
                             <span>{comment.body}</span>
                         </div>
                         )}
+                        <CommentFooter upvote={() => {console.log("upvote")}} downvote={() => {console.log("downvote")}} voteCount={comment.noofvotes}  />
                         {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"}/>)}
                         {!isReplying &&(<button className={styles.replybutton} onClick={()=>setIsReplying(true)}>Reply</button>)}  
                         {!isEditing&&(<button className={styles.replybutton} onClick={()=>setIsEditing(true)}>Edit</button>)}
