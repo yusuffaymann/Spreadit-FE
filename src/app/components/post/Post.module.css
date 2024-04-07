@@ -169,6 +169,10 @@
     width: 100%;
     white-space: normal;
     word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
 }
 
 .viewButton {

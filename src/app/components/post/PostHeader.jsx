@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
-import styles from "./PostHeader.module.css"
 import Image from 'next/image'
+import styles from "./PostHeader.module.css"
 import SubRedditInfoModal from "./SubRedditInfoModal"
 import ProfileInfoModal from "./ProfileInfoModal"
 import ReportModal from "../UI/ReportModal"
@@ -23,50 +23,17 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 
 import Button from "./Button";
 
-function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, onDelete, myPost, onHide, isSpoiler, isNSFW}) {
+function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW}) {
 
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
     const [showDeleteModal,setShowDeleteModal] = useState(false);
-    const [NSFW,setNSFW] = useState(isNSFW);
-    const[spoiler,setSpoiler] = useState(isSpoiler);
-    const [saved,setSaved] = useState(false);
-    const [followed,setFollowed]=useState(isFollowed);
     let timeOut;
-    console.log(saved);
-
-    useEffect(() => {
-        setNSFW(isNSFW);
-    }, [isNSFW]);
-
-    useEffect(() => {
-        setSpoiler(isSpoiler);
-    }, [isSpoiler]);
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
-    }
-
-    const handleFollow=()=>{
-        setFollowed(!followed);
-        onFollow();
-    }
-
-    function toggleNSFW () {
-        setNSFW(!NSFW);
-
-    }
-
-    function toggleSpoiler () {
-        setSpoiler(!spoiler);
-
-    }
-
-    function toggleSaved () {
-        setSaved(!saved);
-
     }
 
     async function handleMouseLeave() {
@@ -78,14 +45,14 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
     return(
         
         <div className={styles.header}>
-        {showReportModal && <ReportModal subRedditPicture={subRedditPicture} subRedditName={subRedditName} closeModal={() => setShowReportModal(false)} />}
+        {showReportModal && <ReportModal userName={userName} subRedditPicture={subRedditPicture} subRedditName={subRedditName} onReport={onReport} onBlock={onBlock} closeModal={() => setShowReportModal(false)} />}
         {showDeleteModal && <DeletePost onDelete={onDelete} closeModal={() => setShowDeleteModal(false)} />}
         <div className={styles.postHeaderInfo}>
             <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
                 {showSubRedditInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
-                    {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isfollowed={followed} onFollow={handleFollow} />}
-                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} /* handleJoin={handleJoin} */ /> }
+                    {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
+                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/> }
                 </div>}
                 <img className={styles.subRedditPicture}
                     src={subRedditPicture}
@@ -103,8 +70,8 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
         <div className={styles.joinAndOptions} >
             {!isMember &&
             <div className={styles.joinButton}>
-                {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => handleJoin()} active={true} />}
-                {joined && <Button className={styles.joinButton} name={"Leave"} onClick={() => handleJoin()} active={true} />}
+                {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => onJoin()} active={true} />}
+                {joined && <Button className={styles.joinButton} name={"Leave"} onClick={() => onJoin()} active={true} />}
             </div>}
             <button type="button" className={styles.options} onClick={toggleDropdown}>
                 <Image 
@@ -115,22 +82,22 @@ function PostHeader ({subRedditName, subRedditPicture, time, banner, subRedditDe
                 alt="options" />
                 {myPost === false &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    {!saved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Remove from saved" onClick={() => toggleSaved()} />}
-                    {saved && <PostDropDownItem icon={unsave} iconAlt="unsave Icon" description="Save" onClick={() => toggleSaved()} />}
+                    {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
+                    {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
                     <PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" onClick={() => setShowReportModal(true)} />
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
                     <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" /> 
-                    {!saved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => toggleSaved()} />}
-                    {saved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => toggleSaved()} />}
+                    {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
+                    {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
                     <PostDropDownItem icon={remove} iconAlt="Delete Icon" description="Delete" onClick={() => setShowDeleteModal(true)} />
-                    {!spoiler && <PostDropDownItem icon={spoilerIcon} iconAlt="Turn on Spoilers Icon" description="Add spoiler tag" onClick={() => toggleSpoiler()} />}
-                    {spoiler && <PostDropDownItem icon={removeSpoiler} iconAlt="Turn off Spoilers Icon" description="Remove spoiler tag" onClick={() => toggleSpoiler()} />}
-                    {!NSFW && <PostDropDownItem icon={nsfwIcon} iconAlt="Turn on NSFW Icon" description="Add NSFW tag" onClick={() => toggleNSFW()} />}
-                    {NSFW && <PostDropDownItem icon={removeNSFW} iconAlt="Turn off NSFW Icon" description="Remove NSFW tag" onClick={() => toggleNSFW()} />}
+                    {!isSpoiler && <PostDropDownItem icon={spoilerIcon} iconAlt="Turn on Spoilers Icon" description="Add spoiler tag" onClick={() => onSpoiler()} />}
+                    {isSpoiler && <PostDropDownItem icon={removeSpoiler} iconAlt="Turn off Spoilers Icon" description="Remove spoiler tag" onClick={() => onSpoiler()} />}
+                    {!isNSFW && <PostDropDownItem icon={nsfwIcon} iconAlt="Turn on NSFW Icon" description="Add NSFW tag" onClick={() => onNSFW()} />}
+                    {isNSFW && <PostDropDownItem icon={removeNSFW} iconAlt="Turn off NSFW Icon" description="Remove NSFW tag" onClick={() => onNSFW()} />}
                     <PostDropDownItem icon={bell} iconAlt="Turn on Bell Icon" description="Notifications" />
                 </PostDropDownMenu>}
             </button>

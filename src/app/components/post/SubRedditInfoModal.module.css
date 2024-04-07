@@ -38,8 +38,14 @@
     font-size: 1.125rem;
 }
 
-.subRedditNameAndPicture:hover .subRedditName {
+.subRedditName {
+    text-decoration: none;
+    color: black;
+}
+
+.subRedditName:hover {
     color: rgb(0, 53, 132);
+    text-decoration: underline;
 }
 
 .subRedditPicture {
