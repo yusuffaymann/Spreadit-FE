@@ -16,7 +16,6 @@ import social from "../social.js";
  * @param   {Function} addSocialLink   The function to be called when the save button is clicked
  * @param   {Function} deleteSocialLink   The function to be called when the black parallel social link bubble is clicked
  * @param   {Object[]} socialLinks   An array of social links containing the id, display name, logo, and url linked passed down as a state from page.js
- * @param   {number} counter       The current count of social links passed down as a state from page.js
  * @returns {JSX.Element} The rendered ProfileSocial component.
  *
  * @example
@@ -43,7 +42,7 @@ import social from "../social.js";
  * //deleteSocialLink: triggered when clicking the delete icon. passes back the Id of the attempted to delete icon
  * <ProfileSocial isOpen={isOpen} onClose={onClose} addSocialLink={addSocialLink} deleteSocialLink={console.log(`Social Link deleted. id: ${id} `)}/>;
 */
-export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSocialLink, deleteSocialLink, socialLinks, counter }) {
+export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSocialLink, deleteSocialLink, socialLinks }) {
 
   return (
     <div>
@@ -67,7 +66,7 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSoci
               <GrayButton
                 children={"Add social link"}
                 wasClicked={onClose}
-                isDisabled={counter === 5}
+                isDisabled={socialLinks.length === 5}
               />
               <GrayOutMenuWrapper
                 isOpen={isOpen}

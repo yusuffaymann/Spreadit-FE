@@ -33,7 +33,6 @@ function Profile() {
   const [displayName, setDisplayName] = useState(""); // Assuming default value is false
   const [about, setAbout] = useState(""); // Assuming default value is false
   const [socialLinks, setSocialLinks] = useState([]);
-  const [counter, setCounter] = useState(0);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bannerUrl, setBannerUrl] = useState("");
   const [clearHistory, setClearHistory] = useState(false);
@@ -201,10 +200,9 @@ function Profile() {
    * @param {string} logo      `socialLink` logo hyperlink
    */
   const addSocialLink = (id, name, url, logo) => {
-    if (counter < MAX_SOCIAL_LINKS) {
+    if (socialLinks.length < MAX_SOCIAL_LINKS) {
       // Spread the existing socialLinks array and add the new object to it
       setSocialLinks([...socialLinks, { id, name, url, logo }]);
-      setCounter(counter + 1);
     }
   };
 
@@ -227,7 +225,6 @@ function Profile() {
     const updatedSocialLinks = socialLinks.filter((link) => link.id !== id);
     // Update the state with the new array
     setSocialLinks(updatedSocialLinks);
-    setCounter(counter - 1);
   };
 
   if (loading) {
@@ -272,7 +269,6 @@ function Profile() {
               addSocialLink={addSocialLink}
               deleteSocialLink={deleteSocialLink}
               socialLinks={socialLinks}
-              counter={counter}
             />
             <h3 className="uppercase-h3-description">Images</h3>
             <ProfileImages
