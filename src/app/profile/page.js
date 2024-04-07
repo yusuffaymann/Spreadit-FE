@@ -10,9 +10,11 @@ import ProfileBar from "./ProfileBar";
 import Image from "next/image";
 
 import profilepicture from "@/app/assets/PP1.png";
+import addPhotoIcon from "@/app/assets/add-photo.svg";
 import styles from "./Profile.module.css";
 
 function Profile() {
+  const [selected, setSelected] = React.useState(0);
   const images = [
     "https://media.gettyimages.com/id/1132402360/photo/cat-sleeping-on-her-back.jpg?s=612x612&w=gi&k=20&c=EgyglqP76bDYcs_QAHQ-4ZLI0_Bldwtajfnw7UpE89M=",
     "https://media.istockphoto.com/id/94056427/photo/adorable-silver-tabby-kitten-sleeping-stretched-out.jpg?s=1024x1024&w=is&k=20&c=E_AZrLVF6sT8sEN43vs-lE5xuAJabayHTQ8O2RH9VTs=",
@@ -58,6 +60,9 @@ function Profile() {
                   }}
                   alt="profile picture"
                 />
+                <div className={styles.circle}>
+            <Image src={addPhotoIcon} width={16} height={16} alt="Post Options" />
+          </div>
               </div>
 
               <div className={styles.profile_name}>
@@ -66,7 +71,7 @@ function Profile() {
               </div>
             </div>
 
-            <ProfileBar selected={0} />
+            <ProfileBar selected={selected} setSelected={setSelected} />
 
             <div className={styles.posts}>
               <Post
@@ -139,7 +144,7 @@ function Profile() {
 
           <div className={styles.profile_info_container}>
             <div className={styles.profile_info}>
-              <ProfileInfo />
+              <MyProfileInfo />
             </div>
           </div>
 

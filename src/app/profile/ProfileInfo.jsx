@@ -12,7 +12,7 @@ import shareArrow from "@/app/assets/shareArrow.svg"
 import blockIcon from "@/app/assets/block.svg"
 import reportIcon from "@/app/assets/post-images/report.svg"
 
-function ProfileInfo() {
+function ProfileInfo({username}) {
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [isFollowed, setIsFollowed] = React.useState(false);
 
@@ -23,6 +23,24 @@ function ProfileInfo() {
   function toggleFollow(){
     setIsFollowed(prevIsFollowed => !prevIsFollowed);
   }
+
+  function share(){
+    console.log("Share")
+  }
+
+  function message(){
+    console.log("message")
+  }
+
+  function report(){
+    console.log("Report")
+  }
+
+  
+  function block(){
+    console.log("Block")
+  }
+
   return (
       <div className={styles.info}>
         <div className={styles.username_container}>
@@ -31,10 +49,10 @@ function ProfileInfo() {
             <Image src={PostOptionsImage} width={12} height={12} alt="Post Options" />
 
             <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                <PostDropDownItem icon={shareArrow} iconAlt="Share Icon" description="Share" /> 
-                <PostDropDownItem icon={comments} iconAlt="Message Icon" description="Send a Message" />
-                <PostDropDownItem icon={blockIcon} iconAlt="Block Icon" description="Block Account" />
-                <PostDropDownItem icon={reportIcon} iconAlt="Report Icon" description="Report Account" />
+                <PostDropDownItem icon={shareArrow} iconAlt="Share Icon" description="Share" onClick={share}/> 
+                <PostDropDownItem icon={comments} iconAlt="Message Icon" description="Send a Message" onClick={message}/>
+                <PostDropDownItem icon={blockIcon} iconAlt="Block Icon" description="Block Account" onClick={block}/>
+                <PostDropDownItem icon={reportIcon} iconAlt="Report Icon" description="Report Account" onClick={report}/>
             </PostDropDownMenu>
 
           </div>

@@ -23,6 +23,24 @@
     position: relative;
 }
 
+.circle{
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    background-color: #EAEDEF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+}
+
+.circle:hover{
+    cursor: pointer;
+    background-color: #E2E7E9;
+}
+
 .main_body{
     padding: 1rem;
     background-color: #f9fafa;
