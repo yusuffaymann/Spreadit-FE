@@ -40,8 +40,8 @@ const Comment=({comment})=>{
                         </div>
                         </div>
                         )}
-                        {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(!isReplying)} buttonDisplay={"comment"}/>)}
-                        {!isReplying &&(<button className={styles.replybutton} onClick={()=>setIsReplying(!isReplying)}>Reply</button>)}  
+                        {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"}/>)}
+                        {!isReplying &&(<button className={styles.replybutton} onClick={()=>setIsReplying(true)}>Reply</button>)}  
                         {!isEditing&&(<button className={styles.replybutton} onClick={()=>setIsEditing(true)}>Edit</button>)}
                         {replies.length !== 0 &&(
                             <div>
