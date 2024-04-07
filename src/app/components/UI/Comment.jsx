@@ -14,7 +14,7 @@ const Comment=({comment})=>{
     const [showReply,setShowReply]=useState(true);
     const [replies,setReplies]=useState(comment.replies);
     const [hidden,setHidden]=useState(comment.hidden);
-   /*  const [followed,setFollowed]=useState(comment.userObject.followed); */
+    const followed=comment.userObject.followed;
     const onComment=(newReply)=>{
         setReplies((prev)=>[...prev,newReply])
         setIsReplying(false);
@@ -24,20 +24,11 @@ const Comment=({comment})=>{
         {isEditing&&(<CommentInput onComment={onComment} close={()=>setIsEditing(false)} commentBody={comment.body} commentImage={comment.media} buttonDisplay={"Save edits"}/>)}
             {!hidden&&(
                     <div className={styles.commentbody}>
-                       {/*  <PostHeader isprofile={true} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture} time={"1 mon"} banner={""} subRedditDescription={""} cakeDate={"1/1/2012"} isfollowed={followed} onFollow={()=>{setFollowed(!followed)}}/> */}
+                       <PostHeader isProfile={true} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture} time={"1 mon"} banner={""} subRedditDescription={""} cakeDate={"1/1/2012"} isFollowed={followed} onFollow={()=>{console.log("api function")}}/>
                         {!isEditing&&(
-                        <div>
-                        <div>
-                            <img className={styles.profilePicture} 
-                                alt="Profile Picture"
-                                src={comment.userObject.profilePicture} 
-                            />
-                            <span>{comment.userObject.userName}</span>
-                        </div> 
                         <div className={styles.commentcontent}>
                             {comment.media!==""&&(<img src={comment.media} className={styles.commentimage} />)}
                             <span>{comment.body}</span>
-                        </div>
                         </div>
                         )}
                         {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"}/>)}
