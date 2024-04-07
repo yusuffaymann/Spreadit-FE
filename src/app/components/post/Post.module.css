@@ -55,12 +55,36 @@
     transform: translateY(-50%);
 }
 
+.exitFullScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: auto;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 100%;
+    background-size: auto;
+    height: 48px;
+    line-height: 30px;
+    width: 48px;
+    cursor: pointer;
+    position: absolute;
+    top: 4%;
+    transform: translateY(-50%);
+    left: 96%;
+    z-index: 30;
+}
+
 .changeImage:hover {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
 .media {
     padding-bottom: 5px;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -87,7 +111,6 @@
     height: 100%;
     top: 50%;
     transform: translateY(-50%);
-    filter: blur(48px);
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover; 
@@ -100,4 +123,71 @@
   
 .nextImage {
     right: 10px;
+}
+
+.fullImage {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 30;
+    pointer-events: auto;
+    cursor: default;
+}
+
+
+
+.blurBackground
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(90px);
+}
+
+.overlay{
+    position: absolute;
+    display: flex;
+    backdrop-filter: blur(90px);
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    border-radius: 16px;
+    outline: 2px solid white;
+}
+
+.content {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+
+.description {
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.viewButton {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    overflow: hidden;
+    border-radius: 50px;
+    margin-left: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 50%;
+    transform: translateX(-50%);
+    filter: brightness(100%) saturate(0%) invert(0%);
+    z-index: 10;
+}
+
+.description.view {
+    min-height: 80px;
+    height: 100%;
 }

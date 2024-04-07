@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import styles from "./SubRedditInfoModal.module.css"
+import Button from './Button';
 
-function SubRedditInfoModal ({subRedditBanner, subRedditPicture, subRedditName, subRedditDescription}) {
+function SubRedditInfoModal ({subRedditBanner, subRedditPicture, subRedditName, subRedditDescription, isMember, joined, handleJoin}) {
 
     return (
         <div className={styles.modal} >
@@ -24,6 +25,12 @@ function SubRedditInfoModal ({subRedditBanner, subRedditPicture, subRedditName, 
                     quality={100}
                 />
                 <div className={styles.subRedditName}>{subRedditName}</div>
+                {!isMember &&
+                    <div className={styles.joinButton} >
+                        {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => handleJoin()} active={true} />}
+                        {joined && <Button className={styles.joinButton} name={"Leave"} onClick={() => handleJoin()} active={true} />}
+                    </div>
+                }
             </div>
             <div className={styles.subRedditDescription}>{subRedditDescription}</div>
         </div>
