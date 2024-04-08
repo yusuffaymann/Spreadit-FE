@@ -36,16 +36,19 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
     }
 
     const handleCommentSubmit = () => {
-        const newComment = {
-            body: contentEditableRef.current.innerHTML,
-            replies: [],
-            image: image ? image : null
+        if(contentEditableRef.current.innerHTML || imageURL){
+            const newComment = {
+                body: contentEditableRef.current.innerHTML,
+                replies: [],
+                media: image ? image : null
+            }
+            console.log(newComment);
+            setCommentBody('');
+            setImage(null);
+            setImageURL(null);
+            onComment(newComment);
         }
-        console.log(newComment);
-        setCommentBody('');
-        setImage(null);
-        setImageURL(null);
-        onComment(newComment);
+        
     }
 
     const handleImageClick = () => {
@@ -87,7 +90,7 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
             <div className={styles.buttonGroup}>
                 <div className={styles.leftbuttons}>
                     <input type="file" ref={inputRef} onChange={handleImageChange} className={styles.uploadbutton} disabled={imageURL !== null} />
-                    <Image src={imageicon} alt="image icon" className={`${styles.icons} ${image !== null ? styles.disabled : ''}`} onClick={handleImageClick} />
+                    <Image src={imageicon} alt="image icon" className={`${styles.icons} ${imageURL !== null ? styles.disabled : ''}`} onClick={handleImageClick} />
                     <Image src={fontsicon} alt="fonts icon" className={styles.icons} />
                 </div>
                 <div className={styles.rightbuttons}>
