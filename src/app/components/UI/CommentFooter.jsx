@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./CommentFooter.module.css"
 
@@ -14,6 +14,7 @@ import unsave from "../../assets/post-images/unsave.svg"
 import report from "../../assets/post-images/report.svg"
 import hide from "../../assets/post-images/hide.svg"
 import edit from "../../assets/post-images/edit.svg"
+import ReportModal from "../UI/ReportModal"
 import downvoteOutlined from "@/app/assets/post-images/downvote-outline.svg";
 import upvoteHover from "@/app/assets/post-images/upvote-hover.svg";
 import downvoteHover from "@/app/assets/post-images/downvote-hover.svg";
@@ -42,9 +43,14 @@ import PostDropDownMenu from "../post/PostDropDownMenu";
 
 
 
-function commentFooter({upvote, downvote, voteCount}) {
+function commentFooter({upvote, downvote, voteCount, isSaved, onSave, isUser, onEdit, onReply, onHide, onDelete, onReport, subRedditPicture, subRedditName}) {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
+    const [showReportModal,setShowReportModal] = useState(false);
+
+    const handleSave =()=>{
+        onSave();
+    }
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
@@ -53,6 +59,7 @@ function commentFooter({upvote, downvote, voteCount}) {
 
     return (
         <div className={styles.post_footer}>
+                    {showReportModal && <ReportModal subRedditPicture={subRedditPicture} subRedditName={subRedditName} closeModal={() => setShowReportModal(false)} />}
             <div className={styles.post_interactions}>
                 <div className={styles.upvotes_container}>
                     <button 
@@ -123,7 +130,7 @@ function commentFooter({upvote, downvote, voteCount}) {
                 </div>
            
 
-                <button className={styles.btn}>
+                <button className={styles.btn} onClick={onReply}>
                         <Image width={16} height={16} src={commentIcon} alt="Comments Icon"/>
                         <span>Reply</span>
                 </button>
@@ -133,17 +140,18 @@ function commentFooter({upvote, downvote, voteCount}) {
                         <span>Share</span>
                 </button>
            </div>
-           <button className={styles.mod_interactions} onClick={toggleDropdown}>
-            <Image width={22} height={22} src={PostOptionsImage} alt="options Icon"/>
+           <button className={styles.toggleDropdown} onClick={toggleDropdown}>
+            <Image width={16} height={16} src={PostOptionsImage} alt="options Icon"/>
            </button>
-           <div className={styles.mod_interactions}>
+           <div className={styles.dropdowncontainer}>
            <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" /> 
-                <PostDropDownItem icon={unsave} iconAlt="unsave Icon" description="Remove from saved" /> 
-                <PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" />
-                <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" />
-                <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit" />
-                <PostDropDownItem icon={remove} iconAlt="Delete Icon" description="Delete" />
+               {!isSaved&&(<PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={handleSave} />)}  
+               {isSaved&&(<PostDropDownItem icon={unsave} iconAlt="unsave Icon" description="Remove from saved" onClick={handleSave}  />)}
+               {!isUser&&(<PostDropDownItem icon={report} iconAlt="Report Icon" description="Report" onClick={()=>{setShowReportModal(true)}}/>)}
+                <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={onHide}/>
+                {isUser&&(<PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit" onClick={onEdit} />)}
+                {isUser&&(<PostDropDownItem icon={remove} iconAlt="Delete Icon" description="Delete" onClick={onDelete} />)}
+                
             </PostDropDownMenu> 
            </div>
                       
