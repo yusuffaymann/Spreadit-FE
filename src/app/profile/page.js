@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import Post from "../components/post/Post";
 import Sidebar from "../components/UI/Sidebar";
 import ToolBar from "../components/UI/Toolbar";
@@ -12,6 +12,8 @@ import Image from "next/image";
 import profilepicture from "@/app/assets/PP1.png";
 import addPhotoIcon from "@/app/assets/add-photo.svg";
 import styles from "./Profile.module.css";
+import getCookies from "../utils/getCookies";
+import { useEffect } from "react";
 
 function Profile() {
   const [selected, setSelected] = React.useState(0);
@@ -33,6 +35,14 @@ function Profile() {
       return videoLink;
     }
   }
+
+  useEffect(() => {
+    async function fetchData() {
+      const token = await getCookies();
+      console.log(token);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className={styles.profile_container}>
@@ -71,7 +81,7 @@ function Profile() {
               </div>
             </div>
 
-            <ProfileBar selected={selected} setSelected={setSelected} />
+            <ProfileBar selected={selected} setSelected={setSelected} isMe={false} />
 
             <div className={styles.posts}>
               <Post
@@ -144,7 +154,7 @@ function Profile() {
 
           <div className={styles.profile_info_container}>
             <div className={styles.profile_info}>
-              <MyProfileInfo />
+              <ProfileInfo />
             </div>
           </div>
 

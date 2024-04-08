@@ -6,6 +6,7 @@ import Validation from "../utils/Validation.js";
 import "./Login.css";
 import { signIn } from "next-auth/react";
 import Link from "next/link.js";
+import storeCookies from "../utils/storeCookies.js";
 
 
 function Login() {
@@ -35,7 +36,7 @@ function Login() {
     }
   }
 
-  const url = "http://localhost:3001/login";
+  const url = "http://localhost:3002/login";
   const loginSubmit = async (values) => {
     console.log(values);
     const options = {
@@ -47,7 +48,11 @@ function Login() {
     };
     fetch(url, options)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        if(data.token){
+          storeCookies(data.token);
+        }
+      });
   };
 
   function HandleRememberMe() {
