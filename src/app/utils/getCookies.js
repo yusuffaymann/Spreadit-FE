@@ -2,7 +2,8 @@
 import { cookies } from 'next/headers';
 
 async function getCookies() {
-    return cookies().get('token');
+    const token = cookies().get('token');
+    return token;
 }
 
 export default getCookies;
