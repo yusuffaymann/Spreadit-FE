@@ -19,21 +19,21 @@ function ProfileBar({ selected, isMe, setSelected}) {
         </h1>
       </button>
 
-      {isMe ?? <button onClick={() => {console.log("ay 7aga"); setSelected(3)}} className={`${styles.link} ${selected === 3 ? styles.selected : ""}`}>
+      {isMe ? <button onClick={() => {console.log("ay 7aga"); setSelected(3)}} className={`${styles.link} ${selected === 3 ? styles.selected : ""}`}>
         <h1 >Saved</h1>
-      </button>}
+      </button> : ""}
 
-      {isMe ?? <button onClick={() => {console.log("ay 7aga"); setSelected(4)}} className={`${styles.link} ${selected === 4 ? styles.selected : ""}`}>
+      {isMe ? <button onClick={() => {console.log("ay 7aga"); setSelected(4)}} className={`${styles.link} ${selected === 4 ? styles.selected : ""}`}>
         <h1 >Hidden</h1>
-      </button>}
+      </button> : ""}
 
-      {isMe ?? <button onClick={() => {console.log("ay 7aga"); setSelected(5)}} className={`${styles.link} ${selected === 5 ? styles.selected : ""}`}>
+      {isMe ? <button onClick={() => {console.log("ay 7aga"); setSelected(5)}} className={`${styles.link} ${selected === 5 ? styles.selected : ""}`}>
         <h1 >Upvoted</h1>
-      </button>}
+      </button> : ""}
 
-      {isMe ?? <button onClick={() => {console.log("ay 7aga"); setSelected(6)}} className={`${styles.link} ${selected === 6 ? styles.selected : ""}`}>
+      {isMe ? <button onClick={() => {console.log("ay 7aga"); setSelected(6)}} className={`${styles.link} ${selected === 6 ? styles.selected : ""}`}>
         <h1 >Downvoted</h1>
-      </button>}
+      </button> : ""}
     </div>
   );
 }

@@ -44,7 +44,7 @@ function ProfileInfo({username}) {
   return (
       <div className={styles.info}>
         <div className={styles.username_container}>
-          <h2>Username</h2>
+          <h2>{username}</h2>
           <div className={styles.circle} onClick={toggleDropdown}>
             <Image src={PostOptionsImage} width={12} height={12} alt="Post Options" />
 

@@ -34,6 +34,12 @@ const nextConfig = {
           },
           {
             protocol: 'https',
+            hostname: 'cdn.britannica.com',
+            port: '',
+            pathname: '/**',
+          },
+          {
+            protocol: 'https',
             hostname: 'media1.popsugar-assets.com',
             port: '',
             pathname: '/**',

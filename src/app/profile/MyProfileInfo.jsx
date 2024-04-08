@@ -11,7 +11,7 @@ import plusIcon from "@/app/assets/post-images/mod-icons/plus.svg";
 import profilepicture from "@/app/assets/PP1.png"
 import addPhotoIcon from "@/app/assets/add-photo.svg";
 
-function MyProfileInfo() {
+function MyProfileInfo({username}) {
   return (
     <div className={styles.info}>
       <div className={styles.banner}>
@@ -25,7 +25,7 @@ function MyProfileInfo() {
       
       <div className={styles.main_body}>
         <div className="username">
-            <h2 className={styles.username}>Gold_Perception_2401</h2>
+            <h2 className={styles.username}>{username}</h2>
         </div>
 
         <PillButton text="Share" image={shareIcon} onClick={() => {console.log("share")}}/>
