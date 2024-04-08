@@ -5,13 +5,17 @@ import Image from "next/image";
 import check from "../../assets/check.svg";
 
 
-function Poll ({isOpen,options}) {
+function Poll ({isOpen,options,onVote}) {
 
     const totalVotes = options.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.votes;
     }, 0);
     const [selectedChoice,setSelectedChoice] = useState(-1);
     const [hasVoted,setHasVoted] = useState(false);
+    function handleVote () {
+        onVote(options[selectedChoice]);
+        setHasVoted(true);
+    }
 
     return(
         <div className={styles.poll}>
@@ -54,7 +58,7 @@ function Poll ({isOpen,options}) {
                 <div className={styles.footerContent}>
                     <div className={styles.voteButton}>
                         {selectedChoice === -1 && <Button name={"Vote"} active={false} ></Button>}
-                        {selectedChoice !== -1 && <Button name={"Vote"} active={true} onClick={() => setHasVoted(true)} ></Button>}
+                        {selectedChoice !== -1 && <Button name={"Vote"} active={true} onClick={() => handleVote()} ></Button>}
                     </div>
                     <div className={styles.closingIn}>Closes in x days</div>
                 </div>

@@ -169,6 +169,10 @@
     width: 100%;
     white-space: normal;
     word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
 }
 
 .viewButton {
@@ -190,4 +194,21 @@
 .description.view {
     min-height: 80px;
     height: 100%;
+}
+
+.deleted {
+    display: flex;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    cursor: pointer;
+}
+
+.deletedText {
+    color: rgb(15 26 28);
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
 }
