@@ -16,7 +16,7 @@ import "../Profile.css";
  * //Print the URL to be returned
  * <bannerArea setBannerUrl={console.log(`${URL.createObjectURL(bannerImage)}`)}/>
  */
-export default function BannerArea({setBannerUrl}) {
+export default function BannerArea({setBanner}) {
   const [bannerImage, setBannerImage] = useState(null);
   const inputRef = useRef(null);
 
@@ -38,8 +38,15 @@ export default function BannerArea({setBannerUrl}) {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // You can perform additional checks/validation here if needed
-      setBannerImage(file);
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif" ||
+        file.type === "image/webp"
+      ) {
+        setBannerImage(file);
+      }
     }
   };
 

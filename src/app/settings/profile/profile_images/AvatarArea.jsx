@@ -15,7 +15,7 @@ import "../Profile.css";
  * //Print the URL to be returned
  * <AvatarArea setAvatarUrl={console.log(`${URL.createObjectURL(avatarImage)}`)}/>
  */
-export default function AvatarArea({setAvatarUrl}) {
+export default function AvatarArea({setAvatar}) {
   const [avatarImage, setAvatarImage] = useState(null);
   const inputRef = useRef(null);
 
@@ -37,7 +37,15 @@ export default function AvatarArea({setAvatarUrl}) {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setAvatarImage(file);
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif" ||
+        file.type === "image/webp"
+      ) {
+        setAvatarImage(file);
+      }
     }
   };
 
@@ -49,7 +57,8 @@ export default function AvatarArea({setAvatarUrl}) {
         file.type === "image/jpeg" ||
         file.type === "image/jpg" ||
         file.type === "image/png" ||
-        file.type === "image/gif"
+        file.type === "image/gif" ||
+        file.type === "image/webp"
       ) {
         setAvatarImage(file);
       }
