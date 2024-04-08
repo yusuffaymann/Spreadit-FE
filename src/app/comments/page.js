@@ -5,18 +5,28 @@ import { useState,useEffect } from 'react';
 import ToolBar from "../components/UI/Toolbar";
 import Sidebar from "../components/UI/Sidebar";
 import Comment from "../components/UI/Comment";
+import apiHandler from "../utils/apiHandler"
 import CommentInput from "../components/UI/CommentInput";
 import RightCommentsSidebar from "../components/UI/RightCommentsSidebar";
 
 const Home=()=> {
-  const UserName="Engineers";
+  const UserName="Teachers";
   const [userData, setUserData] = useState(null);
   const [addingComment,setAddingComment]=useState(false);
   const [comments,setComments]=useState(null);
+  const postId="12b5";
 
-  const onComment=(newComment)=>{
-    setComments((prev)=>[...prev,newComment]);
-  }
+  const onComment = async (newComment) => {
+    try {
+          const response = await apiHandler(`/post/comment/${postId}`, "POST",newComment);
+          console.log('New comment added:', response);
+          setComments((prev) => [...prev, newComment]);
+
+    } catch (error) {
+        console.error('Error adding comment:', error.message);
+    }
+}
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -33,7 +43,7 @@ const Home=()=> {
     }
     async function fetchData2() {
       try {
-        const response = await fetch(`http://localhost:3002/comments`);
+        const response = await fetch(`http://localhost:3002/posts/comment/${postId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
