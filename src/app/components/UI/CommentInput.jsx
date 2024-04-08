@@ -5,8 +5,10 @@ import fontsicon from "../../assets/fonts.svg";
 import imageicon from "../../assets/image.svg";
 
 const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay}) => {
+    const [showModal, setShowModal] = useState(false);
     const [commentBodyState, setCommentBody] = useState(commentBody || '');
-    const [image, setImage] = useState(commentImage || null);
+    const [imageURL,setImageURL]=useState(commentImage || null)
+    const [image, setImage] = useState(null);
     const contentEditableRef = useRef(null);
     const inputRef = useRef(null);
 
@@ -16,16 +18,37 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
         }
     }, []);
 
-    const handleCommentSubmit = () => {
-        const newComment = {
-            body: contentEditableRef.current.innerHTML,
-            replies: [],
-            image: image ? image : null
+    const handleCancel=()=>{
+        if(contentEditableRef.current.innerHTML==""&&imageURL==null){
+            close();
         }
-        console.log(newComment);
-        setCommentBody('');
-        setImage(null);
-        onComment(newComment);
+        else{
+            setShowModal(true);
+        } 
+    }
+
+    const handleCancel2=()=>{
+        setShowModal(false);
+    }
+
+    const handleDiscard=()=>{
+        close();
+    }
+
+    const handleCommentSubmit = () => {
+        if(contentEditableRef.current.innerHTML || imageURL){
+            const newComment = {
+                body: contentEditableRef.current.innerHTML,
+                replies: [],
+                media: image ? image : null
+            }
+            console.log(newComment);
+            setCommentBody('');
+            setImage(null);
+            setImageURL(null);
+            onComment(newComment);
+        }
+        
     }
 
     const handleImageClick = () => {
@@ -34,7 +57,8 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
-        setImage(URL.createObjectURL(file));
+        setImage(file);
+        setImageURL(URL.createObjectURL(file));
     }
 
     const handleCommentChange=(event)=>{
@@ -49,9 +73,10 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
 
 
     return (
+        <div>
         <div className={styles.inputcontainer}>
             <div className={styles.commentContent}>
-                {image && <img src={image} alt="Uploaded" className={styles.uploadedImage} />}
+                {imageURL && <img src={imageURL} alt="Uploaded" className={styles.uploadedImage} />}
                 <div
                     ref={contentEditableRef}
                     className={styles.commenttextarea}
@@ -64,17 +89,31 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
             </div>
             <div className={styles.buttonGroup}>
                 <div className={styles.leftbuttons}>
-                    <input type="file" ref={inputRef} onChange={handleImageChange} className={styles.uploadbutton} disabled={image !== null} />
-                    <Image src={imageicon} alt="image icon" className={`${styles.icons} ${image !== null ? styles.disabled : ''}`} onClick={handleImageClick} />
+                    <input type="file" ref={inputRef} onChange={handleImageChange} className={styles.uploadbutton} disabled={imageURL !== null} />
+                    <Image src={imageicon} alt="image icon" className={`${styles.icons} ${imageURL !== null ? styles.disabled : ''}`} onClick={handleImageClick} />
                     <Image src={fontsicon} alt="fonts icon" className={styles.icons} />
                 </div>
                 <div className={styles.rightbuttons}>
-                    <button className={styles.cancelButton} onClick={close}>Cancel</button>
+                    <button className={styles.cancelButton} onClick={handleCancel}>Cancel</button>
                     <button className={buttonDisplay === "comment" ? styles.addButton : styles.editButton} onClick={handleCommentSubmit}>
                         {buttonDisplay}
                     </button>
                 </div>
             </div>
+        </div>
+        {showModal&&(
+            <div className={styles.modaloverlay}>
+                <div className={styles.modal}>
+                    <button className={styles.Xbutton} onClick={handleCancel2}>X</button>
+                    <h2>Discard comment?</h2>
+                    <p>You have a comment in progress, are you sure you want to discard it?</p>
+                    <div className={styles.modalbuttons}>
+                        <button className={styles.cancelButton2} onClick={handleCancel2}>Cancel</button>
+                        <button className={styles.discardButton} onClick={handleDiscard}>Discard</button>
+                    </div>
+                </div>
+            </div>
+        )}
         </div>
     );
 }
