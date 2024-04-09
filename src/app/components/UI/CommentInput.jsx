@@ -139,7 +139,7 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
                     className={styles.commenttextarea}
                     contentEditable="true"
                     placeholder="write your comment here"
-                    onKeyDown={handleCommentChange}
+                    onInput={handleCommentChange}
                     /* dangerouslySetInnerHTML={{ __html: commentBodyState }} */
                 >
                 </div>
