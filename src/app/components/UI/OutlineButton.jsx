@@ -28,7 +28,7 @@ function OutlineButton(props) {
       <button
         role="button"
         tabIndex="0"
-        className={`${styles. buttonBorder} ${styles.buttonText} ${styles.buttonColor}`}
+        className={`${styles. buttonBorder} ${styles.buttonText} ${props.isInverted ? styles.buttonColorInverted : styles.buttonColor}`}
         onClick={props.btnClick}
         disabled={props.isDisabled}
       >
@@ -37,5 +37,10 @@ function OutlineButton(props) {
     </div>
   );
 }
+
+// Set a default value for colorInverted if not provided
+OutlineButton.defaultProps = {
+  isInverted: false,
+};
 
 export default OutlineButton;
