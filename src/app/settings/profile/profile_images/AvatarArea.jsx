@@ -21,9 +21,9 @@ export default function AvatarArea({setAvatar}) {
 
   useEffect(() => {
     if (avatarImage) {
-      setAvatarUrl(URL.createObjectURL(avatarImage));
+      setAvatar(avatarImage);
     }
-  }, [avatarImage, setAvatarUrl]);
+  }, [avatarImage, setAvatar]);
 
   /**
  * Handles image upload event

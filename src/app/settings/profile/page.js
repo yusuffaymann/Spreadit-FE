@@ -33,8 +33,8 @@ function Profile() {
   const [displayName, setDisplayName] = useState(""); // Assuming default value is false
   const [about, setAbout] = useState(""); // Assuming default value is false
   const [socialLinks, setSocialLinks] = useState([]);
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [bannerUrl, setBannerUrl] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [banner, setBanner] = useState("");
   const [clearHistory, setClearHistory] = useState(false);
   const [loading, setLoading] = useState(true); // Loading indicator
 
@@ -50,8 +50,8 @@ function Profile() {
         setActiveVisibility(prefsData.activeInCommunityVisibility);
         setDisplayName(prefsData.displayName);
         setAbout(prefsData.about);
-        setAvatarUrl(prefsData.profilePicture);
-        setBannerUrl(prefsData.banner);
+        setAvatar(prefsData.profilePicture);
+        setBanner(prefsData.banner);
         setSocialLinks(prefsData.socialLinks); // Assuming sociallinks is the array containing social links
         setClearHistory(prefsData.clearHistory);
         /*
@@ -85,8 +85,8 @@ function Profile() {
       activeInCommunityVisibility: activeVisibility,
       displayName: displayName,
       about: about,
-      profilePicture: avatarUrl,
-      banner: bannerUrl,
+      profilePicture: avatar,
+      banner: banner,
       socialLinks: socialLinks,
       clearHistory: clearHistory,
     };
@@ -108,8 +108,8 @@ function Profile() {
     allowFollow,
     contentVisibility,
     activeVisibility,
-    avatarUrl,
-    bannerUrl,
+    avatar,
+    banner,
     socialLinks,
     clearHistory,
   ]);
@@ -272,8 +272,8 @@ function Profile() {
             />
             <h3 className="uppercase-h3-description">Images</h3>
             <ProfileImages
-              setAvatarUrl={setAvatarUrl}
-              setBannerUrl={setBannerUrl}
+              setAvatar={setAvatar}
+              setBanner={setBanner}
             />
             <h3 className="uppercase-h3-description">Profile Category</h3>
             {optionData.map(

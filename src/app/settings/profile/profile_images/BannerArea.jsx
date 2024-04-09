@@ -22,9 +22,9 @@ export default function BannerArea({setBanner}) {
 
   useEffect(() => {
     if (bannerImage) {
-      setBannerUrl(URL.createObjectURL(bannerImage));
+      setBanner(bannerImage);
     }
-  }, [bannerImage, setBannerUrl]);
+  }, [bannerImage, setBanner]);
 
    /**
  * Handles image upload event
