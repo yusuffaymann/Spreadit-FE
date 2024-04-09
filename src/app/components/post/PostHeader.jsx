@@ -23,7 +23,7 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 
 import Button from "./Button";
 
-function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW}) {
+function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile,isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, onEdit}) {
 
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -77,7 +77,7 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
         </div>
         {!isProfile && 
         <div className={styles.joinAndOptions} >
-            {!isMember &&
+            {!isMember && !isInComment&&
             <div className={styles.joinButton}>
                 {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => onJoin()} active={true} />}
                 {joined && <Button className={styles.joinButton} name={"Leave"} onClick={() => onJoin()} active={true} />}
@@ -98,7 +98,7 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" /> 
+                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={onEdit} /> 
                     {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
                     {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
