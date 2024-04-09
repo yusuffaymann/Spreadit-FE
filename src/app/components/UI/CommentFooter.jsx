@@ -43,7 +43,7 @@ import PostDropDownMenu from "../post/PostDropDownMenu";
 
 
 
-function commentFooter({upvote, downvote, voteCount, isSaved, onSave, isUser, onEdit, onReply, onHide, onDelete, onReport, subRedditPicture, subRedditName}) {
+function commentFooter({upvote, downvote, voteCount, isSaved, onSave, isUser, onEdit, onReply, onHide, onDelete, subRedditPicture, subRedditName,onBlock,onReport}) {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
@@ -56,10 +56,12 @@ function commentFooter({upvote, downvote, voteCount, isSaved, onSave, isUser, on
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
     }
 
+    const userName="bla";
 
     return (
         <div className={styles.post_footer}>
-                    {showReportModal && <ReportModal subRedditPicture={subRedditPicture} subRedditName={subRedditName} closeModal={() => setShowReportModal(false)} />}
+                    {showReportModal && <ReportModal userName={userName} subRedditPicture={subRedditPicture} subRedditName={subRedditName} onReport={onReport} onBlock={onBlock} closeModal={() => setShowReportModal(false)} />}
+
             <div className={styles.post_interactions}>
                 <div className={styles.upvotes_container}>
                     <button 

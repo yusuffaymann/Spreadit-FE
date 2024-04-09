@@ -17,7 +17,18 @@ const Comment=({comment})=>{
     const [replies,setReplies]=useState(comment.replies);
     const [hidden,setHidden]=useState(comment.hidden);
     const [saved,setSaved]=useState(comment.saved);
-    const followed=comment.userObject.followed;
+    const [isFollowed,setIsFollowed]=useState(comment.userObject.followed);
+    
+    const handleFollow=async()=> {
+        setIsFollowed(!isFollowed);
+        try {
+            const response = await apiHandler(`/users/follow`, "POST",comment.userObject.userName);
+            console.log(response);
+          } catch (error) {
+            console.error('Error toggling follow :', error);
+          }
+        //api call to follow or unfollow a user
+    }
     
     const onDelete=async()=>{
         try {
@@ -97,25 +108,44 @@ const Comment=({comment})=>{
     }
     };
 
-    const onReport =()=>{
+    const parseAndStyleLinks = (text) => {
+        // Regular expression to find URLs in text
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        
+        // Replace URLs with anchor tags
+        const formattedText = text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+        
+        return formattedText;
+    }
 
-    };
+    function handleReport(mainReason,subReason) {
+        console.log(mainReason);
+        console.log(subReason);
+        //api call to report a post
+    }
+
+    function handleBlock() {
+        console.log("block");
+        //api call to block a user
+    }
+
+    const formattedDescription = parseAndStyleLinks(comment.body);
 
     return( 
        <div className={styles.commentcontainer}>
        
             {!hidden&&(
                     <div className={styles.commentbody}>
-                       <PostHeader isProfile={true} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture} time={"1 mon"} banner={""} subRedditDescription={""} cakeDate={"1/1/2012"} isFollowed={followed} onFollow={()=>{console.log("api function")}}/>
-                       {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.body} commentImage={comment.media} buttonDisplay={"Save edits"}/>)}
+                       <PostHeader isProfile={true} isInComment={true} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture} time={"1 mon"} banner={""} subRedditDescription={""} cakeDate={"1/1/2012"} isFollowed={isFollowed} onFollow={handleFollow}/>
+                       {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.body} commentImage={comment.media} buttonDisplay={"Save edits"} isPost={false}/>)}
                         {!isEditing&&(
                         <div className={styles.commentcontent}>
                             {comment.media!==""&&(<img src={comment.media} className={styles.commentimage} />)}
-                            <span>{comment.body}</span>
+                            <span className={styles.commenttext} dangerouslySetInnerHTML={{ __html: formattedDescription }}></span>
                         </div>
                         )}
-                        {!isEditing&&(<CommentFooter upvote={onUpVote} downvote={onDownVote} voteCount={comment.noofvotes} isSaved={saved} onSave={onSave} onHide={onHide} isUser={false} onEdit={()=>setIsEditing(true)} onReply={()=>setIsReplying(true)}  onDelete={onDelete} onReport={onReport} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture}/>)}
-                        {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"}/>)}  
+                        {!isEditing&&(<CommentFooter upvote={onUpVote} downvote={onDownVote} voteCount={comment.noofvotes} isSaved={saved} onSave={onSave} onHide={onHide} isUser={true} onEdit={()=>setIsEditing(true)} onReply={()=>setIsReplying(true)}  onDelete={onDelete} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture} onReport={handleReport} onBlock={handleBlock}/>)}
+                        {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"} isPost={false}/>)}  
                         {replies.length !== 0 &&(
                             <div>
                                 {showReply&&(

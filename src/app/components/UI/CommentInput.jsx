@@ -4,7 +4,7 @@ import Image from "next/image";
 import fontsicon from "../../assets/fonts.svg";
 import imageicon from "../../assets/image.svg";
 
-const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay}) => {
+const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay,isPost}) => {
     const [showModal, setShowModal] = useState(false);
     const [commentBodyState, setCommentBody] = useState(commentBody || '');
     const [imageURL,setImageURL]=useState(commentImage || null)
@@ -12,9 +12,34 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
     const contentEditableRef = useRef(null);
     const inputRef = useRef(null);
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (contentEditableRef.current) {
             contentEditableRef.current.innerHTML = commentBodyState;
+        }
+    }, []); */
+
+    const resizeContentEditable = (element) => {
+        element.style.height = "auto";
+        element.style.height = `${element.scrollHeight + 40}px`;
+    }
+
+    const parseAndStyleLinks = (text) => {
+        // Regular expression to find URLs in text
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        
+        // Replace URLs with anchor tags
+        const formattedText = text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+        
+        return formattedText;
+    }
+
+    useEffect(() => {
+        // Resize the contentEditable div when the component mounts
+        if (contentEditableRef.current) {
+            resizeContentEditable(contentEditableRef.current);
+            const formattedBody = parseAndStyleLinks(commentBodyState);
+            contentEditableRef.current.innerHTML = formattedBody;
+            attachClickEventToLinks(contentEditableRef.current);
         }
     }, []);
 
@@ -42,7 +67,6 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
                 replies: [],
                 media: image ? image : null
             }
-            console.log(newComment);
             setCommentBody('');
             setImage(null);
             setImageURL(null);
@@ -62,13 +86,46 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
     }
 
     const handleCommentChange=(event)=>{
+        /* // Parse and style links within the contentEditable div
+    const formattedText = parseAndStyleLinks(contentEditableRef.current.innerHTML);
+    
+    // Update the state with the formatted text
+    setCommentBody(formattedText);
+
+    // Resize the contentEditable div
+    resizeContentEditable(contentEditableRef.current);
+
+    // Attach click event to links
+    attachClickEventToLinks(contentEditableRef.current); */
+        /* const newText = event.target.value;
+        const styledText = parseAndStyleLinks(newText);
+        setCommentBody(styledText);
+
+        if (contentEditableRef.current) {
+            contentEditableRef.current.innerHTML = styledText;
+            resizeContentEditable(contentEditableRef.current);
+            attachClickEventToLinks(contentEditableRef.current);
+        } */
         setCommentBody(event.target.value);
         if (contentEditableRef.current) {
-            contentEditableRef.current.style.height = "auto";
-          
-          // Adjust the height to add 40px before reaching the end
-          contentEditableRef.current.style.height = `${contentEditableRef.current.scrollHeight + 40}px`;
-      }
+            resizeContentEditable(contentEditableRef.current);
+            const formattedBody = parseAndStyleLinks(event.target.value);
+            contentEditableRef.current.innerHTML = formattedBody;
+            attachClickEventToLinks(contentEditableRef.current);
+      } 
+    }
+
+    const attachClickEventToLinks = (element) => {
+        const links = element.querySelectorAll("a");
+        links.forEach(link => {
+            link.addEventListener("click", handleLinkClick);
+        });
+    }
+
+    const handleLinkClick = (event) => {
+        event.preventDefault(); // Prevent default anchor behavior
+        const url = event.target.getAttribute("href");
+        window.open(url, "_blank"); // Open link in a new tab
     }
 
 
@@ -83,14 +140,17 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
                     contentEditable="true"
                     placeholder="write your comment here"
                     onKeyDown={handleCommentChange}
+                    /* dangerouslySetInnerHTML={{ __html: commentBodyState }} */
                 >
                 </div>
                 
             </div>
             <div className={styles.buttonGroup}>
                 <div className={styles.leftbuttons}>
+                    {!isPost&&(<div>
                     <input type="file" ref={inputRef} onChange={handleImageChange} className={styles.uploadbutton} disabled={imageURL !== null} />
                     <Image src={imageicon} alt="image icon" className={`${styles.icons} ${imageURL !== null ? styles.disabled : ''}`} onClick={handleImageClick} />
+                    </div>)}
                     <Image src={fontsicon} alt="fonts icon" className={styles.icons} />
                 </div>
                 <div className={styles.rightbuttons}>
