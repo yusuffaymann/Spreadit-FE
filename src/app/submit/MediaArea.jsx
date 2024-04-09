@@ -83,6 +83,38 @@ export default function MediaArea({ mediaArray, setMediaArray }) {
     setMediaArray(updatedMediaArray);
   };
 
+  const handleKeypress = (event) => {
+    // Check if the key pressed is the arrow keys
+    if (event.key === "ArrowRight") {
+      // Increment the selected state if it's less than mediaArray.length - 1
+      if (selected == -1)
+      {
+        setSelected(mediaArray.length - 1)
+      }
+      else if (selected < mediaArray.length - 1) {
+        setSelected(selected + 1);
+      }
+    } else if (event.key === "ArrowLeft") {
+      // Decrement the selected state if it's greater than zero
+      if (selected > 0) {
+        setSelected(selected - 1);
+      }
+      else if (selected == -1)
+      {
+        setSelected(0)
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeypress);
+  
+    // Remove event listener when component unmounts
+    return () => {
+      window.removeEventListener("keydown", handleKeypress);
+    };
+  }, [selected]);
+
   return (
     <div
       className={`${styles.container}`}
@@ -102,7 +134,7 @@ export default function MediaArea({ mediaArray, setMediaArray }) {
                 <div className={`${styles.uploadedImageFlex}`}>
                   
                 {mediaArray.map((file, index) => (
-                  <div className={`${styles.uploadedImageFlex}`} key={index} onClick={() => setSelected(index)}>
+                  <div className={`${styles.uploadedImageFlex}`} key={index} onClick={() => setSelected(index === selected ? -1 : index)}>
                     <div draggable="true">
                       
                       <span className={`${styles.uploadedImageSpanFlex}`}>
@@ -200,7 +232,7 @@ export default function MediaArea({ mediaArray, setMediaArray }) {
                 </div>
               </div>
             </div>
-            { mediaArray.length > 1 && mediaArray[selected] &&
+            { mediaArray.length >= 1 && mediaArray[selected] &&
             <div className={`${styles.uploadedPreviewFlex}`}>
               { mediaArray[selected].type.includes("image") ? (
             <img className={styles.uploadedPreviewImage} src={URL.createObjectURL(mediaArray[selected])}/>
