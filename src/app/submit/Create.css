@@ -301,3 +301,11 @@ button {
     padding: 2px 4px;
   }
 
+  .public-DraftEditor-content {
+    min-height: 122px;
+    font-family: Noto Sans, Arial, sans-serif;
+  }
+
+  .public-DraftEditorPlaceholder-root {
+    font-family: Noto Sans, Arial, sans-serif;
+  }
