@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styles from "./Checkbox.module.css"
 
-const Checkbox = ({ label, defaultCheck = false, isDisabled= false }) => {
-  const [isChecked, setIsChecked] = useState(defaultCheck);
+const Checkbox = ({ label, isChecked = false, onToggle, isDisabled= false }) => {
+  const [status, setStatus] = useState(isChecked);
 
   const toggleCheckbox = () => {
-    setIsChecked(!isChecked);
-    props.onToggle();
+    setStatus(!status);
+    onToggle(!isChecked);
   };
 
   return (
@@ -19,8 +19,8 @@ const Checkbox = ({ label, defaultCheck = false, isDisabled= false }) => {
         tabIndex="0"
         className={`${styles.checkbox}`}
       >
-        <input type="hidden" value={isChecked ? 'true' : 'false'} disabled={isDisabled}/>
-        {isChecked ? (
+        <input type="hidden" value={status} disabled={isDisabled}/>
+        {!isChecked ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
