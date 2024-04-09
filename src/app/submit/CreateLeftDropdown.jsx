@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import logo from "../assets/logoSpreadIt.svg"
+import styles from "./CreateLeftDropdown.module.css"
 import "./Create.css";
 
 export default function CreateLeftDropdown({current,setter}) {
@@ -11,13 +12,13 @@ export default function CreateLeftDropdown({current,setter}) {
 
 
   return (
-    <div className="createLeftFlexDropdownFlexContainer createLeftFlexGroupedOptions">
-      <div className="create--DropdownArea">
-        <div className="create--DropdownFlex">
-          <span className="create--CommunityIcon create--DropdownOptionIcon"></span>
-          <div className="create--DropdownOptionFlex">
+    <div className={`${styles.createLeftFlexDropdownFlexContainer} ${styles.createLeftFlexGroupedOptions}`}>
+      <div className={styles.createDropdownArea}>
+        <div className={styles.createDropdownFlex}>
+          <span className={`${styles.createCommunityIcon} ${styles.createDropdownOptionIcon}`}></span>
+          <div className={styles.createDropdownOptionFlex}>
             <input
-              className="create--DropdownOptionText"
+              className={styles.createDropdownOptionText}
               placeholder="Choose a community"
               type="text"
               spellcheck="false"
