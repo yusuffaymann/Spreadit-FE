@@ -69,6 +69,11 @@
     background-color: rgb(212, 211, 211);
 }
 
+.searchbar:focus{
+    background-color: white;
+    border:0.3px grey solid;
+}
+
 .searchinput{
     background-color: #b9b6b6;
     width: 95%;
