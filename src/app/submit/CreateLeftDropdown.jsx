@@ -3,7 +3,13 @@ import React from "react";
 import logo from "../assets/logoSpreadIt.svg"
 import "./Create.css";
 
-export default function CreateLeftDropdown() {
+export default function CreateLeftDropdown({current,setter}) {
+  function handleInputChange(event) {
+    const { value } = event.target;
+      setter(value);
+  }
+
+
   return (
     <div className="createLeftFlexDropdownFlexContainer createLeftFlexGroupedOptions">
       <div className="create--DropdownArea">
@@ -11,10 +17,12 @@ export default function CreateLeftDropdown() {
           <span className="create--CommunityIcon create--DropdownOptionIcon"></span>
           <div className="create--DropdownOptionFlex">
             <input
-              class="create--DropdownOptionText"
+              className="create--DropdownOptionText"
               placeholder="Choose a community"
+              type="text"
               spellcheck="false"
-              value=""
+              onChange={handleInputChange}
+              value={current} 
             ></input>
           </div>
         </div>
