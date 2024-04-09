@@ -367,6 +367,121 @@ function RichTextEditor({ mediaArray, setMediaArray, content, setContent, rawCon
     setVideoToggled(!videoToggled);
   };
 
+  const toolbarItems = [
+    {
+      onClick: handleBoldToggle,
+      ariaLabel: 'Bold',
+      ariaSelected: boldToggled,
+      className: boldToggled ? styles.ItemSelected : '',
+      icon: <strong>&#66;</strong>,
+    },
+    {
+      onClick: handleItalicToggle,
+      ariaLabel: 'handleItalicToggle',
+      ariaSelected: italicToggled,
+      className: italicToggled ? styles.ItemSelected : '',
+      icon: <i>&#x69;</i>,
+    },
+    {
+      onClick: handleUnderToggle,
+      ariaLabel: 'Underline',
+      ariaSelected: underToggled,
+      className: underToggled ? styles.ItemSelected : '',
+      icon: <u>&#85;</u>,
+    },
+    {
+      onClick: handleLinkToggle,
+      ariaLabel: 'Link',
+      ariaSelected: linkToggled,
+      className: linkToggled ? styles.ItemSelected : '',
+      icon: <>&#64;</>,
+    },
+    {
+      onClick: handleStrikeToggle,
+      ariaLabel: 'Strikethrough',
+      ariaSelected: strikeToggled,
+      className: strikeToggled ? styles.ItemSelected : '',
+      icon: <del>&#83;</del>,
+    },
+    {
+      onClick: handleInlineToggle,
+      ariaLabel: 'Inline Code',
+      ariaSelected: inlineToggled,
+      className: inlineToggled ? styles.ItemSelected : '',
+      icon: <>&#10092;&#99;&#10093;</>,
+    },
+    {
+      onClick: handleSuperToggle,
+      ariaLabel: 'Superscript',
+      ariaSelected: superToggled,
+      className: superToggled ? styles.ItemSelected : '',
+      icon: <>A<sup>^</sup></>,
+    },
+    {
+      onClick: handleSpoilerToggle,
+      ariaLabel: 'Spoiler',
+      ariaSelected: spoilerToggled,
+      className: spoilerToggled ? styles.ItemSelected : '',
+      icon: <>&#9888;</>,
+    },
+    {
+      onClick: handleHeadingToggle,
+      ariaLabel: 'Heading',
+      ariaSelected: headingToggled,
+      className: headingToggled ? styles.ItemSelected : '',
+      icon: <><sub>&#104;</sub>&#72;</>,
+    },
+    {
+      onClick: handleBulletToggle,
+      ariaLabel: 'Bulleted List',
+      ariaSelected: bulletToggled,
+      className: bulletToggled ? styles.ItemSelected : '',
+      icon: <>&#8226;</>,
+    },
+    {
+      onClick: handleNumberToggle,
+      ariaLabel: 'Numbered List',
+      ariaSelected: numberToggled,
+      className: numberToggled ? styles.ItemSelected : '',
+      icon: <>&#35;</>,
+    },
+    {
+      onClick: handleQuoteToggle,
+      ariaLabel: 'Quoted Block',
+      ariaSelected: quoteToggled,
+      className: quoteToggled ? styles.ItemSelected : '',
+      icon: <>&#10078;</>,
+    },
+    {
+      onClick: handleCodeToggle,
+      ariaLabel: 'Code Block',
+      ariaSelected: codeToggled,
+      className: codeToggled ? styles.ItemSelected : '',
+      icon: <>&#8865;</>,
+    },
+    {
+      onClick: handleTableToggle,
+      ariaLabel: 'Table',
+      ariaSelected: tableToggled,
+      className: tableToggled ? styles.ItemSelected : '',
+      icon: <>&#8862;</>,
+    },
+    {
+      onClick: handleImageToggle,
+      ariaLabel: 'Add Image',
+      ariaSelected: imageToggled,
+      className: imageToggled ? styles.ItemSelected : '',
+      icon: <>📷</>,
+    },
+    {
+      onClick: handleVideoToggle,
+      ariaLabel: 'Add Video',
+      ariaSelected: videoToggled,
+      className: videoToggled ? styles.ItemSelected : '',
+      icon: <>🎬</>,
+    },
+  ];
+
   return (
     <div>
       <div className={styles.RichTextContainerPosition}>
@@ -374,262 +489,9 @@ function RichTextEditor({ mediaArray, setMediaArray, content, setContent, rawCon
           <div className={styles.RichTextToolbar}>
             <div className={styles.RichTextToolbarPosition}>
               <div className={styles.RichTextToolbarItemFlex}>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleBoldToggle}
-                    tabIndex="-1"
-                    aria-label="Bold"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      boldToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      <strong>&#66;</strong>
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleItalicToggle}
-                    tabIndex="-1"
-                    aria-label="Italic"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      italicToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      <i>&#x69;</i>
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleUnderToggle}
-                    tabIndex="-1"
-                    aria-label="Underline"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      underToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      <u>&#85;</u>
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleLinkToggle}
-                    tabIndex="-1"
-                    aria-label="Link"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      linkToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#64;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleStrikeToggle}
-                    tabIndex="-1"
-                    aria-label="Strikethrough"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      strikeToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      <del>&#83;</del>
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleInlineToggle}
-                    tabIndex="-1"
-                    aria-label="Inline Code"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      inlineToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#10092;&#99;&#10093;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleSuperToggle}
-                    tabIndex="-1"
-                    aria-label="Superscript"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      superToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      A<sup>^</sup>
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleSpoilerToggle}
-                    tabIndex="-1"
-                    aria-label="Spoiler"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      spoilerToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#9888;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <div className={styles.divider}></div>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleHeadingToggle}
-                    tabIndex="-1"
-                    aria-label="Heading"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      headingToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      <sub>&#104;</sub>&#72;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleBulletToggle}
-                    tabIndex="-1"
-                    aria-label="Bulleted List"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      bulletToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#8226;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleNumberToggle}
-                    tabIndex="-1"
-                    aria-label="Numbered List"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      numberToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#35;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleQuoteToggle}
-                    tabIndex="-1"
-                    aria-label="Quoted Block"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      quoteToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#10078;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleCodeToggle}
-                    tabIndex="-1"
-                    aria-label="Code Block"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem} ${
-                      codeToggled ? styles.ItemSelected : ""
-                    }`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#8865;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <div className={styles.divider}></div>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleTableToggle}
-                    tabIndex="-1"
-                    aria-label="Table"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem}`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      &#8862;
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleImageToggle}
-                    tabIndex="-1"
-                    aria-label="Add Image"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem}`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      📷
-                    </span>
-                  </button>
-                </span>
-                <span>
-                  <button
-                    role="button"
-                    onClick={handleVideoToggle}
-                    tabIndex="-1"
-                    aria-label="Add Video"
-                    aria-selected="false"
-                    className={`${styles.RichTextToolbarItem}`}
-                  >
-                    <span className={`${styles.miscIcon} icon icon-add`}>
-                      🎬
-                    </span>
-                  </button>
-                </span>
+              {toolbarItems.map((item, index) => (
+        <ToolbarItem key={index} {...item} />
+      ))}
               </div>
             </div>
           </div>
@@ -682,5 +544,25 @@ function RichTextEditor({ mediaArray, setMediaArray, content, setContent, rawCon
     </div>
   );
 }
+
+function ToolbarItem({ onClick, ariaLabel, ariaSelected, className, icon })
+{
+  return (
+    <span>
+      <button
+        role="button"
+        onClick={onClick}
+        tabIndex="-1"
+        aria-label={ariaLabel}
+        aria-selected={ariaSelected}
+        className={`${styles.RichTextToolbarItem} ${className}`}
+      >
+        <span className={`${styles.miscIcon} icon icon-add`}>
+          {icon}
+        </span>
+      </button>
+    </span>
+  );
+};
 
 export default RichTextEditor;
