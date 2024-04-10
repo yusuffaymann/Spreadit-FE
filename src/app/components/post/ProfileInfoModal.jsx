@@ -8,7 +8,7 @@ import styles from "./ProfileInfoModal.module.css"
 
 function ProfileInfoModal ({userName, profilePicture,  cakeDate, isfollowed, onFollow}) {
     return (
-        <div className={styles.modal} >
+        <div className={styles.modal} onClick={(e) => {e.stopPropagation();}} >
             <div className={styles.nameAndPicture}>
                 <img className={styles.profilePicture}
                     src={profilePicture}

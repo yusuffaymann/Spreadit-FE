@@ -188,7 +188,7 @@ function ReportModal({subRedditPicture, subRedditName, subRedditRules, closeModa
     }
 
     return (
-    <div className={styles.modelOverlay}>
+    <div className={styles.modelOverlay} onClick={(e) => {e.stopPropagation();}}>
         <div className={styles.modal}>
             {stage === 1 && <StageOne closeModal={closeModal} onReport={onReport} mainReasonIndex={mainReasonIndex} subReasonIndex={subReasonIndex} subRedditPicture={subRedditPicture} subRedditName={subRedditName} changeStage={(nextStage, mainReason, subReason) => handleStateChange(nextStage, mainReason, subReason)}  />}
             {stage === 2 && <StageTwo closeModal={closeModal} onReport={onReport} subRedditRules={subRedditRules} mainReasonIndex={mainReasonIndex} subReasonIndex={subReasonIndex} mainReason={reasons[mainReasonIndex]} changeStage={(nextStage, mainReason, subReason) => handleStateChange(nextStage, mainReason, subReason)} />}
