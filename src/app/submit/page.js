@@ -29,6 +29,8 @@ function Submit({ currentCommunity = "" }) {
   const [isCommunityFound, setIsCommunityFound] = useState(false);
   const [ready, setReady] = useState(false);
   const [pollReady, setPollReady] = useState(false);
+  const [mediaReady, setMediaReady] = useState(false);
+  const [urlReady, setUrlReady] = useState(false);
   const [selectedOption, setSelectedOption] = useState("post");
   const [communityRules, setCommunityRules] = useState([]);
   const [communityMembers, setCommunityMembers] = useState(0);
@@ -107,9 +109,19 @@ function Submit({ currentCommunity = "" }) {
   }, [community]);
 
   useEffect(() => {
-    if (community !== "" && title !== "" && pollReady) setReady(true);
+    if (community !== "" && title !== "" && pollReady && mediaReady && urlReady) setReady(true);
     else setReady(false);
-  }, [community, title]);
+  }, [community, title, pollReady, mediaReady, urlReady]);
+
+  useEffect(() => {
+    if (selectedOption === "link" && url === "" ) setUrlReady(false);
+    else setUrlReady(true);
+  }, [selectedOption, url]);
+
+  useEffect(() => {
+    if (selectedOption === "image" && mediaArray.length === 0) setMediaReady(false);
+    else setMediaReady(true);
+  }, [selectedOption, mediaArray]);
 
   useEffect(() => {
     if (selectedOption === "poll" && !isPollEnabled) setPollReady(false);
@@ -117,7 +129,7 @@ function Submit({ currentCommunity = "" }) {
   }, [selectedOption, isPollEnabled]);
 
   useEffect(() => {
-    setIsPollEnabled(realVoteOptions.length > 0 && selectedOption === "poll");
+    setIsPollEnabled(realVoteOptions.length > 1 && selectedOption === "poll");
   }, [realVoteOptions, selectedOption]);
 
   useEffect(() => {
