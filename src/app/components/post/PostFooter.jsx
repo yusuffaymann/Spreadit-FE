@@ -43,6 +43,10 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
     }
 
+    function sharePost(){
+        navigator.clipboard.writeText("hello").then(() => {alert("Profile Link Copied!")}).catch(() => {alert("Failed to copy link")} );
+    }
+
     //Todo? propably will make a function here for each mod action in the future
 
     return (
@@ -122,8 +126,8 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                         <span>{commentCount}</span>
                 </button>
 
-                <button className={styles.btn}>
-                        <Image width={16} height={16} src={shareIcon} alt="Comments Icon"/>
+                <button className={styles.btn} onClick={sharePost}>
+                        <Image width={16} height={16} src={shareIcon} alt="Share Icon"/>
                         <span>Share</span>
                 </button>
            </div>
