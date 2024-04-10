@@ -4,11 +4,12 @@ import { redirect } from 'next/navigation'
 
 async function Profile() {
   const cookies = await getCookies();
-  const token = cookies.value;
 
-  if (!token) {
+  if (!cookies) {
     redirect('/login');
   }
+
+  const token = cookies.value;
   
   const user_info = await apiHandler('/user-info', 'GET', "");
   redirect(`/profile/${user_info.username}`);
