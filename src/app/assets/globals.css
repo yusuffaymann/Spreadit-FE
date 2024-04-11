@@ -219,20 +219,20 @@ body.modal-open {
 }
 
 .upvoted{
-  background-color: #D93A00;
+  background-color: #D93A00 !important;
 }
 
 .upvoted-hover{
-  background-color: #962900;
+  background-color: #962900 !important;
 
 }
 
 .downvoted{
-  background-color: #6A5CFF;
+  background-color: #6A5CFF !important;
 }
 
 .downvoted-hover{
-  background-color: #453BB5;
+  background-color: #453BB5 !important;
 }
 
 

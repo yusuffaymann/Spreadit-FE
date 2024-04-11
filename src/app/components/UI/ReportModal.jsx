@@ -37,7 +37,7 @@ function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex
                 <div className={styles.rules}>
                     <div style={{width: "100%"}}>
                         <div className={`${styles.subRedditRule} ${selectedReason===0 ? styles.selected : "" }`} onClick={() => setSelectedReason(0)}>
-                            <Image className={styles.subRedditPicture}
+                            <img className={styles.subRedditPicture}
                                 src={subRedditPicture}
                                 width={256}
                                 height={256}
