@@ -10,9 +10,12 @@
 .commentcontent{
     display: flex;
     flex-direction: column;
-    max-width: 250px;
-    width: fit-content;
+    width: 100%;
     margin: 5px;
+}
+
+.commenttext{
+    word-wrap: break-word;
 }
 
 .profilePicture{
@@ -36,6 +39,11 @@
     border-radius: 45px;
     border:none;
     background-color: rgb(212, 211, 211);
+}
+
+.commentimage{
+    max-width: 250px;
+    width: fit-content;
 }
 
 .replybutton{

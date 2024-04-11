@@ -23,13 +23,14 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 
 import Button from "./Button";
 
-function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, subRedditDescription, subRedditRules, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications}) {
 
+function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, onEdit, replyNotifications, onReplyNotifications}) {
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
+    const [showProfileInfo,setShowProfileInfo] = useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
-
+    
     const [showDeleteModal,setShowDeleteModal] = useState(false);
 
     let timeOut;
@@ -43,24 +44,56 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
         onFollow();
     }
 
-    async function handleMouseLeave() {
+    async function handleMouseLeaveSubreddit() {
         timeOut = setTimeout(() => {
-            setShowSubRedditInfo(false);     
+            setShowSubRedditInfo(false);    
         }, 200);
     }
 
+    async function handleMouseLeaveProfile() {
+        timeOut = setTimeout(() => { 
+            setShowProfileInfo(false);    
+        }, 200);
+    }
     return(
         
         <div className={styles.header}>
         {showReportModal && <ReportModal userName={userName} subRedditPicture={subRedditPicture} subRedditName={subRedditName} subRedditRules={subRedditRules} onReport={onReport} onBlock={onBlock} closeModal={() => setShowReportModal(false)} />}
         {showDeleteModal && <DeletePost onDelete={onDelete} closeModal={() => setShowDeleteModal(false)} />}
-        <div className={styles.postHeaderInfo} onClick={(e) => {e.stopPropagation();}} >
-            <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
-                {showSubRedditInfo &&
-                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}} >
-                    {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
-                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin} /> }
 
+        <div className={styles.postHeaderInfo} onClick={(e) => {e.stopPropagation();}}>
+            {!isInComment&&(<div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()}>
+                {showSubRedditInfo &&
+                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}}>
+
+                    {isProfile && <ProfileInfoModal userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
+                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/> }
+                </div>}
+                <img className={styles.subRedditPicture}
+                    src={subRedditPicture || profilePicture}
+                    width={256}
+                    height={256}
+                    alt="The subReddit picture "
+                    quality={100}
+                />
+                
+                <div className={styles.subredditandusername}>
+                    <div className={styles.postInfo}>
+                    <div className={styles.subRedditName}>{subRedditName || userName}</div>
+                    <div>•</div>
+                    </div>
+                </div>
+                
+            </div>)}
+            {isInComment&&
+            (<div className={styles.subRedditNameAndPicture}>
+                {showSubRedditInfo &&
+                <div className={styles.showmodalarea} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
+                    <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/>
+                </div>}
+                {showProfileInfo &&
+                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowProfileInfo(false)} >
+                    <ProfileInfoModal userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />
                 </div>}
                 <img className={styles.subRedditPicture}
                     src={subRedditPicture}
@@ -69,14 +102,21 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
                     alt="The subReddit picture "
                     quality={100}
                 />
-                <div className={styles.subRedditName}>{subRedditName}</div>
-            </div>
-            <div>•</div>
-            <div className={styles.time}>{time}</div>
+                <div className={styles.subredditandusername}>
+                    <div className={styles.postInfo}>
+                        <div className={styles.subRedditName} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()}>{subRedditName}</div>
+                        <div>•</div>
+                        <div className={styles.time}>{time}</div>
+                    </div>
+                    <div className={styles.userName} onMouseEnter={() => setShowProfileInfo(true)} onMouseLeave={() => handleMouseLeaveProfile()} >{userName}</div>
+                </div>
+            </div>)}
+            {!isInComment&&<div className={styles.time}>{time}</div>}
         </div>
         {!isProfile && 
-        <div className={styles.joinAndOptions} onClick={(e) => {e.stopPropagation();}} >
-            {!isMember &&
+
+        <div className={styles.joinAndOptions} onClick={(e) => {e.stopPropagation();}}>
+            {!isMember && !isInComment&&
             <div className={styles.joinButton}>
                 {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => onJoin()} active={true} />}
                 {joined && <Button className={styles.joinButton} name={"Leave"} onClick={() => onJoin()} active={true} />}
@@ -97,7 +137,7 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" /> 
+                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={onEdit} /> 
                     {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
                     {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />

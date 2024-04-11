@@ -7,7 +7,7 @@ import close from "../../assets/close.svg"
 import back from "../../assets/back.svg"
 
 
-function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
+function StageOne({subRedditPicture, subRedditName,subRedditRules, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
 {
 
     const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];

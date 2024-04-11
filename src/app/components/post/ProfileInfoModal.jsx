@@ -6,7 +6,7 @@ import chaticon from "../../assets/chat-dots.svg"
 import cakeicon from "../../assets/cake.svg" 
 import styles from "./ProfileInfoModal.module.css"
 
-function ProfileInfoModal ({userName, profilePicture,  cakeDate, isfollowed, onFollow}) {
+function ProfileInfoModal ({userName, profilePicture,  cakeDate, isFollowed, onFollow}) {
     return (
         <div className={styles.modal} onClick={(e) => {e.stopPropagation();}} >
             <div className={styles.nameAndPicture}>
@@ -27,13 +27,13 @@ function ProfileInfoModal ({userName, profilePicture,  cakeDate, isfollowed, onF
                 </div>
             </div>
             <div className={styles.buttons}>
-                {!isfollowed&&(
+                {!isFollowed&&(
                     <div className={styles.followButton} onClick={onFollow} >
                         <Image src={plusicon} alt="plus icon" className={styles.icons} />
                         <p className={styles.buttondescription}>Follow</p>
                     </div>
                 )}
-                {isfollowed&&(
+                {isFollowed&&(
                     <div className={styles.followButton} onClick={onFollow} >
                         <Image src={dashicon} alt="dash icon" className={styles.icons} />
                         <p className={styles.buttondescription}>Unfollow</p>
