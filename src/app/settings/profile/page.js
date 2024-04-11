@@ -39,7 +39,7 @@ function Profile() {
   const [loading, setLoading] = useState(true); // Loading indicator
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData() {  
       setLoading(true);
       try {
         // Fetch user preferences
@@ -194,15 +194,14 @@ function Profile() {
    * However, when `socialLinks` are loaded from the API, they werent accounted for, so if for example you had previously saved 5 links then reloaded
    * , you will find yourself able to add up to 10 links in the page
    * 
-   * @param {number} id      `socialLink` ID
-   * @param {string} name      `socialLink` display name
+   * @param {number} platform      `socialLink` platform
    * @param {string} url      `socialLink` url
    * @param {string} logo      `socialLink` logo hyperlink
    */
-  const addSocialLink = (id, name, url, logo) => {
+  const addSocialLink = (platform, url, displayName) => {
     if (socialLinks.length < MAX_SOCIAL_LINKS) {
       // Spread the existing socialLinks array and add the new object to it
-      setSocialLinks([...socialLinks, { id, name, url, logo }]);
+      setSocialLinks([...socialLinks, { platform, url, displayName }]);
     }
   };
 
@@ -218,11 +217,11 @@ function Profile() {
    * This means for example, if you had 5 links of the same type (same `id`), then deleted one of them, they will all get deleted, but the `counter` will
    * only decrement from 5 to 4, thus if you add another link, you will find the "add link" button disabled due to the `counter` actually being set to 5
    * 
-   * @param {number} id      `socialLink` ID to be deleted
+   * @param {number} myIndex      `socialLink` index to be deleted
    */
-  const deleteSocialLink = (id) => {
+  const deleteSocialLink = (myIndex) => {
     // Filter out the social link with the given id
-    const updatedSocialLinks = socialLinks.filter((link,index) => index !== id);
+    const updatedSocialLinks = socialLinks.filter((link,index) => index !== myIndex);
     // Update the state with the new array
     setSocialLinks(updatedSocialLinks);
   };
