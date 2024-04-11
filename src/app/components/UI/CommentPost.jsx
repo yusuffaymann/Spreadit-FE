@@ -16,7 +16,7 @@ import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
  * @component
  */
 
-function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions,Editing }) {
+function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions,Editing }) {
 
     const [isEditing,setIsEditing]=useState(Editing);
     const [imageIndex, setImageIndex] = useState(0);
@@ -27,8 +27,9 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     const [deleted,setDeleted] = useState(false);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
-    const [saved,setSaved] = useState(false);
+    const [saved,setSaved] = useState(isSaved);
     const [followed,setFollowed]=useState(isFollowed);
+    const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
 
     useEffect(() => {
         setNSFW(isNSFW);
@@ -38,6 +39,14 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     useEffect(() => {
         setSpoiler(isSpoiler);
     }, [isSpoiler]);
+
+    useEffect(() => {
+        setSaved(isSaved);
+    }, [isSaved]);
+
+    useEffect(() => {
+        setReplyNotifications(sendReplyNotifications);
+    }, [sendReplyNotifications]);
 
     function handleJoin() {
         setJoined(!joined);
@@ -128,6 +137,11 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
 
     const formattedDescription = parseAndStyleLinks(description);
 
+    function handleReplyNotifications () {
+        setReplyNotifications(!sendReplyNotifications);
+        //api call to set reply notifications
+    }
+
     return (
         <div className={styles.post}>
             {isFullScreen && 
@@ -170,13 +184,13 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header profilePicture={profilePicture} userName={userName} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={false} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} onEdit={()=>setIsEditing(true)} />
+                    <Header profilePicture={profilePicture} userName={userName} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={false} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onEdit={()=>setIsEditing(true)} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {isEditing&& <CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={description} buttonDisplay={"Save edits"} isPost={true}/>}
                         <div className={styles.postcontent}>
                         
-                        {!view&&(
+                        {(!view&& (isNSFW||isSpoiler))&&(
                             <div className={styles.overlay}>
                                 <div className={styles.viewButton} >
                             {(isNSFW && !isSpoiler ) && <Button className={styles.viewButton} name={"View NSFW content"} onClick={() => setView(true)} active={true} />}
@@ -229,7 +243,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                             {video.length !==0 &&
                                 <iframe className={styles.video} title="Posted video"
                                 allowFullScreen
-                                src={video}
+                                src={video[0]}
                             />}
                         </div>
                         </div>

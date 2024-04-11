@@ -37,9 +37,10 @@
 } */
 
 .showmodalarea{
-    top: -35px;
+    top: -15px;
     left: 25px;
-    position: relative;
+    width: 45%;
+    position: absolute;
 }
 
 .subRedditPicture:hover+.subredditandusername .subRedditName {
