@@ -12,6 +12,18 @@ import shareArrow from "@/app/assets/shareArrow.svg"
 import blockIcon from "@/app/assets/block.svg"
 import reportIcon from "@/app/assets/post-images/report.svg"
 
+/**
+ * Component for Displaying a profile info of another user.
+ * @component
+ * @param   {string} username   The username of the profile being viewed [Required]
+ * @returns {JSX.Element} The component for the profile info.
+ *
+ * @example
+ *
+ * <ProfileInfo username="Ahmed"/>
+ * 
+ */
+
 function ProfileInfo({username}) {
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [isFollowed, setIsFollowed] = React.useState(false);

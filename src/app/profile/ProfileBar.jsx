@@ -2,6 +2,21 @@ import React from "react";
 import styles from "./ProfileBar.module.css";
 import { useRouter } from "next/navigation";
 
+/**
+ * Component for Displaying a profile bar.
+ * 
+ * @component
+ * @param   {number} selected   The selected tab [Required]
+ * @param   {boolean} isMe   If the profile is the user's profile [Required]
+ * @param   {function} setSelected   The function to set the selected tab [Required]
+ * @param   {string} username   The username of the profile being viewed [Required]
+ * @returns {JSX.Element} The component for the profile bar.
+ * 
+ * @example
+ * 
+ * <ProfileBar selected={0} isMe={true} setSelected={setSelected} username="Ahmed"/> // This will display the profile bar with the Overview tab selected
+ */ 
+
 function ProfileBar({ selected, isMe, setSelected, username}) {
   const router = useRouter();
   return (

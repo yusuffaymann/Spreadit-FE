@@ -34,7 +34,21 @@ import PostDropDownMenu from "./PostDropDownMenu";
 
 
 
-
+/**
+ * Component for Displaying the footer of a post.
+ * @component
+ * @param   {function} upvote   The function to upvote the post [Required]
+ * @param   {function} downvote   The function to downvote the post [Required]
+ * @param   {number} voteCount   The number of votes the post has [Required]
+ * @param   {number} commentCount   The number of comments the post has [Required]
+ * @param   {boolean} isMod   If the user is a mod [Required]
+ * @returns {JSX.Element} The component for the profile info.
+ *
+ * @example
+ *
+ * <PostFooter upvote={upvote} downvote={downvote} voteCount={voteCount} commentCount={commentCount} isMod={isMod}/>    
+ * 
+ */
 function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
