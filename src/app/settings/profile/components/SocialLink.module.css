@@ -16,7 +16,7 @@
   display: flex;
   height: 20px;
   margin-right: 8px;
-  padding: 10px 12px;
+  padding: 18px 12px;
   white-space: nowrap;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .xMarginLeft {
-  margin-left: 16px;
+  margin-left: 10px;
   justify-content: flex-end;
 }
 
@@ -36,6 +36,7 @@
   line-height: 20px;
   vertical-align: middle;
   width: 20px;
+  fill: #1c1c1c;
 }
 
 .buttonroundd {
@@ -51,6 +52,6 @@
   display: flex;
   height: 20px;
   margin-right: 8px;
-  padding: 10px 12px;
+  padding: 18px 12px;
   white-space: nowrap;
 }

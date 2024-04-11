@@ -154,7 +154,7 @@ input, textarea::placeholder {
   display: flex;
   height: 20px;
   margin-right: 8px;
-  padding: 10px 12px;
+  padding: 18px 12px;
   white-space: nowrap;
 }
 

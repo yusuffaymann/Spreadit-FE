@@ -6,18 +6,24 @@ import Toogle from "./Switch";
 import close from "../../assets/close.svg"
 import back from "../../assets/back.svg"
 
-function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
+
+function StageOne({subRedditPicture, subRedditName,subRedditRules, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
 {
 
-    const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Self-harm or suicide","Spam"];
-    const descriptions=[`Posts, comments, or behavior that breaks ${subRedditName} community rules.`,"Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.","Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.","Promoting hate or inciting violence based on identity or vulnerability.","Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.","Sharing or threatening to share private, personal, or confidential information about someone.",'Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).',"Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services.","Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions.","Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)","Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)","Behavior or comments that make you think someone may be considering suicide or seriously hurting themselves.","Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform."]
-    const [selectedReason,setSelectedReason]= useState(reportIndex);
+    const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
+    const descriptions=[`Posts, comments, or behavior that breaks ${subRedditName} community rules.`,"Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.","Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.","Promoting hate or inciting violence based on identity or vulnerability.","Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.","Sharing or threatening to share private, personal, or confidential information about someone.",'Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).',"Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services.","Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions.","Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)","Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)","Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform."]
+    const [selectedReason,setSelectedReason]= useState(mainReasonIndex);
+
+    function handleSubmit () {
+        onReport(reasons[selectedReason],"");
+        changeStage(3,-1,-1);
+    }
 
     return (
         <div >
             <div className={styles.header}>
                 <div className={styles.title}>Submit a report</div>
-                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => {console.log("close modal")}}>
+                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() =>  closeModal()}>
                     <Image 
                     src={close}
                     width={16}
@@ -31,7 +37,7 @@ function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
                 <div className={styles.rules}>
                     <div style={{width: "100%"}}>
                         <div className={`${styles.subRedditRule} ${selectedReason===0 ? styles.selected : "" }`} onClick={() => setSelectedReason(0)}>
-                            <Image className={styles.subRedditPicture}
+                            <img className={styles.subRedditPicture}
                                 src={subRedditPicture}
                                 width={256}
                                 height={256}
@@ -55,7 +61,7 @@ function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
                         <div className={styles.ruleDescription}>{descriptions[selectedReason]}</div>
                         </div>}
                     </div>
-                    <Button name={`${(selectedReason === 3 || selectedReason === 7) ? "Submit Report" : "Next"}`} active={selectedReason===-1 ? false : true} onClick={() => {(selectedReason === 3 || selectedReason === 7) ? changeStage(3,-1) : changeStage(2,selectedReason) }} />
+                    <Button name={`${(selectedReason === 3 || selectedReason === 7) ? "Submit Report" : "Next"}`} active={selectedReason===-1 ? false : true} onClick={() => {(selectedReason === 3 || selectedReason === 7) ? handleSubmit() : changeStage(2,selectedReason,subReasonIndex) }} />
                 </div>
             </div>
         </div>
@@ -63,21 +69,23 @@ function StageOne({subRedditPicture, subRedditName, changeStage, reportIndex})
     );
 }
 
-function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
+function StageTwo({subRedditRules,mainReasonIndex,mainReason,subReasonIndex,changeStage,closeModal,onReport})
 {
 
-    const question=["Which community rule does this violate?","Who is the harassment towards?","Who is the threat towards?","Hate","What type of minor abuse or sexualization is this?","Whose personal information is it?","Who is the non-consensual intimate media of?","Prohibited transaction","Who is being impersonated?","Whose copyright is it?","Whose trademark is it?","Self-harm or suicide","What type of spam is this?"];
-    const choices=[subRedditRules,["You","Someone else"],["You","Someone else"],[],["Sexual or suggestive content","Predatory or inappropriate behaviour","Content involving physical or emotional abuse or neglect"],["Yours","Someone else's"],["You","Someone else"],[],["You or an individual or entity you represent","Someone else"],["Yours or an individual or entity you represent","Someone else's"],["Yours or an individual or entity you represent","Someone else's"],[],["Link farming","Unsolicited messaging","Excessive posts or comments in a community","Posting harmful links (malware)","Harmful bots","Other"]]
-    const [selectedChoice,setSelectedChoice]= useState(-1);
-    function sendReport (Reason,subReason,changeStage) {
+    const question=["Which community rule does this violate?","Who is the harassment towards?","Who is the threat towards?","Hate","What type of minor abuse or sexualization is this?","Whose personal information is it?","Who is the non-consensual intimate media of?","Prohibited transaction","Who is being impersonated?","Whose copyright is it?","Whose trademark is it?","What type of spam is this?"];
+    const choices=[subRedditRules,["You","Someone else"],["You","Someone else"],[],["Sexual or suggestive content","Predatory or inappropriate behaviour","Content involving physical or emotional abuse or neglect"],["Yours","Someone else's"],["You","Someone else"],[],["You or an individual or entity you represent","Someone else"],["Yours or an individual or entity you represent","Someone else's"],["Yours or an individual or entity you represent","Someone else's"],["Link farming","Unsolicited messaging","Excessive posts or comments in a community","Posting harmful links (malware)","Harmful bots","Other"]]
+    const [selectedChoice,setSelectedChoice] = useState(subReasonIndex);
 
-        changeStage(3,-1);
+    function handleSubmit () {
+        onReport(mainReason,choices[mainReasonIndex][selectedChoice]);
+        changeStage(3,-1,-1);
     }
+
 
     return (
         <div style={{height: "100%"}}>
             <div className={styles.header}>
-            <button type="button" className={styles.controls} style={{marginRight: "10px"}} onClick={() => {changeStage(1,reportIndex)}}>
+            <button type="button" className={styles.controls} style={{marginRight: "10px"}} onClick={() => {changeStage(1,mainReasonIndex,selectedChoice)}}>
                     <Image 
                     src={back}
                     width={16}
@@ -86,7 +94,7 @@ function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
                     alt="back" />
                 </button> 
                 <div className={styles.title}>Submit a report</div>
-                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => {console.log("close modal")}}>
+                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => closeModal()}>
                     <Image 
                     src={close}
                     width={16}
@@ -95,23 +103,24 @@ function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
                     alt="close" />
                 </button>      
             </div>
-            <div className={styles.subTitle}>{[question[reportIndex]]}</div>
+            <div className={styles.subTitle}>{[question[mainReasonIndex]]}</div>
             <div className={styles.body} style={{ height: "85%"}}>
                 <div className={styles.choices}>
-                    {choices[reportIndex].map((option, index) => (
+                    {choices[mainReasonIndex].map((option, index) => (
                     <div className={styles.radio} key={index}>
                         <input className={`${styles.radioButton} ${selectedChoice === index ? styles.selected : ""}`} onClick={() => {setSelectedChoice(index)}}
                             type="radio"
                             id={`option${index}`}
                             name="options"
                             value={option}
+                            defaultChecked={selectedChoice === index}
                         />
                         <label htmlFor={`option${index}`}>{option}</label>
                     </div>))}
                 </div>
                 <div  className={styles.footer} >
                     <div style={{display: "flex", justifyContent: "flex-end", width: "100%"}}>
-                        <Button name={"Submit"} active={selectedChoice===-1 ? false : true} onClick={() => sendReport(reportReason,choices[selectedChoice],changeStage)} />
+                        <Button name={"Submit"} active={selectedChoice===-1 ? false : true} onClick={() => handleSubmit()} />
                     </div>
                 </div>
             </div>
@@ -121,16 +130,23 @@ function StageTwo({subRedditRules,reportIndex,reportReason,changeStage})
 }
 
 
-function StageThree({reportedUser})
+function StageThree({reportedUser,closeModal,onBlock})
 {
 
     const [blockUser,setBlockUser]= useState(false);
+
+    function finishReport() {
+        if (blockUser === true) {
+            onBlock();
+        }
+        closeModal();
+    }
 
     return (
         <div style={{height: "100%"}}>
             <div className={styles.header}>
                 <div className={styles.title}>Report Submitted</div>
-                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => {console.log("close modal")}}>
+                <button type="button" className={styles.controls} style={{marginLeft: "auto"}} onClick={() => closeModal()}>
                     <Image 
                     src={close}
                     width={16}
@@ -147,7 +163,7 @@ function StageThree({reportedUser})
                         <div style={{width:"100%"}}>
                         <Toogle optionTitle={`Block ${reportedUser} `} optionDescription={"You won't be able to send direct messages or chat requests to each other "} isToggled={blockUser} onToggle={() => setBlockUser(!blockUser)} />
                         </div>
-                        <Button name={"Done"}  onClick={() => console.log("done")} />
+                        <Button name={"Done"}  onClick={() => finishReport()} />
                     </div>
                 </div>
             </div>
@@ -158,24 +174,25 @@ function StageThree({reportedUser})
 
 
 
-function ReportModal({subRedditPicture, subRedditName, subRedditRules}) {
+function ReportModal({subRedditPicture, subRedditName, subRedditRules, closeModal, onReport, onBlock, userName}) {
 
-    const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Self-harm or suicide","Spam"];
+    const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
     const [stage,setStage] = useState(1);
-    const [reportIndex,setReporttIndex] = useState(-1);
+    const [mainReasonIndex,setMainReasonIndex] = useState(-1);
+    const [subReasonIndex,setSubReasonIndex] = useState(-1);
 
-    function handleStateChange (nextStage, reportReason) {
+    function handleStateChange (nextStage, mainReason, subReason) {
         setStage(nextStage);
-        setReporttIndex(reportReason);
-
+        setMainReasonIndex(mainReason);
+        setSubReasonIndex(subReason);
     }
 
     return (
-    <div className={styles.modelOverlay}>
+    <div className={styles.modelOverlay} onClick={(e) => {e.stopPropagation();}}>
         <div className={styles.modal}>
-            {stage === 1 && <StageOne reportIndex={reportIndex} subRedditPicture={subRedditPicture} subRedditName={subRedditName} changeStage={(newStage,chosenReason) => handleStateChange(newStage,chosenReason)}  />}
-            {stage === 2 && <StageTwo subRedditRules={subRedditRules} reportIndex={reportIndex} reportReason={reasons[reportIndex]} changeStage={(newStage,chosenReason) => handleStateChange(newStage,chosenReason)} />}
-            {stage === 3 && <StageThree reportedUser={"Gold_perception_2401"} />}
+            {stage === 1 && <StageOne closeModal={closeModal} onReport={onReport} mainReasonIndex={mainReasonIndex} subReasonIndex={subReasonIndex} subRedditPicture={subRedditPicture} subRedditName={subRedditName} changeStage={(nextStage, mainReason, subReason) => handleStateChange(nextStage, mainReason, subReason)}  />}
+            {stage === 2 && <StageTwo closeModal={closeModal} onReport={onReport} subRedditRules={subRedditRules} mainReasonIndex={mainReasonIndex} subReasonIndex={subReasonIndex} mainReason={reasons[mainReasonIndex]} changeStage={(nextStage, mainReason, subReason) => handleStateChange(nextStage, mainReason, subReason)} />}
+            {stage === 3 && <StageThree  closeModal={closeModal} onBlock={onBlock} reportedUser={userName} />}
         </div>
     </div>
     );

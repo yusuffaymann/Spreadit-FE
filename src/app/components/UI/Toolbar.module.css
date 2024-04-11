@@ -6,7 +6,7 @@
     position: fixed;
     top: 0px;
     right: 0px;
-    z-index: 1000;
+    z-index: 26;
     border-bottom: 0.2px solid grey;
     background-color: white;
 }
@@ -67,6 +67,11 @@
 
 .searchbar:hover{
     background-color: rgb(212, 211, 211);
+}
+
+.searchbar:focus{
+    background-color: white;
+    border:0.3px grey solid;
 }
 
 .searchinput{
@@ -175,7 +180,7 @@
     padding: 0px;
     background-color: white;
     position: absolute;
-    z-index: 1001;
+    z-index: 26;
     right:2px;
     top: 100%;
     box-shadow: 0 0 5px rgba(0,0,0,0.3);
@@ -219,8 +224,7 @@
     height: 100vh;
     width: 100%;
     background-color: var(--modaloverlaybackground);
-    z-index: 1000; 
-    top: 60px;
+    z-index: 25; 
     left: 0px;
   }
 
