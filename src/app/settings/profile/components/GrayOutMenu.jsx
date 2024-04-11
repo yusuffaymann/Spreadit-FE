@@ -25,6 +25,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isChoicesOpen, setChoicesOpen] = useState(true);
   const [displayName, setDisplayName] = useState("");
+  const [platform, setPlatform] = useState("Platform");
   const [socialUrl, setUrl] = useState("");
   const [selectedLinkId, setSelectedLinkId] = useState(-1);
 
@@ -75,8 +76,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const handleSave = () => {
     if (displayName.trim() !== "" && socialUrl.trim() !== "") {
       // Check if displayName is not empty
-      const tempFinder = social.find((finder) => finder.id === selectedLinkId);
-      addSocial(selectedLinkId, displayName, socialUrl, tempFinder.logo); // Pass an object with displayName to addSocial function
+      addSocial(platform,socialUrl, displayName, socialUrl); // Pass an object with displayName to addSocial function
       onClose();
     }
   };
@@ -96,6 +96,11 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const handleLinkClick = (id) => {
     handleToggleStates();
     setSelectedLinkId(id);
+    const matchingSocial = social.find(optionSocial => optionSocial.id === id);
+    if (matchingSocial)
+    {
+      setPlatform(matchingSocial.platform);
+    }
     console.log(id);
   };
 
@@ -106,15 +111,14 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const renderDialog = () => {
     return (
       <>
-        {social.map(
-          (optionSocial) =>
+        {social.map((optionSocial,index) =>
             optionSocial.id === selectedLinkId && (
               <SocialLink
-                key={optionSocial.id}
-                id={optionSocial.id}
-                logo={optionSocial.logo}
-                name={optionSocial.name}
-                wasClicked={handleLinkClick}
+                key={index}
+                id={index}
+                displayName={optionSocial.name}
+                platform={optionSocial.platform}
+                wasClicked={(id) => {}} //Does nothing, just to stop errors from popping up
               />
             )
         )}
@@ -147,12 +151,12 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const renderChoices = () => {
     return (
       <>
-        {social.map((optionSocial) => (
+        {social.map((optionSocial, index) => (
           <SocialLink
-            key={optionSocial.id}
-            id={optionSocial.id}
-            logo={optionSocial.logo}
-            name={optionSocial.name}
+            platform={optionSocial.platform}
+            key={index}
+            index={index}
+            displayName={optionSocial.name}
             wasClicked={handleLinkClick}
           />
         ))}
