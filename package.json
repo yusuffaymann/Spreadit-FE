@@ -21,6 +21,7 @@
     "axios": "^1.6.8",
     "better-docs": "^2.7.3",
     "bootstrap": "^5.3.3",
+    "date-fns": "^3.6.0",
     "firebase": "^10.9.0",
     "install": "^0.13.0",
     "jsdoc": "^4.0.2",

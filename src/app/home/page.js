@@ -11,6 +11,7 @@ import PostDropDownItem from "../components/post/PostDropDownItem";
 import handler from "../utils/apiHandler";
 import up from "../assets/up-arrow.svg";
 import Button from "../components/post/Button";
+import parseTime from "../utils/timeDifference"
 
 function homepage() {
 
@@ -87,9 +88,10 @@ function homepage() {
     async function getSub() {
         setLoading(true);
       try {
+        if(reachedEnd || postArray.length === 0) {
         const subs = await handler("/community/get-info", "GET");
         setSubArray(prevSubArray => [...prevSubArray, subs.sub1, subs.sub2, subs.sub3]);//subs.sub1 etc will be changed in integration when we get an actual array from backend same for posts.post1 in getPost
-      
+        }
   
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -98,7 +100,7 @@ function homepage() {
       }
     }
     getSub();
-  }, []);
+  }, [reachedEnd,sortBy]);
 
 
   useEffect(() => {
@@ -181,7 +183,7 @@ function homepage() {
           <div className={styles.feedContent}>
               {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
-                  <Post subRedditName={postObject.community} subRedditPicture={postObject.images[0]} subRedditDescription={"asdasda"} banner={postObject.images[2]} subRedditRules={subRedditRules} postTitle={postObject.title} description={"https://www.reddit.com/ bshvjdshcvhdsb https://www.reddit.com/"} images={postObject.images} video={[]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} isMember={false} />
+                  <Post subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={postObject.images} video={postObject.videos} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={false} />
                 </div>))}
           </div>
         </div>

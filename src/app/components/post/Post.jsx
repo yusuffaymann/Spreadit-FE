@@ -19,7 +19,7 @@ import close from "../../assets/close.svg";
  * @component
  */
 
-function Post({ title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions }) {
+function Post({ title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions }) {
 
     const displayDescription = (video.length === 0 && images.length === 0) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
@@ -30,8 +30,9 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
     const [deleted,setDeleted] = useState(false);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
-    const [saved,setSaved] = useState(false);
+    const [saved,setSaved] = useState(isSaved);
     const [followed,setFollowed]=useState(isFollowed);
+    const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
 
     useEffect(() => {
         setNSFW(isNSFW);
@@ -40,6 +41,14 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
     useEffect(() => {
         setSpoiler(isSpoiler);
     }, [isSpoiler]);
+
+    useEffect(() => {
+        setSaved(isSaved);
+    }, [isSaved]);
+
+    useEffect(() => {
+        setReplyNotifications(sendReplyNotifications);
+    }, [sendReplyNotifications]);
 
     const parseAndStyleLinks = (text) => {
         // Regular expression to find URLs in text
@@ -117,6 +126,11 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
 
     }
 
+    function handleReplyNotifications () {
+        setReplyNotifications(!sendReplyNotifications);
+        //api call to set reply notifications
+    }
+
     return (
         <div className={styles.post} onClick={() => console.log("redirect")}>
             {isFullScreen && 
@@ -159,11 +173,11 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={false} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
+                    <Header subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
-                        {!view && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
-                        {!view && <div className={styles.viewButton} onClick={(e) => {e.stopPropagation();}} >
+                        {(!view && (isNSFW || isSpoiler) ) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
+                        {(!view && (isNSFW || isSpoiler) ) && <div className={styles.viewButton} onClick={(e) => {e.stopPropagation();}} >
                             {(isNSFW && !isSpoiler ) && <Button className={styles.viewButton} name={"View NSFW content"} onClick={() => setView(true)} active={true} />}
                             {(isSpoiler && !isNSFW) && <Button className={styles.viewButton} name={"View spoiler"} onClick={() => setView(true)} active={true} />}
                             {(isSpoiler && isNSFW)  && <Button className={styles.viewButton} name={"View NSFW content & spoilers"} onClick={() => setView(true)} active={true} />}
@@ -173,7 +187,7 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
                             {video.length !== 0 &&
                                 <iframe className={styles.video} title="Posted video"
                                 allowFullScreen
-                                src={video}
+                                src={video[0]}
                             />}
                             {(video.length === 0 && images.length !== 0) &&       
                                 <div className={styles.image} onClick={() => setIsFullScreen(true)}  >

@@ -2,8 +2,10 @@ import { useState } from "react";
 import Image from 'next/image';
 import styles from "./MiniaturePost.module.css";
 import SubRedditInfoModal from "../components/post/SubRedditInfoModal";
+import spoilerIcon from "../assets/post-images/mod-icons/spoiler.svg";
+import nsfwIcon from "../assets/post-images/mod-icons/nsfw.svg";
 
-function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video}) {
+function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video,isNSFW,isSpoiler}) {
 
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [joined,setJoined] = useState(false);
@@ -44,9 +46,26 @@ function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,sub
                     </div>
                     <div className={styles.title}>{postTitle}</div>
                 </div>
-                    {postPicture !== "" && <div className={styles.media} onClick={(e) => {e.stopPropagation();}}>
-                        {!video && <Image src={postPicture} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
-                        {video && <video className={styles.video} title="Posted video" src={video} ></video>}
+                {(postPicture !== undefined || video.length !== 0 ) && <div className={styles.media} onClick={(e) => {e.stopPropagation();}} >
+                        {(isSpoiler || isNSFW) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
+                        <div className={styles.warningIcon} onClick={(e) => {e.stopPropagation();}} >
+                            {isNSFW && <Image 
+                                        src={nsfwIcon}
+                                        width={36}
+                                        height={36} 
+                                        viewBox="0 0 20 20"
+                                        alt="NSFW" />}
+                            {(isSpoiler && !isNSFW) && <Image 
+                                        src={spoilerIcon}
+                                        width={36}
+                                        height={36} 
+                                        viewBox="0 0 20 20"
+                                        alt="Spoiler" />}
+                            </div>
+                        <div>
+                            {video.length === 0 && <Image src={postPicture} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
+                            {video.length !==0 && <video className={styles.video} title="Posted video" src={video[0]} ></video>}
+                        </div>
                     </div>}
                 </div>
             <div className={styles.footer}>
