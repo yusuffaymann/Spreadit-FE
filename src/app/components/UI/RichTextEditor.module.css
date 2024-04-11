@@ -14,7 +14,7 @@
 .RichTextToolbar {
     position: -webkit-sticky;
     position: sticky;
-    top: 48px;
+    top: 60px;
     z-index: 8;
     -ms-flex-align: center;
     align-items: center;

@@ -5,7 +5,7 @@ import CreateLeftDropdown from "./CreateLeftDropdown.jsx";
 import CreateRightRules from "./CreateRightRules.jsx";
 import CreateLeftBox from "./CreateLeftBox.jsx";
 import React, { useState, useEffect } from "react";
-import Bar from "../components/UI/Bar.jsx";
+import Toolbar from "../components/UI/Toolbar.jsx";
 import handler from "@/app/utils/apiHandler.js";
 import CommunityInfoBox from "./CommunityInfoBox.jsx";
 import CommunityRulesBox from "./CommunityRulesBox.jsx";
@@ -167,8 +167,9 @@ function Submit({ currentCommunity = "" }) {
 
   return (
     <div>
-      <Bar />
-      <main className="create">
+      <header>
+      <Toolbar loggedin={true}/></header>
+      <main className="create" style={{marginTop: "30px"}}>
         <div className="createMainFlex">
           <div className="createLeftFlex">
             <CreateLeftHeader />
