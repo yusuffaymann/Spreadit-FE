@@ -1,12 +1,13 @@
 .modal {
     position: absolute;
     max-width: 360px;
-    width: 90vw;
+    width: 520%;
     border-radius: 16px;
     background-color: white;
     z-index: 20;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     top: 35px;
     overflow: hidden;
     height: fit-content;
@@ -16,8 +17,7 @@
 .userinfo{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
 }
 
 .nameAndPicture {
@@ -59,7 +59,7 @@
 
 .date{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
