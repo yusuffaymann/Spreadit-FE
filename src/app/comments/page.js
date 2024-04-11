@@ -18,7 +18,7 @@ const Home=()=> {
   const [comments,setComments]=useState(null);
   const [isEditing,setIsEditing]=useState(true);
   const [postId, setPostId] = useState(0);
-  const [posterUserName,setPosterUserName] = useState("")
+  const [posterUserName,setPosterUserName] = useState("");
   const [upVotes,setUpVotes] = useState(0);
   const [downVotes,setDownVotes] = useState(0);
   const [commentsCount,setCommentsCount] = useState(0);
@@ -32,9 +32,11 @@ const Home=()=> {
   const [subDescription,setSubDescription] = useState("");
   const [subImage,setSubImage] = useState("");
   const [subBanner,setSubBanner] = useState("");
+  const [subRules,setSubRules] = useState("");
   const [members,setMembers] = useState([]);
   const [isMember,setIsMember] = useState(false);
-  const [myUserName,setMyUserName] = useState("u/Common-Summer-7186")
+  const [myUserName,setMyUserName] = useState("u/Common-Summer-7186");
+  const [profilePicture,setProfilePicture]=useState("https://wallpapers.com/images/hd/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf.jpg");
   const [loading,setLoading] = useState(true);
 
 
@@ -52,6 +54,7 @@ useEffect(() => {
       setSubImage(sub0.image);
       setSubBanner(sub0.communityBanner);
       setMembers(sub0.members);
+      setSubRules(sub0.rules);
       setIsMember(sub0.members && sub0.members.includes(myUserName));
       /* setIsMember(sub0.members.includes(myUserName)); */
 
@@ -172,7 +175,7 @@ useEffect(() => {
         <div className={styles.mainbar}>
           {isEditing&&(
             <div className={styles.postarea}>
-             <CommentPost description={"link1: https://search.yahoo.com/search?d=%7b%22dn%22%3a%22yk%22%2c%22subdn%22%3a%22software%22%2c%22ykid%22%3a%22236aff65-e6dc-456c-a1c5-cf15b5e12c43%22%7d&fr2=p%3ads%2cv%3aomn%2cm%3asa%2cbrws%3achrome%2cpos%3a2&fr=mcafee&type=E210US91105G0&p=Bootstrap jjjjj link2: https://docs.google.com/document/d/1NPsRCvTLL89FX1jr3JwNyadTWpVnsDFnWzvO_DHhfyg/edit"} userName={posterUserName} title={title} subRedditName={subName} subRedditDescription={subDescription} subRedditPicture={subImage} banner={subBanner} upVotes={upVotes-downVotes} comments={commentsCount} video={video1} isSpoiler={false} isNSFW={isNSFW} images={images} isMember={isMember} pollIsOpen={true} pollOptions={pollOptions} />
+             <CommentPost description={"link1: https://search.yahoo.com/search?d=%7b%22dn%22%3a%22yk%22%2c%22subdn%22%3a%22software%22%2c%22ykid%22%3a%22236aff65-e6dc-456c-a1c5-cf15b5e12c43%22%7d&fr2=p%3ads%2cv%3aomn%2cm%3asa%2cbrws%3achrome%2cpos%3a2&fr=mcafee&type=E210US91105G0&p=Bootstrap jjjjj link2: https://docs.google.com/document/d/1NPsRCvTLL89FX1jr3JwNyadTWpVnsDFnWzvO_DHhfyg/edit"} userName={posterUserName} title={title} profilePicture={profilePicture} subRedditName={subName} subRedditDescription={subDescription} cakeDate={"1/1/2024"} subRedditPicture={subImage} banner={subBanner} upVotes={upVotes-downVotes} time={"2 mon"} comments={commentsCount} video={video1} isSpoiler={false} isNSFW={isNSFW} images={images} isMember={isMember} pollIsOpen={true} subRedditRules={subRules} pollOptions={pollOptions} />
               {/* <CommentPost description={description} title={"post example with an embeded youtube video"} subRedditName={"r/youtube"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh44/styles/communityIcon_1vctc2ym3zt51.png"} video={video1} time={"now"} upVotes={"3k"} comments={"0"} subRedditDescription={"r/YouTube is for discussion about YouTube. This is a fan sub, not run or owned by YouTube! Please read the rules: https://www.reddit.com/r/youtube/wiki/index/rules NEVER GIVE OUT YOUR PERSONAL INFORMATION: https://support.google.com/youtube/answer/2802848"} isMember={false} isNSFW={true} isSpoiler={true} pollOptions={[]} /> */}
               {/* <CommentPost description={description} title={"post example with a description only"} subRedditName={"r/aww"} subRedditPicture={"https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"} time={"1 day ago"} upVotes={"0"} comments={"35"} banner={"https://styles.redditmedia.com/t5_2qs0q/styles/bannerBackgroundImage_7glcgg5ymxp21.png"} isSpoiler={true} pollIsOpen={true} pollOptions={pollOptions}  /> */}
               {/* <PostHeader subRedditName={subRedditName} subRedditPicture={subRedditPicture} time={"1month"} banner={banner} subRedditDescription={subRedditDescription} isProfile={false}  myPost={true} />
@@ -188,7 +191,7 @@ useEffect(() => {
             <div>
               {comments.map((comment)=>(
               <div>
-                <Comment comment={comment} />
+                <Comment comment={comment} subRedditName={subName} subRedditPicture={subImage} subRedditRules={subRules}/>
               </div>
               ))}
             </div>
