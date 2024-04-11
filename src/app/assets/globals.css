@@ -208,6 +208,38 @@ body.modal-open {
   margin: 0;
 }
 
+
+/* Global Styiling for Home page */
+
+.neutral{
+  background-color: #EAEDEF;
+}
+
+.neutral-hover{
+  background-color: #E2E7E9;
+}
+
+.upvoted{
+  background-color: #D93A00 !important;
+}
+
+.upvoted-hover{
+  background-color: #962900 !important;
+
+}
+
+.downvoted{
+  background-color: #6A5CFF !important;
+}
+
+.downvoted-hover{
+  background-color: #453BB5 !important;
+}
+
+
+
+
+
 .create--link {
   font-size: 14px;
   font-weight: 500;
