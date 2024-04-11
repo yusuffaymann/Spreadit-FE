@@ -29,89 +29,56 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
   const [socialUrl, setUrl] = useState("");
   const [selectedLinkId, setSelectedLinkId] = useState(-1);
 
-  /**
-   * Handles changes in the social URL input field and `setDisplayName` of the social link as such
-   * @param   {Event} event   The input change event
-   */
   function handleDispInputChange(event) {
     const { value } = event.target;
-
     setDisplayName(value);
   }
 
-
-  /**
-   * Handles changes in the social URL input field and `setUrl` as such
-   * @param   {Event} event   The input change event
-   */
   function handleUrlInputChange(event) {
     const { value } = event.target;
-
     setUrl(value);
   }
 
-  /**
-   * Toggles the dialog and choices states to move between the link selection and link adding screen states
-   */
   const handleToggleStates = () => {
     setDialogOpen((prevState) => !prevState);
     setChoicesOpen((prevState) => !prevState);
   };
 
-    /**
-   * Handles enter key press event for QOL.
-   * @param   {Event} event   The key press event
-   */
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSave();
     }
   };
 
-  /**
-   * Ensures the fields are not empty then sends these parameters back to `ProfileSocial`, then onto the `page.js` to be added into the array.
-   * Note: a bug exists, the id returned is not unique. Therefore, when a deletion happens, all icons of the same type will be deleted
-   * This is also not accounted for in the `counter` in `page.js`, since it is supposed to delete just one at a time
-   */
   const handleSave = () => {
     if (displayName.trim() !== "" && socialUrl.trim() !== "") {
       // Check if displayName is not empty
-      addSocial(platform,socialUrl, displayName, socialUrl); // Pass an object with displayName to addSocial function
+      addSocial(platform, socialUrl, displayName, socialUrl); // Pass an object with displayName to addSocial function
       onClose();
     }
   };
 
-  /**
-   * Actually unnecessary and unused.
-   */
+  //Prevent menu from being closed
   const handleClick = (event) => {
-    // Prevent clicks from propagating to elements underneath the menu
     event.stopPropagation();
   };
 
-  /**
-   * When you select an icon to add, this will send said icon to the next screen where you enter in the fields before saving
-   * @param   {number} id  The ID of the clicked link
-   */
   const handleLinkClick = (id) => {
     handleToggleStates();
     setSelectedLinkId(id);
-    const matchingSocial = social.find(optionSocial => optionSocial.id === id);
-    if (matchingSocial)
-    {
+    const matchingSocial = social.find(
+      (optionSocial) => optionSocial.id === id
+    );
+    if (matchingSocial) {
       setPlatform(matchingSocial.platform);
     }
-    console.log(id);
   };
 
-  /**
-   * Renders the dialog section.
-   * @returns {JSX.Element}  The rendered dialog section
-   */
   const renderDialog = () => {
     return (
       <>
-        {social.map((optionSocial,index) =>
+        {social.map(
+          (optionSocial, index) =>
             optionSocial.id === selectedLinkId && (
               <SocialLink
                 key={index}
@@ -144,10 +111,6 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
     );
   };
 
-  /**
-   * Renders the choices section.
-   * @returns {JSX.Element}  The rendered choices section
-   */
   const renderChoices = () => {
     return (
       <>
@@ -202,6 +165,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
                     children={"Save"}
                     isDisabled={displayName === "" || socialUrl === ""}
                     btnClick={handleSave}
+                    isInverted={true}
                   />
                 </div>
               )}
@@ -216,7 +180,6 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
     </div>
   );
 }
-
 
 /**
  * Wrapper for the menu to separate its visibility AND the actual options inside the menu itself
