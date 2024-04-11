@@ -16,9 +16,9 @@ import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
  * @component
  */
 
-function CommentPost({ title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions }) {
+function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions,Editing }) {
 
-    const [isEditing,setIsEditing]=useState(false);
+    const [isEditing,setIsEditing]=useState(Editing);
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [joined,setJoined] = useState(false);
@@ -106,7 +106,7 @@ function CommentPost({ title, description, userName,profilePicture, subRedditNam
 
     const onEdit= async (newcontent)=>{
         try {
-            const response = await apiHandler(`/posts/${posrId}/edit`, "POST",newcontent);
+            const response = await apiHandler(`/posts/${postId}/edit`, "POST",newcontent);
             console.log('edit done:', response);
             description=newcontent;
             setIsEditing(false);
