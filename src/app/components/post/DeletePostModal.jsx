@@ -13,7 +13,7 @@ function DeletePost({closeModal, onDelete}) {
     }
 
 return (
-    <div className={styles.modelOverlay}>
+    <div className={styles.modelOverlay} onClick={(e) => {e.stopPropagation();}}>
         <div className={styles.modal}>
             <div className={styles.header}>
                 <div className={styles.title}>Delete post?</div>

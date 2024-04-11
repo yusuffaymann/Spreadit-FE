@@ -23,7 +23,7 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 
 import Button from "./Button";
 
-function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW}) {
+function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, subRedditDescription, subRedditRules, isProfile, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications}) {
 
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -52,15 +52,14 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
     return(
         
         <div className={styles.header}>
-        {showReportModal && <ReportModal userName={userName} subRedditPicture={subRedditPicture} subRedditName={subRedditName} onReport={onReport} onBlock={onBlock} closeModal={() => setShowReportModal(false)} />}
+        {showReportModal && <ReportModal userName={userName} subRedditPicture={subRedditPicture} subRedditName={subRedditName} subRedditRules={subRedditRules} onReport={onReport} onBlock={onBlock} closeModal={() => setShowReportModal(false)} />}
         {showDeleteModal && <DeletePost onDelete={onDelete} closeModal={() => setShowDeleteModal(false)} />}
-        <div className={styles.postHeaderInfo}>
+        <div className={styles.postHeaderInfo} onClick={(e) => {e.stopPropagation();}} >
             <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()}>
                 {showSubRedditInfo &&
-                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
-
+                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}} >
                     {isProfile && <ProfileInfoModal userName={subRedditName} profilePicture={subRedditPicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
-                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/> }
+                    {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin} /> }
 
                 </div>}
                 <img className={styles.subRedditPicture}
@@ -76,7 +75,7 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
             <div className={styles.time}>{time}</div>
         </div>
         {!isProfile && 
-        <div className={styles.joinAndOptions} >
+        <div className={styles.joinAndOptions} onClick={(e) => {e.stopPropagation();}} >
             {!isMember &&
             <div className={styles.joinButton}>
                 {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => onJoin()} active={true} />}
@@ -107,7 +106,8 @@ function PostHeader ({userName, subRedditName, subRedditPicture, time, banner, s
                     {isSpoiler && <PostDropDownItem icon={removeSpoiler} iconAlt="Turn off Spoilers Icon" description="Remove spoiler tag" onClick={() => onSpoiler()} />}
                     {!isNSFW && <PostDropDownItem icon={nsfwIcon} iconAlt="Turn on NSFW Icon" description="Add NSFW tag" onClick={() => onNSFW()} />}
                     {isNSFW && <PostDropDownItem icon={removeNSFW} iconAlt="Turn off NSFW Icon" description="Remove NSFW tag" onClick={() => onNSFW()} />}
-                    <PostDropDownItem icon={bell} iconAlt="Turn on Bell Icon" description="Notifications" />
+                    {!replyNotifications && <PostDropDownItem icon={bell} iconAlt="Turn on reply notifications Icon" description="Turn on reply notification" onClick={() => onReplyNotifications()} />}                       
+                    {replyNotifications && <PostDropDownItem icon={removeBell} iconAlt="Turn off reply notifications Icon" description="Turn off reply notification" onClick={() => onReplyNotifications()} />}                 
                 </PostDropDownMenu>}
             </button>
         </div>}    
