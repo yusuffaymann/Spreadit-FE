@@ -16,7 +16,7 @@ import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
  * @component
  */
 
-function CommentPost({ title, description, userName, subRedditName, subRedditPicture, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions }) {
+function CommentPost({ title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, pollIsOpen, pollOptions }) {
 
     const [isEditing,setIsEditing]=useState(false);
     const [imageIndex, setImageIndex] = useState(0);
@@ -170,7 +170,7 @@ function CommentPost({ title, description, userName, subRedditName, subRedditPic
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={false} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} onEdit={()=>setIsEditing(true)} />
+                    <Header profilePicture={profilePicture} userName={userName} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={false} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} onEdit={()=>setIsEditing(true)} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {isEditing&& <CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={description} buttonDisplay={"Save edits"} isPost={true}/>}
@@ -193,7 +193,7 @@ function CommentPost({ title, description, userName, subRedditName, subRedditPic
                         </div>} */}
                         {!isEditing&& <div className={`${styles.description} ${!view ? styles.view : ""}`} dangerouslySetInnerHTML={{ __html: formattedDescription }}></div>}
                         <div className={styles.media}>
-                            {(images !==undefined) &&       
+                            {(images.length !==0) &&       
                                 <div className={styles.image} onClick={() => setIsFullScreen(true)}  >
                                     <div className={styles.blurBackground}></div>
                                     <div className={styles.backgroundImage} style={{backgroundImage: `url(${images[imageIndex]})`}}></div>
@@ -226,7 +226,7 @@ function CommentPost({ title, description, userName, subRedditName, subRedditPic
                                     </button>}
                                 </div>
                             }
-                            {video !== undefined &&
+                            {video.length !==0 &&
                                 <iframe className={styles.video} title="Posted video"
                                 allowFullScreen
                                 src={video}

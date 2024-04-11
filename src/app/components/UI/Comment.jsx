@@ -136,7 +136,7 @@ const Comment=({comment})=>{
        
             {!hidden&&(
                     <div className={styles.commentbody}>
-                       <PostHeader isProfile={true} isInComment={true} subRedditName={comment.userObject.userName} subRedditPicture={comment.userObject.profilePicture} time={"1 mon"} banner={""} subRedditDescription={""} cakeDate={"1/1/2012"} isFollowed={isFollowed} onFollow={handleFollow}/>
+                       <PostHeader isProfile={true} isInComment={false} userName={comment.userObject.userName} profilePicture={comment.userObject.profilePicture} time={"1 mon"} cakeDate={"1/1/2012"} isFollowed={isFollowed} onFollow={handleFollow}/>
                        {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.body} commentImage={comment.media} buttonDisplay={"Save edits"} isPost={false}/>)}
                         {!isEditing&&(
                         <div className={styles.commentcontent}>
