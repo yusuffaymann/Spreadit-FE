@@ -30,6 +30,7 @@ function SocialLink({
   isDeletor = false,
   isLink = false,
   url = "",
+  isFocusable = false,
 }) {
   /**
    * Unnecessary function used for debugging to detect what id was clicked, then execute the wasClicked function
@@ -45,6 +46,13 @@ function SocialLink({
   const handleClick = (event) => {
     console.log(index);
     wasClicked(index);
+  };
+
+  const handleKeypress = (event) => {
+    if (event.key === "Enter") {
+    console.log(index);
+    wasClicked(index);
+    }
   };
 
   const getLogoUrl = (platform) => {
@@ -63,8 +71,9 @@ function SocialLink({
     <>
       {!isDeletor && !isLink && (
         <li
-          className={`${styles.buttonround} ${styles.limargin}`}
+          className={`${styles.buttonround} ${styles.limargin} ${isFocusable ? "focusable" : ""}`}
           onClick={handleClick}
+          onKeyDown={handleKeypress}
           tabIndex="0"
           role="button"
         >

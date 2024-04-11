@@ -92,7 +92,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
         <div>
           <input
             placeholder="Display text"
-            className={styles.txtBox}
+            className={`${styles.txtBox} focusable`}
             value={displayName}
             data-tribute="true"
             onKeyDown={handleKeyPress}
@@ -101,7 +101,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
           <input
             placeholder="insert url"
             onChange={handleUrlInputChange}
-            className={styles.txtBox}
+            className={`${styles.txtBox} focusable`}
             value={socialUrl}
             data-tribute="true"
             onKeyDown={handleKeyPress}
@@ -115,7 +115,8 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
     return (
       <>
         {social.map((optionSocial, index) => (
-          <SocialLink
+          <SocialLink className
+          isFocusable={true}
             platform={optionSocial.platform}
             key={index}
             index={index}
@@ -144,7 +145,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
             <div className={styles.flexHeader}>
               {isDialogOpen && (
                 <div className={styles.backArrow} style={{ flexBasis: "16px" }}>
-                  <button onClick={handleToggleStates}>
+                  <button className="focusable" onClick={handleToggleStates}>
                     <div className="color-X icon">&larr;</div>
                   </button>
                 </div>
@@ -153,17 +154,18 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
                 <div className={styles.textHeader}>Add Social Link</div>
               </div>
               {isChoicesOpen && (
-                <div className={styles.flexX} style={{ flexBasis: "16px" }}>
-                  <button onClick={onClose}>
+                <div className={`${styles.flexX}`} style={{ flexBasis: "16px" }}>
+                  <button className="focusable" onClick={onClose}>
                     <div className="color-X icon">&#10006;</div>
                   </button>
                 </div>
               )}
               {isDialogOpen && (
-                <div className={styles.flexX} style={{ flexBasis: "16px" }}>
+                <div className={`${styles.flexX}`} style={{ flexBasis: "16px" }}>
                   <OutlineButton
                     children={"Save"}
                     isDisabled={displayName === "" || socialUrl === ""}
+                    isFocusable={true}
                     btnClick={handleSave}
                     isInverted={true}
                   />
@@ -208,6 +210,36 @@ function GrayOutMenuWrapper({ isOpen, onClose, onSelectWrapper, addFunc }) {
       document.body.classList.remove("modal-open");
     }
   }, [isOpen]); // Only re-run the effect if isOpen changes
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Prevent scrolling when the menu is open
+      if (isOpen && event.key === "Escape")
+      {
+        onClose();
+      }
+      if (isOpen && (event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Tab")) {
+        event.preventDefault();
+        const focusableElements = document.querySelectorAll(".focusable");
+        const focusedIndex = Array.from(focusableElements).indexOf(document.activeElement);
+    
+        let nextIndex = focusedIndex + (event.shiftKey ? -1 : 1);
+        if (nextIndex < 0) {
+          nextIndex = focusableElements.length - 1; // Wrap around to the end
+        } else if (nextIndex >= focusableElements.length) {
+          nextIndex = 0; // Wrap around to the beginning
+        }
+    
+        focusableElements[nextIndex].focus(); // Move focus to the next/previous element
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

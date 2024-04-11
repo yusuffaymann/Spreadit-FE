@@ -27,8 +27,8 @@ function OutlineButton(props) {
     <div>
       <button
         role="button"
-        tabIndex="0"
-        className={`${styles. buttonBorder} ${styles.buttonText} ${props.isInverted ? styles.buttonColorInverted : styles.buttonColor}`}
+        tabIndex={props.isDisabled ?   -1 : 0}
+        className={`${styles. buttonBorder} ${styles.buttonText} ${props.isInverted ? styles.buttonColorInverted : styles.buttonColor} ${!props.isDisabled && props.isFocusable ? "focusable" : ""}`}
         onClick={props.btnClick}
         disabled={props.isDisabled}
       >
