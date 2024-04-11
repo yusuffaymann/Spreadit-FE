@@ -208,6 +208,7 @@ body.modal-open {
   margin: 0;
 }
 
+
 /* Global Styiling for Home page */
 
 .neutral{
@@ -238,3 +239,13 @@ body.modal-open {
 
 
 
+
+.create--link {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--brightcolor);
+  display: block;
+  margin-right: 4px;
+  text-decoration: none;
+}

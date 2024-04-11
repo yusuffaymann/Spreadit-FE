@@ -3,7 +3,7 @@ import styles from "./HiddenPost.module.css"
 function HiddenPost ({unHide}) {
 
     return (
-        <div className={styles.hidden} >
+        <div className={styles.hidden} onClick={(e) => {e.stopPropagation();}} >
             <div className={styles.text} >
             Post hidden
             </div>

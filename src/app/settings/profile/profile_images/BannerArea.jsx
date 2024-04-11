@@ -16,15 +16,15 @@ import "../Profile.css";
  * //Print the URL to be returned
  * <bannerArea setBannerUrl={console.log(`${URL.createObjectURL(bannerImage)}`)}/>
  */
-export default function BannerArea({setBannerUrl}) {
+export default function BannerArea({setBanner}) {
   const [bannerImage, setBannerImage] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
     if (bannerImage) {
-      setBannerUrl(URL.createObjectURL(bannerImage));
+      setBanner(bannerImage);
     }
-  }, [bannerImage, setBannerUrl]);
+  }, [bannerImage, setBanner]);
 
    /**
  * Handles image upload event
@@ -38,8 +38,15 @@ export default function BannerArea({setBannerUrl}) {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // You can perform additional checks/validation here if needed
-      setBannerImage(file);
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif" ||
+        file.type === "image/webp"
+      ) {
+        setBannerImage(file);
+      }
     }
   };
 
@@ -51,8 +58,30 @@ export default function BannerArea({setBannerUrl}) {
     height: "200px", // Set your desired height
   };
 
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif"
+      ) {
+        setBannerImage(file);
+      }
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="profile--banner">
+    <div className="profile--banner"
+    onDrop={handleDrop}
+    onDragOver={handleDragOver}>
       <label className="profile--images-dragarea profile--images-border">
         <div
           style={bannerStyle}
