@@ -26,7 +26,7 @@ import social from "../social.js";
  * //setting `isOpen` to false also will never allow you to open the menu
  * //These are not intended under normal circumstances
  * //This is because `isOpen` is supposed to be "married" to its state, and this is the only way it can be toggled, but with a plain boolean
- * //constant passed as a prop, it will never be modified. 
+ * //constant passed as a prop, it will never be modified.
  * <ProfileSocial isOpen={true} />;
  * @example
  * //When pressing the "add social link" button, or the X close icon, or attempting to save, `onClose` will be called since it is the toggler
@@ -41,7 +41,7 @@ import social from "../social.js";
  * <ProfileSocial isOpen={isOpen} onClose={onClose} addSocialLink={console.log(`Social Link Created. id: ${id} name: ${name} logo: ${logo} link: ${link}`)} />;
  * //deleteSocialLink: triggered when clicking the delete icon. passes back the Id of the attempted to delete icon
  * <ProfileSocial isOpen={isOpen} onClose={onClose} addSocialLink={addSocialLink} deleteSocialLink={console.log(`Social Link deleted. id: ${id} `)}/>;
-*/
+ */
 export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSocialLink, deleteSocialLink, socialLinks }) {
 
   return (
@@ -58,9 +58,16 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSoci
             <ul>
               {socialLinks.map((link, index) => (
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <a href={link.url} style={{ textDecoration: "none" }}>
-                    <SocialLink key={index} platform={link.platform} displayName={link.displayName} index={index}/>
-                  </a>
+                  <SocialLink
+                    key={index}
+                    platform={link.platform}
+                    displayName={link.displayName}
+                    index={index}
+                    isLink={true}
+                    isDeletor={true}
+                    url={link.url}
+                    wasClicked={deleteSocialLink}
+                  />
                 </div>
               ))}
               <GrayButton
@@ -75,20 +82,6 @@ export default function ProfileSocial({ isOpen, onClose, onSelectSocial, addSoci
                 addFunc={addSocialLink}
               />{" "}
               {/* Pass onClose instead of onClick */}
-            </ul>
-            <ul>
-              {socialLinks.map((link, index) => (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <SocialLink
-                    key={index}
-                    index={index}
-                    displayName={link.name}
-                    platform={link.platform}
-                    wasClicked={deleteSocialLink}
-                    isDeletor={true}
-                  />
-                </div>
-              ))}
             </ul>
           </nav>
         </div>
