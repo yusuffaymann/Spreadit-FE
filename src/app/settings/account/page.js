@@ -56,49 +56,27 @@ const Home=()=> {
   }
 
   const {username, email, password, gender, country, connected } = userData;
-  async function updateGender(newgender) {
-    try {
-        const response = await fetch('http://localhost:3002/settings/account', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                gender: newgender
-            })
-        });
 
-        if (!response.ok) {
-            throw new Error('Failed to update gender');
-        }
-        console.log("gender changed to "+newgender);
-    } catch (error) {
-        console.error('Error updating gender:', error.message);
-    }
-}
-async function updateCountry(newcountry) {
+  
+const updateGender= async (newgender)=>{
   try {
-      const response = await fetch('http://localhost:3002/settings/account', {
-          method: 'PATCH',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              country: newcountry
-          })
-      });
-
-      if (!response.ok) {
-          throw new Error('Failed to update country');
-      }
-
-      //const data = await response.json();
-      console.log("country changed to "+newcountry);
+      const response = await apiHandler(`settings/account`, "POST",newgender);
+      console.log('Gender changed:', response);
   } catch (error) {
-      console.error('Error updating country:', error.message);
+    console.error('Error changing gender:', error.message);
   }
 }
 
+const updateCountry= async (newcountry)=>{
+  try {
+      const response = await apiHandler(`settings/account`, "POST",newcountry);
+      console.log('Country changed:', response);
+      
+
+  } catch (error) {
+    console.error('Error changing country:', error.message);
+  }
+}
 
   const genders=["MAN","WOMAN"];
   const countries = [
