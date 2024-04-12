@@ -18,11 +18,19 @@ const Comment=({comment,subRedditName,subRedditPicture,subRedditRules})=>{
     const [hidden,setHidden]=useState(comment.is_hidden);
     const [saved,setSaved]=useState(comment.is_saved);
     const [isFollowed,setIsFollowed]=useState(comment.user.followed);
-    let userName="user 1";
+
     let isUser=false;
-    if(userName===comment.user.username){
-        isUser=true;
-    }
+    useEffect(() => {
+        async function fetchData() {
+          const cookie = await getCookies();
+    
+          if(cookie.username === comment.user.username){
+            isUser=true;
+          }
+        }
+        fetchData();
+      }, []);
+
     
     const handleFollow=async()=> {
         setIsFollowed(!isFollowed);
