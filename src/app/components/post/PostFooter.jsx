@@ -34,7 +34,21 @@ import PostDropDownMenu from "./PostDropDownMenu";
 
 
 
-
+/**
+ * Component for Displaying the footer of a post.
+ * @component
+ * @param   {function} upvote   The function to upvote the post [Required]
+ * @param   {function} downvote   The function to downvote the post [Required]
+ * @param   {number} voteCount   The number of votes the post has [Required]
+ * @param   {number} commentCount   The number of comments the post has [Required]
+ * @param   {boolean} isMod   If the user is a mod [Required]
+ * @returns {JSX.Element} The component for the profile info.
+ *
+ * @example
+ *
+ * <PostFooter upvote={upvote} downvote={downvote} voteCount={voteCount} commentCount={commentCount} isMod={isMod}/>    
+ * 
+ */
 function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
@@ -43,11 +57,15 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
     }
 
+    function sharePost(){
+        navigator.clipboard.writeText("hello").then(() => {alert("Profile Link Copied!")}).catch(() => {alert("Failed to copy link")} );
+    }
+
     //Todo? propably will make a function here for each mod action in the future
 
     return (
         <div className={styles.post_footer}>
-            <div className={styles.post_interactions}>
+            <div className={styles.post_interactions} onClick={(e) => {e.stopPropagation();}} >
                 <div className={styles.upvotes_container}>
                     <button 
                     className={`${styles.circle} ${styles.upvotes_button} ${buttonState.type}${buttonState.upHover} }`} 
@@ -122,16 +140,15 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                         <span>{commentCount}</span>
                 </button>
 
-                <button className={styles.btn}>
-                        <Image width={16} height={16} src={shareIcon} alt="Comments Icon"/>
+                <button className={styles.btn} onClick={sharePost}>
+                        <Image width={16} height={16} src={shareIcon} alt="Share Icon"/>
                         <span>Share</span>
                 </button>
            </div>
-           <button className={styles.mod_interactions} onClick={toggleDropdown}>
+           <button className={styles.mod_interactions} onClick={(e) => {e.stopPropagation(); toggleDropdown()}} >
             <Image width={22} height={22} src={shieldIcon} alt="mod shield Icon"/>
-           </button>
             <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" /> 
+                <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" onClick={() => {console.log("I Love you")}} /> 
                 <PostDropDownItem icon={spam} iconAlt="Spam Icon" description="Mark as Spam" />
                 <PostDropDownItem icon={star} iconAlt="Star Icon" description="Distinguish as Mod" />
                 <PostDropDownItem icon={pin} iconAlt="Pin Icon" description="Sticky Post" />
@@ -140,7 +157,8 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                 <PostDropDownItem icon={nsfw} iconAlt="NSFW Icon" description="Mark as NSFW" />
                 <PostDropDownItem icon={spoiler} iconAlt="Spoiler Icon" description="Mark as Spoiler" />
                 <PostDropDownItem icon={croudControl} iconAlt="Cone Icon" description="Adjust Croud Control" />
-            </PostDropDownMenu>           
+            </PostDropDownMenu>  
+           </button>         
            
         </div>
     );

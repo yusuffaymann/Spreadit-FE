@@ -15,15 +15,15 @@ import "../Profile.css";
  * //Print the URL to be returned
  * <AvatarArea setAvatarUrl={console.log(`${URL.createObjectURL(avatarImage)}`)}/>
  */
-export default function AvatarArea({setAvatarUrl}) {
+export default function AvatarArea({setAvatar}) {
   const [avatarImage, setAvatarImage] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
     if (avatarImage) {
-      setAvatarUrl(URL.createObjectURL(avatarImage));
+      setAvatar(avatarImage);
     }
-  }, [avatarImage, setAvatarUrl]);
+  }, [avatarImage, setAvatar]);
 
   /**
  * Handles image upload event
@@ -37,12 +37,42 @@ export default function AvatarArea({setAvatarUrl}) {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setAvatarImage(file);
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif" ||
+        file.type === "image/webp"
+      ) {
+        setAvatarImage(file);
+      }
     }
   };
 
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/gif" ||
+        file.type === "image/webp"
+      ) {
+        setAvatarImage(file);
+      }
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="profile--avatar">
+    <div className="profile--avatar"
+    onDrop={handleDrop}
+    onDragOver={handleDragOver}>
       <label className="profile--images-dragarea profile--images-border">
         {avatarImage ? (
           <img className={`${styles.box} ${styles.color} ${styles.border} }`} src={URL.createObjectURL(avatarImage)} alt="Uploaded Avatar" />

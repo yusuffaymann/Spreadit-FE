@@ -7,7 +7,7 @@ import close from "../../assets/close.svg"
 import back from "../../assets/back.svg"
 
 
-function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
+function StageOne({subRedditPicture, subRedditName,subRedditRules, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
 {
 
     const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
@@ -37,7 +37,7 @@ function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex
                 <div className={styles.rules}>
                     <div style={{width: "100%"}}>
                         <div className={`${styles.subRedditRule} ${selectedReason===0 ? styles.selected : "" }`} onClick={() => setSelectedReason(0)}>
-                            <Image className={styles.subRedditPicture}
+                            <img className={styles.subRedditPicture}
                                 src={subRedditPicture}
                                 width={256}
                                 height={256}
@@ -189,7 +189,7 @@ function ReportModal({subRedditPicture, subRedditName, subRedditRules, closeModa
     }
 
     return (
-    <div className={styles.modelOverlay}>
+    <div className={styles.modelOverlay} onClick={(e) => {e.stopPropagation();}}>
         <div className={styles.modal}>
             {stage === 1 && <StageOne closeModal={closeModal} onReport={onReport} mainReasonIndex={mainReasonIndex} subReasonIndex={subReasonIndex} subRedditPicture={subRedditPicture} subRedditName={subRedditName} changeStage={(nextStage, mainReason, subReason) => handleStateChange(nextStage, mainReason, subReason)}  />}
             {stage === 2 && <StageTwo closeModal={closeModal} onReport={onReport} subRedditRules={subRedditRules} mainReasonIndex={mainReasonIndex} subReasonIndex={subReasonIndex} mainReason={reasons[mainReasonIndex]} changeStage={(nextStage, mainReason, subReason) => handleStateChange(nextStage, mainReason, subReason)} />}

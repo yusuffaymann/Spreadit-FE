@@ -7,6 +7,30 @@
   cursor: pointer;
 }
 
+.buttonColorInverted {
+  position: relative;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  fill: #ffffff;
+  background-color: #0079d3;
+  cursor: pointer;
+}
+
+.buttonColorInverted:hover {
+  background-color: #1484d6 ; /* Change background color on hover */
+}
+
+.buttonColorInverted:active {
+  background-color: #4ca1e0 ; /* Change background color on click */
+}
+
+.buttonColorInverted:disabled {
+  background-color: rgba(132, 132, 132, 1);
+  color: rgba(161, 161, 161, 1);
+  border-color: rgba(118, 118, 118, 0.3);
+  cursor:not-allowed;
+}
+
 .buttonColor:hover {
   background-color: #f5fafd; /* Change background color on hover */
 }
@@ -46,3 +70,4 @@
   border-color: rgba(118, 118, 118, 0.3);
   cursor:not-allowed;
 }
+
