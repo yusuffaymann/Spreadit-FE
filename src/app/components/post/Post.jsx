@@ -1,4 +1,5 @@
-import React, { use } from "react";
+import React from "react";
+import { useRouter } from "next/navigation";
 import styles from "./Post.module.css";
 import Image from 'next/image'
 import { useState, useEffect } from "react";
@@ -9,6 +10,7 @@ import nextImage from "../../assets/right-chevron-svgrepo-com.svg"
 import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
 import PostFooter from "./PostFooter";
 import HiddenPost from "./HiddenPost";
+import getCookies from "../../utils/getCookies";
 import close from "../../assets/close.svg";
 
 
@@ -19,8 +21,9 @@ import close from "../../assets/close.svg";
  * @component
  */
 
-function Post({ title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions }) {
+function Post({postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration }) {
 
+    const router = useRouter();
     const displayDescription = (video.length === 0 && images.length === 0) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -28,11 +31,23 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
     const [hidden,setHidden] = useState(false);
     const [view, setView] = useState(false);
     const [deleted,setDeleted] = useState(false);
+    const [myPost,setMyPost] = useState(false);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
     const [saved,setSaved] = useState(isSaved);
     const [followed,setFollowed]=useState(isFollowed);
     const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
+
+    useEffect(() => {
+        async function fetchData() {
+          const cookie = await getCookies();
+    
+          if(cookie.username === userName){
+            setMyPost(true);
+          }
+        }
+        fetchData();
+      }, []);
 
     useEffect(() => {
         setNSFW(isNSFW);
@@ -58,6 +73,19 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
         const formattedText = text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; color: blue; pointer-events: none;">$1</a>');
         
         return formattedText;
+    }
+
+    function convertToEmbedLink(videoLink) {
+        // Regular expression to check if the link is a YouTube link
+        const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
+    
+        if (youtubeRegex.test(videoLink)) {
+            // If it's a YouTube link, replace "watch" with "embed"
+            return videoLink.replace("/watch?v=", "/embed/");
+        } else {
+            // If it's not a YouTube link, return the original link
+            return videoLink;
+        }
     }
 
     const formattedDescription = parseAndStyleLinks(description);
@@ -132,7 +160,7 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
     }
 
     return (
-        <div className={styles.post} onClick={() => console.log("redirect")}>
+        <div className={styles.post} onClick={() => deleted ? "" : router.push(`/comments/${postId}?isEditing=${false}`)}>
             {isFullScreen && 
                     <div className={styles.fullImage} onClick={(e) => {e.stopPropagation();}} >
                         <button type="button" className={`${styles.changeImage} ${styles.exitFullScreen}`} onClick={() => {setIsFullScreen(false)}}>
@@ -168,12 +196,12 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
             </div>}
             <div className={styles.body}>
                 {deleted === true && 
-                <div className={styles.deleted}>
+                <div className={styles.deleted} >
                     <div className={styles.deletedText}>Post deleted</div>
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
+                    <Header postId={postId} subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {(!view && (isNSFW || isSpoiler) ) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
@@ -187,7 +215,7 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
                             {video.length !== 0 &&
                                 <iframe className={styles.video} title="Posted video"
                                 allowFullScreen
-                                src={video[0]}
+                                src={convertToEmbedLink(video[0])}
                             />}
                             {(video.length === 0 && images.length !== 0) &&       
                                 <div className={styles.image} onClick={() => setIsFullScreen(true)}  >
@@ -224,7 +252,7 @@ function Post({ title, description, userName, subRedditName, subRedditPicture, s
                             }
                         </div>}
                     </div>
-                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} />}
+                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} />}
                     <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={upVotes} commentCount={comments} isMod={true} />
                 </div>}
             </div>

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react"
+import { useRouter } from "next/navigation";
 import Image from 'next/image'
 import styles from "./PostHeader.module.css"
 import SubRedditInfoModal from "./SubRedditInfoModal"
@@ -24,8 +25,9 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 import Button from "./Button";
 
 
-function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, onEdit, replyNotifications, onReplyNotifications}) {
+function PostHeader ({postId, userName, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications}) {
 
+    const router = useRouter();
     const [showDropdown, setShowDropdown] = useState(false);
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [showProfileInfo,setShowProfileInfo] = useState(false);
@@ -62,7 +64,7 @@ function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture,
         {showDeleteModal && <DeletePost onDelete={onDelete} closeModal={() => setShowDeleteModal(false)} />}
 
         <div className={styles.postHeaderInfo} onClick={(e) => {e.stopPropagation();}}>
-            {!isInComment&&(<div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()}>
+            {!isInComment&&(<div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()}  onClick={() => {router.push(`/community/${subRedditName}`)}}>
                 {showSubRedditInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}}>
 
@@ -79,7 +81,7 @@ function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture,
                 
                 <div className={styles.subredditandusername}>
                     <div className={styles.postInfo}>
-                    <div className={styles.subRedditName}>{subRedditName || userName}</div>
+                    <div className={styles.subRedditName}>{`r/${subRedditName || userName}`}</div>
                     <div>•</div>
                     </div>
                 </div>
@@ -88,7 +90,7 @@ function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture,
             {isInComment&&
             (<div className={styles.subRedditNameAndPicture}>
                 {showSubRedditInfo &&
-                <div className={styles.showmodalarea} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
+                <div className={styles.showmodalarea} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={() => {router.push(`/community/${subRedditName}`)}} >
                     <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/>
                 </div>}
                 {showProfileInfo &&
@@ -137,7 +139,7 @@ function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture,
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={onEdit} /> 
+                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={() => router.push(`/comments/${postId}?isEditing=${true}`)} /> 
                     {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
                     {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
