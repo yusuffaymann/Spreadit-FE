@@ -5,13 +5,16 @@ import { redirect } from 'next/navigation'
 async function Profile() {
   const cookies = await getCookies();
 
-  if (!cookies) {
+  if (cookies === null) {
     redirect('/login');
   }
 
-  const token = cookies.value;
-  
-  const user_info = await apiHandler('/user-info', 'GET', "");
+  try{
+    const user_info = await apiHandler('/user-info', 'GET', "");
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    redirect('/login');
+  }
   redirect(`/profile/${user_info.username}`);
 
   return (
