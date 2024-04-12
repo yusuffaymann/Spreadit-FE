@@ -10,31 +10,12 @@ import PostDropDownMenu from "../components/post/PostDropDownMenu";
 import PostDropDownItem from "../components/post/PostDropDownItem";
 import handler from "../utils/apiHandler";
 import up from "../assets/up-arrow.svg";
-import Button from "../components/post/Button";
 import parseTime from "../utils/timeDifference"
 
 function homepage() {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showDropdown, setShowDropdown] = useState(false);
-/*   const [postId, setPostId] = useState(0);
-  const [posterUserName,setPosterUserName] = useState("")
-  const [upVotes,setUpVotes] = useState(0);
-  const [downVotes,setDownVotes] = useState(0);
-  const [commentsCount,setCommentsCount] = useState(0);
-  const [title,setTitle] = useState("");
-  const [description,setdescription] = useState("");
-  const [images,setImages] = useState([]);
-  const [video,setVideo] = useState("");
-  const [isSpoiler,setisSpoiler] = useState(false);
-  const [isNSFW,setIsNSFW] = useState(false);
-  const [subName,setSubName] = useState("");
-  const [subDescription,setSubDescription] = useState("");
-  const [subImage,setSubImage] = useState("");
-  const [subBanner,setSubBanner] = useState("");
-  const [members,setMembers] = useState([]);
-  const [isMember,setIsMember] = useState(false); */
-  const [myUserName,setMyUserName] = useState("u/Common-Summer-7186");
   const [loading,setLoading] = useState(true);
   const [showButton, setShowButton] = useState(false);
   const [reachedEnd, setReachedEnd] = useState(false);
@@ -65,9 +46,6 @@ function homepage() {
     setReachedEnd(bottomOfPage);
   };
 
-  let video1 = "https://www.youtube.com/watch?v=Sklc_fQBmcs";
-  let subRedditRules=["rule 1","read rule 1 again",]
-  video1 = convertToEmbedLink(video1);
   const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}]
 
   useEffect(() => {
@@ -135,19 +113,6 @@ function homepage() {
     getPost();
   }, [reachedEnd,sortBy]);
 
-  function convertToEmbedLink(videoLink) {
-    // Regular expression to check if the link is a YouTube link
-    const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
-
-    if (youtubeRegex.test(videoLink)) {
-        // If it's a YouTube link, replace "watch" with "embed"
-        return videoLink.replace("/watch?v=", "/embed/");
-    } else {
-        // If it's not a YouTube link, return the original link
-        return videoLink;
-    }
-}
-
 
     return (
         <div className={styles.page}>
@@ -183,7 +148,7 @@ function homepage() {
           <div className={styles.feedContent}>
               {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
-                  <Post subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={postObject.images} video={postObject.videos} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={false} />
+                  <Post subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={postObject.images} video={postObject.videos} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={false} />
                 </div>))}
           </div>
         </div>

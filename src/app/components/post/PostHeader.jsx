@@ -79,7 +79,7 @@ function PostHeader ({userName, profilePicture, subRedditName, subRedditPicture,
                 
                 <div className={styles.subredditandusername}>
                     <div className={styles.postInfo}>
-                    <div className={styles.subRedditName}>{subRedditName || userName}</div>
+                    <div className={styles.subRedditName}>{`r/${subRedditName || userName}`}</div>
                     <div>•</div>
                     </div>
                 </div>
