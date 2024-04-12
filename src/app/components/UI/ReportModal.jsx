@@ -71,9 +71,10 @@ function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex
 
 function StageTwo({subRedditRules,mainReasonIndex,mainReason,subReasonIndex,changeStage,closeModal,onReport})
 {
-
+    
+    const subRedditReportReasons = subRedditRules.map(item => item.reportReason);
     const question=["Which community rule does this violate?","Who is the harassment towards?","Who is the threat towards?","Hate","What type of minor abuse or sexualization is this?","Whose personal information is it?","Who is the non-consensual intimate media of?","Prohibited transaction","Who is being impersonated?","Whose copyright is it?","Whose trademark is it?","What type of spam is this?"];
-    const choices=[subRedditRules,["You","Someone else"],["You","Someone else"],[],["Sexual or suggestive content","Predatory or inappropriate behaviour","Content involving physical or emotional abuse or neglect"],["Yours","Someone else's"],["You","Someone else"],[],["You or an individual or entity you represent","Someone else"],["Yours or an individual or entity you represent","Someone else's"],["Yours or an individual or entity you represent","Someone else's"],["Link farming","Unsolicited messaging","Excessive posts or comments in a community","Posting harmful links (malware)","Harmful bots","Other"]]
+    const choices=[subRedditReportReasons,["You","Someone else"],["You","Someone else"],[],["Sexual or suggestive content","Predatory or inappropriate behaviour","Content involving physical or emotional abuse or neglect"],["Yours","Someone else's"],["You","Someone else"],[],["You or an individual or entity you represent","Someone else"],["Yours or an individual or entity you represent","Someone else's"],["Yours or an individual or entity you represent","Someone else's"],["Link farming","Unsolicited messaging","Excessive posts or comments in a community","Posting harmful links (malware)","Harmful bots","Other"]]
     const [selectedChoice,setSelectedChoice] = useState(subReasonIndex);
 
     function handleSubmit () {
