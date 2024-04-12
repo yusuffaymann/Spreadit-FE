@@ -98,14 +98,7 @@ function Sidebar() {
               <li
                 key={key}
                 className={styles.row}
-                id={
-                  window.location.pathname == val.link
-                    ? styles.active
-                    : styles.notactive
-                }
-                onClick={() => {
-                  window.location.pathname = val.link;
-                }}
+                onClick={()=>{console.log("Route")}}
               >
                 <div id={styles.icon}>{val.icon}</div>{" "}
                 <div id={styles.title}>{val.title}</div>
@@ -136,14 +129,7 @@ function Sidebar() {
               <li
                 key={key}
                 className={styles.row}
-                id={
-                  window.location.pathname == val.link
-                    ? styles.active
-                    : styles.notactive
-                }
-                onClick={() => {
-                  window.location.pathname = val.link;
-                }}
+                onClick={()=>{console.log("Route")}}
               >
                 <div id={styles.icon}>{val.icon}</div>{" "}
                 <div id={styles.title}>{val.title}</div>
@@ -212,14 +198,7 @@ function Sidebar() {
               <li
                 key={key}
                 className={styles.row}
-                id={
-                  window.location.pathname == val.link
-                    ? styles.active
-                    : styles.notactive
-                }
-                onClick={() => {
-                  window.location.pathname = val.link;
-                }}
+                onClick={()=>{console.log("Route")}}
               >
                 <div id={styles.icon}>{val.icon}</div>{" "}
                 <div id={styles.title}>{val.title}</div>
@@ -231,5 +210,4 @@ function Sidebar() {
     </div>
   );
 }
-
 export default Sidebar;
