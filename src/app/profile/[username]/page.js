@@ -29,23 +29,23 @@ function Profile({params : {username}}) {
 
   
 
-  useEffect(() => {
-    async function fetchData() {
-      const cookies = await getCookies();
-      if(cookies !== null){
-        setToken(cookies.access_token);
-        console.log("Yummy Token " + cookies.access_token);
-      }
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const cookies = await getCookies();
+  //     if(cookies !== null){
+  //       setToken(cookies.access_token);
+  //       console.log("Yummy Token " + cookies.access_token);
+  //     }
 
-      const user_info = await apiHandler('/user-info', 'GET', "");
-      if(user_info.username === username){
-        setIsMe(true);
-        setAvatar(user_info.avatar);
-      }
+  //     const user_info = await apiHandler('/user-info', 'GET', "");
+  //     if(user_info.username === username){
+  //       setIsMe(true);
+  //       setAvatar(user_info.avatar);
+  //     }
 
-    }
-    fetchData();
-  }, []);
+  //   }
+  //   fetchData();
+  // }, []);
 
 
 
@@ -82,37 +82,37 @@ function Profile({params : {username}}) {
   const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}]
 
 
-  useEffect(() => {
-    async function getSub() { //this use Effect will probably be moved to the useEffect right below it when we get the actual array from the backend
-      try {
-        if(reachedEnd || postArray.length === 0) {
-        const subs = await apiHandler("/communities", "GET");
-        setSubArray(prevSubArray => [...prevSubArray, subs.sub1, subs.sub2, subs.sub3]);//subs.sub1 etc will be changed in integration when we get an actual array from backend same for posts.post1 in getPost
-        }
+  // useEffect(() => {
+  //   async function getSub() { //this use Effect will probably be moved to the useEffect right below it when we get the actual array from the backend
+  //     try {
+  //       if(reachedEnd || postArray.length === 0) {
+  //       const subs = await apiHandler("/communities", "GET");
+  //       setSubArray(prevSubArray => [...prevSubArray, subs.sub1, subs.sub2, subs.sub3]);//subs.sub1 etc will be changed in integration when we get an actual array from backend same for posts.post1 in getPost
+  //       }
   
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    getSub();
-  }, [reachedEnd,sortBy]);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   }
+  //   getSub();
+  // }, [reachedEnd,sortBy]);
 
 
-  useEffect(() => {
-    async function getPost() {
-      try {
+  // useEffect(() => {
+  //   async function getPost() {
+  //     try {
 
-        if(reachedEnd || postArray.length === 0) {
-        const posts = await apiHandler("/posts", "GET");//todo change api endpoint according to sortBy state
-        setPostArray(prevPostArray => [...prevPostArray, posts.post1, posts.post2, posts.post3]);
-        //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
-      }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } 
-    }
-    getPost();
-  }, [reachedEnd,sortBy]);
+  //       if(reachedEnd || postArray.length === 0) {
+  //       const posts = await apiHandler("/posts", "GET");//todo change api endpoint according to sortBy state
+  //       setPostArray(prevPostArray => [...prevPostArray, posts.post1, posts.post2, posts.post3]);
+  //       //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
+  //     }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     } 
+  //   }
+  //   getPost();
+  // }, [reachedEnd,sortBy]);
 
   function convertToEmbedLink(videoLink) {
     // Regular expression to check if the link is a YouTube link
