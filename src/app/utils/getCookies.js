@@ -20,7 +20,7 @@ async function getCookies() {
         return {
             access_token: cookieStore.get('access_token').value,
             username: cookieStore.get('username').value,
-            email: (cookieStore.has('email') && cookieStore.get('email')).value
+            email: (cookieStore.has('email') && cookieStore.get('email').value)
         };
     }
     return null;
