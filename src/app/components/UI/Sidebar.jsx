@@ -15,8 +15,7 @@ function Sidebar() {
   const [showRecentDropdown, setShowRecentDropdown] = useState(false);
   const [showCommunitiesDropdown, setShowCommunitiesDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
-  const [showCreateCommunityModal, setShowCreateCommunityModal] =
-    useState(false);
+  const [showCreateCommunityModal, setShowCreateCommunityModal] = useState(false);
 
   function toggleDropdown(dropdown) {
     switch (dropdown) {
@@ -155,7 +154,7 @@ function Sidebar() {
       </div>
 
       <p className={styles.spliter}>_____________________________</p>
-
+      
       <div
         className={styles.dropdown}
         onClick={() => toggleDropdown("communities")}
@@ -187,6 +186,7 @@ function Sidebar() {
           })}
         </ul>
       </div>
+
 
       <p className={styles.spliter}>_____________________________</p>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import ContinueWith from "../components/UI/ContinueWith";
 import LoginForm from "./LoginForm.jsx";
@@ -6,6 +7,8 @@ import Validation from "../utils/Validation.js";
 import "./Login.css";
 import { signIn } from "next-auth/react";
 import Link from "next/link.js";
+import storeCookies from "../utils/storeCookies.js";
+import apiHandler from "../utils/apiHandler.js";
 
 
 function Login() {
@@ -31,23 +34,14 @@ function Login() {
     setErrors(valErrors);
     if(valErrors.username === "" && valErrors.password === "")
     {
-      await loginSubmit(JSON.stringify(formData));
+      await loginSubmit(formData);
     }
   }
 
-  const url = "http://localhost:3001/login";
+  const url = "http://localhost:3002/login";
   const loginSubmit = async (values) => {
-    console.log(values);
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: values,
-    };
-    fetch(url, options)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    const response = await apiHandler("/login", "POST", values)
+    await storeCookies(response);
   };
 
   function HandleRememberMe() {
@@ -55,7 +49,8 @@ function Login() {
   };
 
   const handleGoogleSignIn = async () => {
-    await signIn("google");
+    await signIn("google", { callbackUrl: 'http://localhost:3000/redirecting' });
+    
   };
 
   return (
