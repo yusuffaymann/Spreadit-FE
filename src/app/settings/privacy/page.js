@@ -46,7 +46,7 @@ export default function Home() {
   }
   const updatePrivacySettings= async (newBlockedUsers,newMutedCommunities)=>{
     try {
-        const response = await apiHandler(`settings/privacy`, "PUT",{ blockedUsers: newBlockedUsers, mutedCommunities: newMutedCommunities });
+        const response = await apiHandler(`settings/safety-privacy`, "PUT",{ blockedUsers: newBlockedUsers, mutedCommunities: newMutedCommunities });
         console.log('Privacy settings updated successfully ', response);
     } catch (error) {
       console.error('Error updating privacy settings:', error.message);
