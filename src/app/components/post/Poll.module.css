@@ -75,13 +75,13 @@
     height: 26px;
     overflow: hidden;
     border-radius: 50px;
-    margin-left: 5px;
 }
 
 .footer {
     display: flex;
     margin-top: 10px;
     margin-bottom: .75rem;
+    margin-left: 10px;
 }
 
 .footerContent {
