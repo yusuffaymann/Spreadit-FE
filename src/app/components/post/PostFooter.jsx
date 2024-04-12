@@ -65,7 +65,7 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
 
     return (
         <div className={styles.post_footer}>
-            <div className={styles.post_interactions}>
+            <div className={styles.post_interactions} onClick={(e) => {e.stopPropagation();}} >
                 <div className={styles.upvotes_container}>
                     <button 
                     className={`${styles.circle} ${styles.upvotes_button} ${buttonState.type}${buttonState.upHover} }`} 
@@ -145,9 +145,8 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                         <span>Share</span>
                 </button>
            </div>
-           <button className={styles.mod_interactions} onClick={toggleDropdown}>
+           <button className={styles.mod_interactions} onClick={(e) => {e.stopPropagation(); toggleDropdown()}} >
             <Image width={22} height={22} src={shieldIcon} alt="mod shield Icon"/>
-           </button>
             <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
                 <PostDropDownItem icon={cross} iconAlt="Cross Icon" description="Remove" onClick={() => {console.log("I Love you")}} /> 
                 <PostDropDownItem icon={spam} iconAlt="Spam Icon" description="Mark as Spam" />
@@ -158,7 +157,8 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                 <PostDropDownItem icon={nsfw} iconAlt="NSFW Icon" description="Mark as NSFW" />
                 <PostDropDownItem icon={spoiler} iconAlt="Spoiler Icon" description="Mark as Spoiler" />
                 <PostDropDownItem icon={croudControl} iconAlt="Cone Icon" description="Adjust Croud Control" />
-            </PostDropDownMenu>           
+            </PostDropDownMenu>  
+           </button>         
            
         </div>
     );

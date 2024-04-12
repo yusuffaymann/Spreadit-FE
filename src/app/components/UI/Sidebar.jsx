@@ -15,9 +15,7 @@ function Sidebar() {
   const [showRecentDropdown, setShowRecentDropdown] = useState(false);
   const [showCommunitiesDropdown, setShowCommunitiesDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
-  const [showCreateCommunityModal, setShowCreateCommunityModal] =
-    useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [showCreateCommunityModal, setShowCreateCommunityModal] = useState(false);
 
   function toggleDropdown(dropdown) {
     switch (dropdown) {
@@ -79,7 +77,7 @@ function Sidebar() {
         })}
       </ul>
 
-      <p className={styles.spliter}>___________</p>
+      <p className={styles.spliter}>_____________________________</p>
 
       <div className={styles.dropdown} onClick={() => toggleDropdown("mod")}>
         {" "}
@@ -117,7 +115,7 @@ function Sidebar() {
         </ul>
       </div>
 
-      <p className={styles.spliter}>___________</p>
+      <p className={styles.spliter}>_____________________________</p>
 
       <div className={styles.dropdown} onClick={() => toggleDropdown("recent")}>
         {" "}
@@ -155,8 +153,8 @@ function Sidebar() {
         </ul>
       </div>
 
-      <p className={styles.spliter}>___________</p>
-
+      <p className={styles.spliter}>_____________________________</p>
+      
       <div
         className={styles.dropdown}
         onClick={() => toggleDropdown("communities")}
@@ -169,6 +167,7 @@ function Sidebar() {
           <KeyboardArrowDownIcon className={styles.arrowbutton} />
         )}{" "}
       </div>
+
       <div
         className={`${styles.dropdownmenu} ${showCommunitiesDropdown ? styles.active : styles.inactive}`}
       >
@@ -188,7 +187,8 @@ function Sidebar() {
         </ul>
       </div>
 
-      <p className={styles.spliter}>___________</p>
+
+      <p className={styles.spliter}>_____________________________</p>
 
       <div
         className={styles.dropdown}

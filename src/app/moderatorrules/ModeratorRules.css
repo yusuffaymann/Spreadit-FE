@@ -1,0 +1,66 @@
+.moderator-rules-container {
+  max-width: 600px;
+  margin: 16px auto;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.rules-list {
+  margin-bottom: 16px;
+}
+
+.rules-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.rules-list li {
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f6f7f8;
+  display: flex;
+  align-items: center;
+}
+
+.rules-list li button {
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  color: #0079d3;
+  cursor: pointer;
+}
+
+.rules-list li button:hover {
+  text-decoration: underline;
+}
+
+.add-rule {
+  display: flex;
+  align-items: center;
+  background-color: #f6f7f8;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.add-rule input {
+  flex: 1;
+  padding: 8px;
+  margin-right: 8px;
+  border: none;
+}
+
+.add-rule button {
+  padding: 8px 16px;
+  background-color: #0079d3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-rule button:hover {
+  background-color: #005ea6;
+}

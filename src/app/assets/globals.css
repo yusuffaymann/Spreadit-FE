@@ -208,6 +208,7 @@ body.modal-open {
   margin: 0;
 }
 
+
 /* Global Styiling for Home page */
 
 .neutral{
@@ -219,22 +220,32 @@ body.modal-open {
 }
 
 .upvoted{
-  background-color: #D93A00;
+  background-color: #D93A00 !important;
 }
 
 .upvoted-hover{
-  background-color: #962900;
+  background-color: #962900 !important;
 
 }
 
 .downvoted{
-  background-color: #6A5CFF;
+  background-color: #6A5CFF !important;
 }
 
 .downvoted-hover{
-  background-color: #453BB5;
+  background-color: #453BB5 !important;
 }
 
 
 
 
+
+.create--link {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--brightcolor);
+  display: block;
+  margin-right: 4px;
+  text-decoration: none;
+}
