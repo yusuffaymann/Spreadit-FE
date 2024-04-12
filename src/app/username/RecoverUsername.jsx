@@ -3,6 +3,7 @@ import FormInfo from "../components/form/FormInfo.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 import UserNameForm from "./UsernameForm.jsx";
 import submitToApi from "../utils/submitToApi.js";
+import apiHandler from "../utils/apiHandler.js"
 
 function RecoverUsername() {
   const url = "http://localhost:3002/forgot-username";
@@ -27,8 +28,8 @@ function RecoverUsername() {
     }else{
       setEmailError("");
     }
-    const data = { email };
-    const response = await submitToApi(url, "POST", data);
+    const data = { email: email };
+    const response = await apiHandler("/forgot-username", "POST", data);
     console.log(response);
     setEmail("");
   };

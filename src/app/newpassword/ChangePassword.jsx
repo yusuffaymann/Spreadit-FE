@@ -3,8 +3,9 @@ import FormInfo from "../components/form/FormInfo.jsx";
 import NewPasswordForm from "./NewPasswordForm";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 import submitToApi from "../utils/submitToApi.js";
+import apiHandler from "../utils/apiHandler.js"
 
-function ChangePassword() {
+function ChangePassword({token}) {
   const url = "http://localhost:3002/reset-password";
   const [formData, setFormData] = useState({ password: "", password2: "" });
   const [isEqual, setIsEqual] = useState(true);
@@ -29,7 +30,7 @@ function ChangePassword() {
       return;
     }
     const password = formData.password;
-    submitToApi(url, "POST", {password});
+    apiHandler("/reset-password-by-token", "POST", {password: password, resetToken: token});
     setFormData({ password: "", password2: "" });
   }
 
