@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import submitToApi from "../../../src/app/utils/submitToApi";
+import apiHandler from "../../../src/app/utils/apiHandler";
+import storeCookies from "@/app/utils/storeCookies";
+import { SessionContext } from "next-auth/react";
 
 export const authOptions = {
   session: {
@@ -15,12 +17,22 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account.provider === "google") {
-        const url = "http://localhost:3002/login";
-        const response = await submitToApi(url, "POST", account.access_token);
-        console.log(response)
+        const url = "/google/oauth";
+        const response = await apiHandler(url, "POST", {Authorization: account.access_token, remember_me: true});
+        user.data = response;
         return true;
       }
     },
+    async jwt({ token, user }) {
+      if (user) {
+        token.data = user.data;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.data = token.data;
+      return session;
+    }
   },
   pages: {
     signIn: "/login",

@@ -14,8 +14,17 @@ import { cookies } from 'next/headers';
  */
 
 async function getCookies() {
-    const token = cookies().get('token');
-    return token;
+    const cookieStore = cookies();
+    console.log(cookieStore.get("access_token"));
+    if(cookieStore.has('access_token') && cookieStore.has('username')) {
+        return {
+            access_token: cookieStore.get('access_token').value,
+            username: cookieStore.get('username').value,
+            email: (cookieStore.has('email') && cookieStore.get('email')).value
+        };
+    }
+    return null;
+    
 }
 
 export default getCookies;
