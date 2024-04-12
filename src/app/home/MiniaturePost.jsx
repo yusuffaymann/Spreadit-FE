@@ -6,8 +6,9 @@ import SubRedditInfoModal from "../components/post/SubRedditInfoModal";
 import spoilerIcon from "../assets/post-images/mod-icons/spoiler.svg";
 import nsfwIcon from "../assets/post-images/mod-icons/nsfw.svg";
 
-function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video,isNSFW,isSpoiler}) {
+function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video,isNSFW,isSpoiler}) {
 
+    const router = useRouter();
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [joined,setJoined] = useState(false);
     let timeOut;
@@ -39,11 +40,11 @@ function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,sub
 
     return(
 
-        <div className={styles.post} onClick={() => {router.push(`/comments/${postId}`)}}>
+        <div className={styles.post} onClick={() => router.push(`/comments/${postId}?isEditing=${false}`)}>
             <div className={styles.content}>
                 <div className={styles.body}>
                     <div className={styles.header}>
-                        <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()} onClick={(e) => {e.stopPropagation();}}>
+                        <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()} onClick={(e) => {e.stopPropagation();router.push(`/community/${subRedditName}`)}}>
                             {showSubRedditInfo &&
                             <div className={styles.subInfo} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
                                 <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={subRedditBanner} subRedditDescription={subRedditDescription} isMember={false} joined={joined} onJoin={handleJoin}/>
