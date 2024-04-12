@@ -12,6 +12,7 @@ import PostFooter from "./PostFooter";
 import HiddenPost from "./HiddenPost";
 import getCookies from "../../utils/getCookies";
 import close from "../../assets/close.svg";
+import handler from "@/app/utils/apiHandler";
 
 
 //todo get my username from cookies and check if it is equal to the poster username to set mypost with true or false
@@ -90,74 +91,101 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
 
     const formattedDescription = parseAndStyleLinks(description);
 
-    function handleJoin() {
-        setJoined(!joined);
+    async function handleJoin() {
+        try{
+            if(joined){
+                const  response = await handler("/community/unsubscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                console.log(response)
+                setJoined(false);
+            }else{
+                const  response = await handler("/community/subscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                console.log(response)
+                setJoined(true);
+            }
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
+        
+
+
         //api call to join subreddit
     }
 
-    function handleHide() {
-        setHidden(!hidden);
+    async function handleHide() {
+        if(hidden){
+            const  response = await handler(`/posts/${postId}/unhide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+            console.log(response)
+            setHidden(false);
+        }else{
+            const  response = await handler(`/posts/${postId}/hide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+            console.log(response)
+            setHidden(true)
+        }
+        
         //api call to hide a post
     }
 
-    function handleDelete () {
+    async function handleDelete () {
+        const response = await handler(`/posts/${postId}`, "DELETE", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
         setDeleted(true);
         //api call to delete a post
     }
 
-    function handleUpVote(vote) {
+    async function handleUpVote(vote) {
         //api call to upvote or down vote
     }
 
-    function handlePollVote(choice) {
+    async function handlePollVote(choice) {
         console.log(choice);
         //api call to vote 
     }
 
-    function handleNSFW() {
+    async function handleNSFW() {
         //api call to invert NSFW
     }
 
-    function handleSpoiler() {
+    async function handleSpoiler() {
         //api call to invert Spoiler
     }
 
-    function handleFollow() {
+    async function handleFollow() {
         setFollowed(!followed);
         onFollow();
         //api call to follow or unfollow a user
     }
 
-    function handleReport(mainReason,subReason) {
+    async function handleReport(mainReason,subReason) {
         console.log(subReason);
         //api call to report a post
     }
 
-    function handleBlock() {
+    async function handleBlock() {
         console.log("block");
         //api call to block a user
     }
 
-    function handleNSFW () {
+    async function handleNSFW () {
         setNSFW(!NSFW);
         //api call to set one of your posts as nsfw
     }
 
-    function handleSpoiler () {
+    async function handleSpoiler () {
         setSpoiler(!spoiler);
         //api call to set one of your posts as spoiler
     }
 
-    function handleSaved () {
+    async function handleSaved () {
         setSaved(!saved);
         //api call to save a post
 
     }
 
-    function handleReplyNotifications () {
+    async function handleReplyNotifications () {
         setReplyNotifications(!sendReplyNotifications);
         //api call to set reply notifications
     }
+
+    console.log(`this is hidden: ${hidden}`)
 
     return (
         <div className={styles.post} onClick={() => deleted ? "" : router.push(`/comments/${postId}?isEditing=${false}`)}>

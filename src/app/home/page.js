@@ -42,7 +42,7 @@ function homepage() {
     const scrollY = window.scrollY // Get scroll position
     setShowButton(scrollY > 200);
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    const bottomOfPage = (scrollTop + clientHeight + 200 >= scrollHeight);
+    const bottomOfPage = (scrollTop + clientHeight + 800 >= scrollHeight);
 
     setReachedEnd(bottomOfPage);
   };
@@ -71,7 +71,7 @@ function homepage() {
         if(reachedEnd || postArray.length === 0) {
         const posts = await handler(`/home/${sortBy}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");//todo change api endpoint according to sortBy state
         console.log(posts)
-        setPostArray(posts);
+        setPostArray((prevPostArray) =>  [...prevPostArray, ...posts]);
 
         //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
         const subs = await Promise.all(posts.map(async (postObj) => {
@@ -82,15 +82,17 @@ function homepage() {
         console.log(returnedData)
           return returnedData
         }))
-        setSubArray(subs)
+        setSubArray(prevSubArray => [...prevSubArray, ...subs])
 
         const getSubscribed = await Promise.all(posts.map(async (postObj) => {
           const data = await handler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
         console.log(data)
           return data
         }))
-        setSubscribedArray(getSubscribed)
-        
+        setSubscribedArray(prevSubscribedArray => [...prevSubscribedArray, ...getSubscribed])
+
+        const temp = await handler("/posts/624a6962a85ed5a6d6ca9373", "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+        console.log(temp)
         
       }
       
@@ -139,7 +141,6 @@ function homepage() {
               {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
                   <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={[]} video={[]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subscribedArray[index].isSubscribed} />
-                  {console.log(postObject.date)}
                 </div>))}
           </div>}
         </div>

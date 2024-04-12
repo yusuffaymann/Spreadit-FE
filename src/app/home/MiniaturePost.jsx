@@ -45,7 +45,7 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                 <div className={styles.body}>
                     <div className={styles.header}>
                         <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()} onClick={(e) => {e.stopPropagation();router.push(`/community/${subRedditName}`)}}>
-                            {true &&
+                            {showSubRedditInfo &&
                             <div className={styles.subInfo} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
                                 <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={subRedditBanner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={handleJoin}/>
                             </div>}
