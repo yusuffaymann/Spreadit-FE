@@ -54,7 +54,149 @@ function RichTextEditor({ mediaArray, setMediaArray, content, setContent, rawCon
     setInlineToggled(currentStyle.has("INLINE_CODE"));
     setSuperToggled(currentStyle.has("SUPERSCRIPT"));
     setHeadingToggled(currentStyle.has("HEADING"));
+    console.log(convertEditorStateToHTML(editorState))
   }, [editorState]);
+
+function convertEditorStateToHTML(editorState) {
+  const contentState = editorState.getCurrentContent();
+  const blockMap = contentState.getBlockMap();
+
+  let html = '';
+
+  blockMap.forEach(block => {
+    const text = block.getText();
+    const characterList = block.getCharacterList();
+
+    // Open a new block tag
+    html += '<p>';
+
+    let lastStyles = [];
+
+    // Define style priority
+    const stylePriority = [
+      'SPOILER',
+      'BOLD',
+      'ITALIC',
+      'UNDERLINE',
+      'INLINE_CODE',
+      'STRIKETHROUGH',
+      'LINK',
+      'SUPERSCRIPT',
+      'HEADING'
+    ];
+
+    // Loop through each character in the block
+    text.split('').forEach((char, index) => {
+      const styles = characterList.get(index).getStyle();
+      
+      // Detect style changes
+      const removedStyles = lastStyles.filter(style => !styles.includes(style));
+      const addedStyles = styles.filter(style => !lastStyles.includes(style));
+
+      // Close tags for removed styles
+      if (removedStyles.size > 0 || addedStyles.size > 0) {
+        lastStyles = sortStyles(lastStyles, stylePriority);
+        html += closeCurrentTags(lastStyles);
+
+      stylePriority.forEach(style => {
+        if (styles.includes(style)) {
+          html += openTag(style);
+        }
+      });}
+
+      // Append character
+      html += char;
+
+      // Update current styles
+      lastStyles = styles;
+    });
+
+    // Close any remaining tags
+    lastStyles = sortStyles(lastStyles, stylePriority);
+    html += closeCurrentTags(lastStyles);
+
+    // Close the block tag
+    html += '</p>';
+  });
+
+  return html;
+}
+
+// Helper function to sort styles based on priority
+function sortStyles(styles, stylePriority) {
+  return stylePriority.filter(style => styles.includes(style));
+}
+
+// Helper function to close current tags
+function closeCurrentTags(lastStyles) {
+  let closingTags = '';
+  lastStyles.reverse().forEach(style => {
+    closingTags += closeTag(style);
+  });
+  return closingTags;
+}
+
+// Helper function to open a tag based on style
+function openTag(style) {
+  if (style === 'SPOILER') {
+    return '<span class="spoiler">';
+  }
+  if (style === 'BOLD') {
+    return '<strong>';
+  }
+  if (style === 'ITALIC') {
+    return '<em>';
+  }
+  if (style === 'UNDERLINE') {
+    return '<u>';
+  }
+  if (style === 'INLINE_CODE') {
+    return '<code>';
+  }
+  if (style === 'STRIKETHROUGH') {
+    return '<s>';
+  }
+  if (style === 'LINK') {
+    return `<a href="${hyperlinkUrl}" style="color: var(--brightcolor)">`;
+  }
+  if (style === 'SUPERSCRIPT') {
+    return '<sup>';
+  }
+  if (style === 'HEADING') {
+    return '<h1>';
+  }
+}
+
+// Helper function to close a tag based on style
+function closeTag(style) {
+  if (style === 'HEADING') {
+    return '</h1>';
+  }
+  if (style === 'SUPERSCRIPT') {
+    return '</sup>';
+  }
+  if (style === 'LINK') {
+    return '</a>';
+  }
+  if (style === 'STRIKETHROUGH') {
+    return '</s>';
+  }
+  if (style === 'INLINE_CODE') {
+    return '</code>';
+  }
+  if (style === 'UNDERLINE') {
+    return '</u>';
+  }
+  if (style === 'ITALIC') {
+    return '</em>';
+  }
+  if (style === 'BOLD') {
+    return '</strong>';
+  }
+  if (style === 'SPOILER') {
+    return '</span>';
+  }
+}
 
   const customStyleMap = {
     INLINE_CODE: {
