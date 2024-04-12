@@ -4,6 +4,7 @@
     background-color: rgb(255, 252, 252);
     border: 1px solid rgb(123, 120, 120);
     overflow-y: scroll;
+  
 }
 
 .sidebarlist{
@@ -49,7 +50,6 @@
     margin-top: -15px;
     margin-bottom: 10px;
     color:rgb(221, 220, 220);
-    
 }
 
 .dropdown{
@@ -81,4 +81,3 @@
     margin-left: auto;
     color: black;
 }
-

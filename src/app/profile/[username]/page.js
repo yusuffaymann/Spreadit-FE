@@ -1,6 +1,5 @@
 "use client";
-
-import React, { use } from "react";
+import React from "react";
 import Post from "../../components/post/Post";
 import Sidebar from "../../components/UI/Sidebar";
 import ToolBar from "../../components/UI/Toolbar";
@@ -47,8 +46,11 @@ function Profile({params : {username}}) {
 
   useEffect(() => {
     async function fetchData() {
-      const cookie = await getCookies();
-      setToken(cookie.value);
+      const cookies = await getCookies();
+      if(cookies !== null){
+        setToken(cookies.access_token);
+        console.log("Yummy Token " + cookies.access_token);
+      }
 
       const user_info = await apiHandler('/user-info', 'GET', "");
       if(user_info.username === username){
