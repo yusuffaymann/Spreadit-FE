@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./CreateCommunityModal.module.css";
 import Toogle from "./Switch";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -6,8 +6,13 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import EighteenUpRatingOutlinedIcon from "@mui/icons-material/EighteenUpRatingOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import apiHandler from "@/app/utils/apiHandler"
+import getCookies from "@/app/utils/getCookies";
+import { redirect } from 'next/navigation'
+
 
 function CreateCommunityModal(props) {
+  const [token , setToken] = useState(null);
   const [nameTaken, setNameTaken] = useState(false);
   const [errors, setErrors] = useState("");
   const [formData, setFormData] = useState({
@@ -36,6 +41,21 @@ function CreateCommunityModal(props) {
   const handleclose = () => {
     props.close();
   };
+
+  async function handleCreate(){
+    const communityName = formData.name
+    const isNSFW = formData.mature
+    let communityType
+    if(formData.public){
+      communityType = "Public"
+    }else if(formData.private){
+      communityType = "Private"
+    } else{
+      communityType = "Restricted"
+    }
+    const response = await apiHandler("/community/create", "POST", {name: communityName, is18plus: isNSFW, communityType: communityType}, token)
+    console.log(response)
+  }
 
   return (
     <div className={styles.modaloverlay}>
@@ -173,6 +193,7 @@ function CreateCommunityModal(props) {
           <button
             className={styles.buttons}
             disabled={!(formData.name && !errors)}
+            onClick={handleCreate}
           >
             Create your community
           </button>
