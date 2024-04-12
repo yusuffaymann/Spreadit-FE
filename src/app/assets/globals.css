@@ -249,3 +249,33 @@ body.modal-open {
   margin-right: 4px;
   text-decoration: none;
 }
+
+.spoiler {
+  background-color: black !important;
+  padding: 5px;
+  border-radius: 5px;
+  color: black !important;
+  display: block;
+  text-decoration: none !important;
+  transition: background-color 0.3s ease;
+  overflow: hidden;
+}
+
+.spoiler a {
+  color: inherit ;
+  transition: color 0.3s ease;
+}
+
+.spoiler:hover a {
+  color: var(--brightcolor) !important;
+}
+
+.spoiler:hover {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: inherit !important;
+  color: inherit !important;
+  display: block;
+  text-decoration: inherit;
+  cursor: pointer;
+}
