@@ -21,7 +21,8 @@ function homepage() {
   const [reachedEnd, setReachedEnd] = useState(false);
   const [postArray,setPostArray] = useState([]);
   const [subArray,setSubArray] = useState([]);
-  const [sortBy,setSortBy] = useState("Best");
+  const [sortBy,setSortBy] = useState("best");
+  const [subscribedArray, setSubscribedArray] = useState([])
 
   function changeSort (newSort) {
     setSortBy(newSort);
@@ -63,47 +64,36 @@ function homepage() {
   }, []);
 
   useEffect(() => {
-    async function getSub() {
-        setLoading(true);
-      try {
-        if(reachedEnd || postArray.length === 0) {
-        const subs = await handler("/community/get-info", "GET");
-        setSubArray(prevSubArray => [...prevSubArray, subs.sub1, subs.sub2, subs.sub3]);//subs.sub1 etc will be changed in integration when we get an actual array from backend same for posts.post1 in getPost
-        }
-  
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    getSub();
-  }, [reachedEnd,sortBy]);
-
-
-  useEffect(() => {
     async function getPost() {
         setLoading(true);
       try {
 
         if(reachedEnd || postArray.length === 0) {
-        const posts = await handler("/posts", "GET");//todo change api endpoint according to sortBy state
-        setPostArray(prevPostArray => [...prevPostArray, posts.post1, posts.post2, posts.post3]);
+        const posts = await handler(`/home/${sortBy}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");//todo change api endpoint according to sortBy state
+        console.log(posts)
+        setPostArray(posts);
+
         //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
+        const subs = await Promise.all(posts.map(async (postObj) => {
+          const data = await handler(`/community/get-info?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+          const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
+          communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png",
+        }
+        console.log(returnedData)
+          return returnedData
+        }))
+        setSubArray(subs)
+
+        const getSubscribed = await Promise.all(posts.map(async (postObj) => {
+          const data = await handler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+        console.log(data)
+          return data
+        }))
+        setSubscribedArray(getSubscribed)
+        
+        
       }
       
-/*         setPostId(post0.postId);
-        setUpVotes(post0.votesUpCount);
-        setDownVotes(post0.votesDownCount);
-        setCommentsCount(post0.commentsCount);
-        setTitle(post0.title);
-        setdescription(post0.content[0]);
-        setSubName(post0.community);
-        setImages(post0.images);
-        setisSpoiler(post0.isSpoiler);
-        setIsNSFW(post0.isNsfw);
-        setPosterUserName(post0.username); */
-  
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -114,7 +104,7 @@ function homepage() {
   }, [reachedEnd,sortBy]);
 
 
-    return (
+    return (!loading &&
         <div className={styles.page}>
         <ToolBar loggedin={true} page={"Spreadit"} />
         {showButton === true && 
@@ -145,19 +135,20 @@ function homepage() {
                 </PostDropDownMenu>
             </button>
           </div>
-          <div className={styles.feedContent}>
+          {!loading && <div className={styles.feedContent}>
               {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
-                  <Post postId={postObject.postId} subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={postObject.images} video={postObject.videos} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={false} />
+                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={[]} video={[]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subscribedArray[index].isSubscribed} />
+                  {console.log(postObject.date)}
                 </div>))}
-          </div>
+          </div>}
         </div>
         {windowWidth > 1150 && <div className={styles.recentPostsGridColumn}> <div className={styles.recentPostsContainer}>
           <RecentPosts />
         </div>
         </div>}
       </div>
-    );
+      );
   }
 
   export default homepage;

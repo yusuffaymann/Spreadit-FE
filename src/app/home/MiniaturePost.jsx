@@ -6,7 +6,7 @@ import SubRedditInfoModal from "../components/post/SubRedditInfoModal";
 import spoilerIcon from "../assets/post-images/mod-icons/spoiler.svg";
 import nsfwIcon from "../assets/post-images/mod-icons/nsfw.svg";
 
-function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video,isNSFW,isSpoiler}) {
+function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPictures,upVotes,comments,video,isNSFW,isSpoiler, isMember}) {
 
     const router = useRouter();
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
@@ -45,9 +45,9 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                 <div className={styles.body}>
                     <div className={styles.header}>
                         <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()} onClick={(e) => {e.stopPropagation();router.push(`/community/${subRedditName}`)}}>
-                            {showSubRedditInfo &&
+                            {true &&
                             <div className={styles.subInfo} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
-                                <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={subRedditBanner} subRedditDescription={subRedditDescription} isMember={false} joined={joined} onJoin={handleJoin}/>
+                                <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={subRedditBanner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={handleJoin}/>
                             </div>}
                             <img className={styles.subRedditPicture}
                                 src={subRedditPicture}
@@ -61,7 +61,7 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                     </div>
                     <div className={styles.title}>{postTitle}</div>
                 </div>
-                {(postPicture !== undefined || video.length !== 0 ) && <div className={styles.media} onClick={(e) => {e.stopPropagation();}} >
+                {(postPictures.length !== 0 || video.length !== 0 ) && <div className={styles.media} onClick={(e) => {e.stopPropagation();}} >
                         {(isSpoiler || isNSFW) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
                         <div className={styles.warningIcon} onClick={(e) => {e.stopPropagation();}} >
                             {isNSFW && <Image 
@@ -78,7 +78,7 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                                         alt="Spoiler" />}
                             </div>
                         <div>
-                            {video.length === 0 && <Image src={postPicture} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
+                            {video.length === 0 && <Image src={postPictures[0]} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
                             {video.length !==0 && <video className={styles.video} title="Posted video" src={convertToEmbedLink(video[0])}  ></video>}
                         </div>
                     </div>}

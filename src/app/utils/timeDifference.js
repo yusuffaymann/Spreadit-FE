@@ -32,15 +32,12 @@ function getTimeDifferenceString(dateString) {
     returnString = `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'}` + returnString;
   }
 
-  // Handle hours
   const diffInHours = differenceInHours(newerDate, olderDate);
+  const diffInDays = differenceInDays(newerDate, olderDate);
+
   if (diffInHours < 24) {
     returnString = `${diffInHours} hour${diffInHours === 1 ? '' : 's'}` + returnString;
-  }
-
-  // Handle days, weeks, months, and years
-  const diffInDays = differenceInDays(newerDate, olderDate);
-  if (diffInDays < 7) {
+  } else if (diffInDays < 7) {
     returnString = `${diffInDays} day${diffInDays === 1 ? '' : 's'}` + returnString;
   } else if (diffInDays < 30) {
     const diffInWeeks = differenceInWeeks(newerDate, olderDate);
