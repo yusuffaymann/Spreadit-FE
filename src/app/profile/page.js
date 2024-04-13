@@ -9,13 +9,12 @@ async function Profile() {
     redirect('/login');
   }
 
-  try{
-    const user_info = await apiHandler('/user-info', 'GET', "");
-  } catch (error) {
-    console.error('Error fetching data:', error);
+  if(cookies.username){
+    redirect(`/profile/${cookies.username}`);
+  }else{
     redirect('/login');
   }
-  redirect(`/profile/${user_info.username}`);
+  
 
   return (
     <div>
