@@ -24,10 +24,10 @@ function GrayOutMenuWrapper({ isOpen, onClose, onSelectWrapper, addFunc }) {
     // Disable scrolling on the body when the modal is open
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      document.body.classList.add("modal-open");
+      document.body.style.pointerEvents = "none";
     } else {
       document.body.style.overflow = "";
-      document.body.classList.remove("modal-open");
+      document.body.style.pointerEvents = "inherit";
     }
   }, [isOpen]); // Only re-run the effect if isOpen changes
 
