@@ -1,23 +1,36 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./DropdownCommunity.module.css";
 
-function DropdownCommunity() {
+function DropdownCommunity({communityName = "announcements",
+communityIcon = "https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png",
+communityMembers = 0}) {
+  const handleRedirect = () => {
+    // Redirect to the desired URL when the div is clicked
+    window.location.href = `https://www.reddit.com/r/${communityName}`;
+  };
+
   return (
-    <div className={`${styles.menuCommunityContainer}`}>
+    <div
+      className={`${styles.menuCommunityContainer}`}
+      onClick={handleRedirect}
+      // Adding tabIndex={0} to make the div focusable
+      tabIndex={0}
+      role="link"
+    >
           <div className={`${styles.menuCommunity}`}>
             <img
               alt="Subreddit Icon"
               role="presentation"
               style={{ backgroundColor: "rgb(252, 71, 30)" }}
               className={`${styles.menuCommunityIcon}`}
-              src="https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png?width=256&amp;s=897f8538fb9de5be72e13970788816a27cd7bd0e"
+              src={communityIcon}
             />
             <div className={`${styles.menuCommunityDetailsFlex}`}>
               <span className={`${styles.menuCommunityDetailsTitle}`}>
-                r/announcements
+                r/{communityName}
               </span>
               <span className={`${styles.menuCommunityDetailsMembers}`}>
-                0 members
+                {communityMembers} {communityMembers === 1 ? "member" : "members"}
               </span>
             </div>
           </div>
