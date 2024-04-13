@@ -130,8 +130,10 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
 
   return (
     <div
-      className={`${styles.grayOut} ${styles.menuPosition}`}
-      onClick={onClose} // Close the menu when clicking on the gray area
+      className={`${styles.grayOut} `}
+    >
+      <div
+      className={` ${styles.menuPosition}`}
     >
       <div
         aria-modal="true"
@@ -179,6 +181,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
           </div>
         </section>
       </div>
+    </div>
     </div>
   );
 }
