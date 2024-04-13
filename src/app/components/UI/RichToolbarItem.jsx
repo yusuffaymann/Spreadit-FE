@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./RichTextEditor.module.css";
+import styles from "./RichToolbarItem.module.css"
 
 function RichToolbarItem({ onClick, ariaLabel, ariaSelected, className, icon })
 {
