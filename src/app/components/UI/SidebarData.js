@@ -7,16 +7,16 @@ export const SidebarData = [
    {
    title: "Home",
    icon: <HomeIcon/> ,
-   link: "/home"
+   link: "home"
    },
    {
       title: "Popular",
       icon: <OutboundOutlinedIcon/> ,
-      link: "/popular"
+      link: "popular"
    },
    {
       title: "All",
       icon: <SignalCellularAltRoundedIcon/> ,
-      link: "/all"
+      link: "all"
    }
 ]

@@ -1,6 +1,7 @@
 import React from "react"
 import AddIcon from '@mui/icons-material/Add';
-import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+import awwpfp from "@/app/assets/awwpfp.jpg";
+import ProfileIcon from "./ProfileIcon.jsx";
 
 export const CommunitiesData = [
    {
@@ -10,14 +11,14 @@ export const CommunitiesData = [
    isfavorite: false
    },
    {
-      title: "community test",
-      icon: < PeopleAltRoundedIcon/>,
-      link: "",
+      title: "aww",
+      icon:<ProfileIcon url={awwpfp}/>,
+      link: "aww",
       isfavorite: false
    },
    {
       title: "community test2",
-      icon: < PeopleAltRoundedIcon/>,
+      icon: <ProfileIcon url={awwpfp}/>,
       link: "",
       isfavorite: false
    }
