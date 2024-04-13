@@ -25,7 +25,7 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 import Button from "./Button";
 
 
-function PostHeader ({postId, userName, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications}) {
+function PostHeader ({postId, isUser, userName,showProfilePicture, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications}) {
 
     const router = useRouter();
     const [showDropdown, setShowDropdown] = useState(false);
@@ -68,16 +68,16 @@ function PostHeader ({postId, userName, profilePicture, subRedditName, subReddit
                 {showSubRedditInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}}>
 
-                    {isProfile && <ProfileInfoModal userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
+                    {isProfile && <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
                     {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/> }
                 </div>}
-                <img className={styles.subRedditPicture}
+                {showProfilePicture&&<img className={styles.subRedditPicture}
                     src={subRedditPicture || profilePicture}
                     width={256}
                     height={256}
                     alt="The subReddit picture "
                     quality={100}
-                />
+                />}
                 
                 <div className={styles.subredditandusername}>
                     <div className={styles.postInfo}>
@@ -95,7 +95,7 @@ function PostHeader ({postId, userName, profilePicture, subRedditName, subReddit
                 </div>}
                 {showProfileInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowProfileInfo(false)} >
-                    <ProfileInfoModal userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />
+                    <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />
                 </div>}
                 <img className={styles.subRedditPicture}
                     src={subRedditPicture}
