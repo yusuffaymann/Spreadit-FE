@@ -35,6 +35,12 @@ async function storeCookies(cookieData) {
             httpOnly: true,
             secure: false, // Set to true if using HTTPS only
           }),
+          'Set-Cookie': cookies().set('avatar', cookieData.user.avatar_url, {
+            path: '/',
+            maxAge: 3600, // Expires in 1 hour
+            httpOnly: true,
+            secure: false, // Set to true if using HTTPS only
+          }),
         },
       });
 }
