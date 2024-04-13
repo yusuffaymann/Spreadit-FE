@@ -42,7 +42,7 @@ function homepage() {
     const scrollY = window.scrollY // Get scroll position
     setShowButton(scrollY > 200);
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    const bottomOfPage = (scrollTop + clientHeight + 800 >= scrollHeight);
+    const bottomOfPage = (scrollTop + clientHeight + 200 >= scrollHeight);
 
     setReachedEnd(bottomOfPage);
   };
@@ -70,8 +70,7 @@ function homepage() {
 
         if(reachedEnd || postArray.length === 0) {
         const posts = await handler(`/home/${sortBy}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");//todo change api endpoint according to sortBy state
-        console.log(posts)
-        setPostArray((prevPostArray) =>  [...prevPostArray, ...posts]);
+        setPostArray(posts);
 
         //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
         const subs = await Promise.all(posts.map(async (postObj) => {
@@ -79,20 +78,16 @@ function homepage() {
           const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
           communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png",
         }
-        console.log(returnedData)
           return returnedData
         }))
-        setSubArray(prevSubArray => [...prevSubArray, ...subs])
+        setSubArray(subs)
 
         const getSubscribed = await Promise.all(posts.map(async (postObj) => {
           const data = await handler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-        console.log(data)
           return data
         }))
-        setSubscribedArray(prevSubscribedArray => [...prevSubscribedArray, ...getSubscribed])
+        setSubscribedArray(getSubscribed)
 
-        const temp = await handler("/posts/624a6962a85ed5a6d6ca9373", "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-        console.log(temp)
         
       }
       
