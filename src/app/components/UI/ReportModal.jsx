@@ -7,11 +7,11 @@ import close from "../../assets/close.svg"
 import back from "../../assets/back.svg"
 
 
-function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
+function StageOne({subRedditPicture, subRedditName,subRedditRules, changeStage, mainReasonIndex, subReasonIndex, closeModal, onReport})
 {
 
-    const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
-    const descriptions=[`Posts, comments, or behavior that breaks ${subRedditName} community rules.`,"Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.","Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.","Promoting hate or inciting violence based on identity or vulnerability.","Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.","Sharing or threatening to share private, personal, or confidential information about someone.",'Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).',"Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services.","Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions.","Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)","Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)","Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform."]
+    const reasons=[`Breaks r/${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
+    const descriptions=[`Posts, comments, or behavior that breaks r/${subRedditName} community rules.`,"Harassing, bullying, intimidating, or abusing an individual or group of people with the result of discouraging them from participating.","Encouraging, glorifying, or inciting violence or physical harm against individuals or groups of people, places, or animals.","Promoting hate or inciting violence based on identity or vulnerability.","Sharing or soliciting content involving abuse, neglect, or sexualization of minors or any predatory or inappropriate behavior towards minors.","Sharing or threatening to share private, personal, or confidential information about someone.",'Sharing, threatening to share, or soliciting intimate or sexually-explicit content of someone without their consent (including fake or "lookalike" pornography).',"Soliciting or facilitating transactions or gifts of illegal or prohibited goods and services.","Impersonating an individual or entity in a misleading or deceptive way. This includes deepfakes, manipulated content, or false attributions.","Content posted to Reddit that infringes a copyright you own or control. (Note: Only the copyright owner or an authorized representative can submit a report.)","Content posted to Reddit that infringes a trademark you own or control. (Note: Only the trademark owner or an authorized representative can submit a report.)","Repeated, unwanted, or unsolicited manual or automated actions that negatively affect redditors, communities, and the Reddit platform."]
     const [selectedReason,setSelectedReason]= useState(mainReasonIndex);
 
     function handleSubmit () {
@@ -71,9 +71,10 @@ function StageOne({subRedditPicture, subRedditName, changeStage, mainReasonIndex
 
 function StageTwo({subRedditRules,mainReasonIndex,mainReason,subReasonIndex,changeStage,closeModal,onReport})
 {
-
+    
+    const subRedditReportReasons = subRedditRules.map(item => item.reportReason);
     const question=["Which community rule does this violate?","Who is the harassment towards?","Who is the threat towards?","Hate","What type of minor abuse or sexualization is this?","Whose personal information is it?","Who is the non-consensual intimate media of?","Prohibited transaction","Who is being impersonated?","Whose copyright is it?","Whose trademark is it?","What type of spam is this?"];
-    const choices=[subRedditRules,["You","Someone else"],["You","Someone else"],[],["Sexual or suggestive content","Predatory or inappropriate behaviour","Content involving physical or emotional abuse or neglect"],["Yours","Someone else's"],["You","Someone else"],[],["You or an individual or entity you represent","Someone else"],["Yours or an individual or entity you represent","Someone else's"],["Yours or an individual or entity you represent","Someone else's"],["Link farming","Unsolicited messaging","Excessive posts or comments in a community","Posting harmful links (malware)","Harmful bots","Other"]]
+    const choices=[subRedditReportReasons,["You","Someone else"],["You","Someone else"],[],["Sexual or suggestive content","Predatory or inappropriate behaviour","Content involving physical or emotional abuse or neglect"],["Yours","Someone else's"],["You","Someone else"],[],["You or an individual or entity you represent","Someone else"],["Yours or an individual or entity you represent","Someone else's"],["Yours or an individual or entity you represent","Someone else's"],["Link farming","Unsolicited messaging","Excessive posts or comments in a community","Posting harmful links (malware)","Harmful bots","Other"]]
     const [selectedChoice,setSelectedChoice] = useState(subReasonIndex);
 
     function handleSubmit () {
@@ -176,7 +177,7 @@ function StageThree({reportedUser,closeModal,onBlock})
 
 function ReportModal({subRedditPicture, subRedditName, subRedditRules, closeModal, onReport, onBlock, userName}) {
 
-    const reasons=[`Breaks ${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
+    const reasons=[`Breaks r/${subRedditName} rules`,"Harassment","Threatening violence","Hate","Minor abuse or sexualization","Sharing personal information","Non-consensual intimate media","Prohibited transaction","Impersonation","Copyright violation","Trademark violation","Spam"];
     const [stage,setStage] = useState(1);
     const [mainReasonIndex,setMainReasonIndex] = useState(-1);
     const [subReasonIndex,setSubReasonIndex] = useState(-1);

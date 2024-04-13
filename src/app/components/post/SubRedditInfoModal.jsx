@@ -6,7 +6,7 @@ import Button from './Button';
 function SubRedditInfoModal ({subRedditBanner, subRedditPicture, subRedditName, subRedditDescription, isMember, joined, onJoin}) {
 
     return (
-        <div className={styles.modal} >
+        <div className={styles.modal} onClick={(e) => {e.stopPropagation();}} >
             {subRedditBanner && 
             <div className={styles.banner} >
                 <Image 
@@ -25,8 +25,7 @@ function SubRedditInfoModal ({subRedditBanner, subRedditPicture, subRedditName, 
                     alt="The subReddit picture "
                     quality={100}
                 />
-                <Link className={styles.subRedditName} href={{ pathname: '/settings/emails', query: { id: '123' } }}>{subRedditName}</Link>
-{/*                 <div className={styles.subRedditName}>{subRedditName}</div> */}
+                <Link className={styles.subRedditName} href={{ pathname: `/community/${subRedditName}`}}>{`r/${subRedditName}`}</Link>
                 {!isMember &&
                     <div className={styles.joinButton} >
                         {!joined && <Button className={styles.joinButton} name={"Join"} onClick={() => onJoin()} active={true} />}

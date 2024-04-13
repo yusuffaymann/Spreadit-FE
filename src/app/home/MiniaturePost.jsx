@@ -1,15 +1,30 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import styles from "./MiniaturePost.module.css";
 import SubRedditInfoModal from "../components/post/SubRedditInfoModal";
 import spoilerIcon from "../assets/post-images/mod-icons/spoiler.svg";
 import nsfwIcon from "../assets/post-images/mod-icons/nsfw.svg";
 
-function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video,isNSFW,isSpoiler}) {
+function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPicture,upVotes,comments,video,isNSFW,isSpoiler}) {
 
+    const router = useRouter();
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [joined,setJoined] = useState(false);
     let timeOut;
+
+    function convertToEmbedLink(videoLink) {
+        // Regular expression to check if the link is a YouTube link
+        const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
+    
+        if (youtubeRegex.test(videoLink)) {
+            // If it's a YouTube link, replace "watch" with "embed"
+            return videoLink.replace("/watch?v=", "/embed/");
+        } else {
+            // If it's not a YouTube link, return the original link
+            return videoLink;
+        }
+    }
 
     function handleJoin() {
         setJoined(!joined);
@@ -25,11 +40,11 @@ function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,sub
 
     return(
 
-        <div className={styles.post} onClick={() => {console.log("redirect")}}>
+        <div className={styles.post} onClick={() => router.push(`/comments/${postId}?isEditing=${false}`)}>
             <div className={styles.content}>
                 <div className={styles.body}>
                     <div className={styles.header}>
-                        <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()} onClick={(e) => {e.stopPropagation();}}>
+                        <div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeave()} onClick={(e) => {e.stopPropagation();router.push(`/community/${subRedditName}`)}}>
                             {showSubRedditInfo &&
                             <div className={styles.subInfo} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
                                 <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={subRedditBanner} subRedditDescription={subRedditDescription} isMember={false} joined={joined} onJoin={handleJoin}/>
@@ -41,7 +56,7 @@ function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,sub
                                 alt="The subReddit picture "
                                 quality={100}
                             />
-                            <div className={styles.subRedditName}>{subRedditName}</div>
+                            <div className={styles.subRedditName}>{`r/${subRedditName}`}</div>
                         </div>  
                     </div>
                     <div className={styles.title}>{postTitle}</div>
@@ -64,7 +79,7 @@ function MiniaturePost ({subRedditName,subRedditPicture,subRedditDescription,sub
                             </div>
                         <div>
                             {video.length === 0 && <Image src={postPicture} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
-                            {video.length !==0 && <video className={styles.video} title="Posted video" src={video[0]} ></video>}
+                            {video.length !==0 && <video className={styles.video} title="Posted video" src={convertToEmbedLink(video[0])}  ></video>}
                         </div>
                     </div>}
                 </div>
