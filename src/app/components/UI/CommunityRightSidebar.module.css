@@ -99,7 +99,7 @@
 .dropdown{
     display: flex;
     font-family: Arial;
-    height: 40px;
+    height: auto;
     margin-bottom: 10px;
 }
 
@@ -114,8 +114,31 @@
     background-color: rgb(232, 232, 232);
 }
 
+.dropdowntitle{
+    margin-left: 20px;
+}
+
 .arrowbutton{
     margin: 0px 0px;
     margin-left: auto;
     color: black;
+}
+
+.sidebarlist {
+    list-style-type: none; 
+    margin: 0;  
+    padding: 0;  
+    width: 100%;
+}
+
+.row {
+    padding: 10px;  
+    width: 120%; 
+    box-sizing: border-box;  
+    cursor: pointer;  
+    margin-left: -5px;
+}
+
+.row:hover {
+    background-color: rgb(232, 232, 232); 
 }
