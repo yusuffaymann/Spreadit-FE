@@ -1,8 +1,11 @@
 .grayOut {
     pointer-events: auto; /* Enable pointer events */
+    user-select:text;
     background-color: rgba(28,28,28,.9);
     display: block;
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 100;
@@ -23,6 +26,7 @@
     top: 0;
     width: 100%;
     z-index: 56;
+    justify-content: center;
 }
 
 .menuBox {

@@ -48,7 +48,15 @@
     }
 
     .mainBoxHeaderItem:hover {
-        background-color: #f2f8fd;
+        background-color: rgb(0 ,121 ,211 ,0.05);
+    }
+
+    .mainBoxHeaderItemFirst {
+        border-top-left-radius: 5px;
+    }
+
+    .mainBoxHeaderItemLast {
+        border-top-right-radius: 5px;
     }
 
     .mainBoxHeaderSelected {

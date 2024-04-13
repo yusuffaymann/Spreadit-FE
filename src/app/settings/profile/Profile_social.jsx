@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import GrayButton from "./components/GrayButton";
 import SocialLink from "./components/SocialLink";
-import GrayOutMenuWrapper from "./components/GrayOutMenu"; // Import the correct component
+import GrayOutMenuWrapper from "./components/GrayOutMenuWrapper"; // Import the correct component
 import social from "../social.js";
 
 

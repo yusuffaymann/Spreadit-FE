@@ -197,6 +197,8 @@ body{
 
 body.modal-open {
   pointer-events: none;
+  user-select: none;
+  overflow: hidden;
 }
 
 .input-error{
