@@ -38,12 +38,24 @@ function Profile({params : {username}}) {
       const cookies = await getCookies();
       if(cookies !== null && cookies.access_token && cookies.username){
         setToken(cookies.access_token);
-        console.log("Yummy Token " + cookies.access_token);
-        setAvatar(cookies.avatar)
-      }
 
-      if(cookies.username === username){
-        setIsMe(true);
+        if(cookies.username === username){
+          setIsMe(true);
+          setAvatar(cookies.avatar)
+        } else{
+          //check if the user exists or not
+          try{
+            console.log("bagib posts 7ad tany")
+            const userInfo = await apiHandler(`/user/profile-info/${username}`, "GET", "", cookies.access_token)
+            setAvatar(userInfo.avatar)
+            setIsMe(false);
+          }
+          catch(err){ 
+            router.push("/404")
+          }
+        }
+      } else {
+        router.push("/login")
       }
 
     }
@@ -52,39 +64,18 @@ function Profile({params : {username}}) {
 
 
 
-  
-
-
-
-  let video1 = "https://www.youtube.com/watch?v=Sklc_fQBmcs";
-  let subRedditRules=["rule 1","read rule 1 again",]
-  video1 = convertToEmbedLink(video1);
-  const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}]
-
-  function convertToEmbedLink(videoLink) {
-    // Regular expression to check if the link is a YouTube link
-    const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
-
-    if (youtubeRegex.test(videoLink)) {
-        // If it's a YouTube link, replace "watch" with "embed"
-        return videoLink.replace("/watch?v=", "/embed/");
-    } else {
-        // If it's not a YouTube link, return the original link
-        return videoLink;
-    }
-}
-
 useEffect(() => {
   async function getPost() {
+    if(token === null) return
     try {
-      console.log("da5alt agib el posts")
-      const posts = await apiHandler(`/posts/upvote`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");//todo change api endpoint according to sortBy state
+      console.log(token)
+      const posts = await apiHandler(`/posts/upvote`, "GET", "", token);//todo change api endpoint according to sortBy state
       console.log(posts)
       
 
       //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
       const subs = await Promise.all(posts.map(async (postObj) => {
-        const data = await apiHandler(`/community/get-info?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+        const data = await apiHandler(`/community/get-info?communityName=${postObj.community}`, "GET", "", token)
         const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
         communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png",
       }
@@ -94,7 +85,7 @@ useEffect(() => {
       
 
       const getSubscribed = await Promise.all(posts.map(async (postObj) => {
-        const data = await apiHandler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+        const data = await apiHandler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", token)
       console.log(data)
         return data
       }))
@@ -109,10 +100,10 @@ useEffect(() => {
     }
   }
   getPost();
-}, []);
+}, [token]);
 
 
-
+  
   return (!loading &&
     <div className={styles.profile_container}>
       <ToolBar page={`u/${username}`} loggedin={true} />
