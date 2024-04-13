@@ -1,6 +1,6 @@
 "use client";
-
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import Post from "../../../components/post/Post";
 import Sidebar from "../../../components/UI/Sidebar";
 import ToolBar from "../../../components/UI/Toolbar";
@@ -26,19 +26,36 @@ function Profile({params : {username}}) {
 
   const [avatar, setAvatar] = React.useState(profilepicture);
   const [isMe, setIsMe] = React.useState(false);
+  const [subscribedArray, setSubscribedArray] = useState([])
+  const [postArray,setPostArray] = useState([]);
+  const [subArray,setSubArray] = useState([]);
+  const [loading,setLoading] = useState(true);
+
+  
 
   useEffect(() => {
     async function fetchData() {
       const cookies = await getCookies();
-      if(cookies !== null){
+      if(cookies !== null && cookies.access_token && cookies.username){
         setToken(cookies.access_token);
-        console.log("Yummy Token " + cookies.access_token);
-      }
 
-      const user_info = await apiHandler('/user-info', 'GET', "");
-      if(user_info.username === username){
-        setIsMe(true);
-        setAvatar(user_info.avatar);
+        if(cookies.username === username){
+          setIsMe(true);
+          setAvatar(cookies.avatar)
+        } else{
+          //check if the user exists or not
+          try{
+            console.log("bagib posts 7ad tany")
+            const userInfo = await apiHandler(`/user/profile-info/${username}`, "GET", "", cookies.access_token)
+            setAvatar(userInfo.avatar)
+            setIsMe(false);
+          }
+          catch(err){ 
+            router.push("/404")
+          }
+        }
+      } else {
+        router.push("/login")
       }
 
     }
@@ -47,89 +64,49 @@ function Profile({params : {username}}) {
 
 
 
-  const [reachedEnd, setReachedEnd] = useState(false);
-  const [postArray,setPostArray] = useState([]);
-  const [subArray,setSubArray] = useState([]);
-  const [sortBy,setSortBy] = useState("Best");
+useEffect(() => {
+  async function getPost() {
+    if(token === null) return
+    try {
+      console.log(token)
+      const posts = await apiHandler(`/posts/upvote`, "GET", "", token);//todo change api endpoint according to sortBy state
+      console.log(posts)
+      
 
-  function changeSort (newSort) {
-    setSortBy(newSort);
-    setPostArray([]);
+      //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
+      const subs = await Promise.all(posts.map(async (postObj) => {
+        const data = await apiHandler(`/community/get-info?communityName=${postObj.community}`, "GET", "", token)
+        const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
+        communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png",
+      }
+      console.log(returnedData)
+        return returnedData
+      }))
+      
+
+      const getSubscribed = await Promise.all(posts.map(async (postObj) => {
+        const data = await apiHandler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", token)
+      console.log(data)
+        return data
+      }))
+      setPostArray(posts);
+      setSubArray(subs)
+      setSubscribedArray(getSubscribed)
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
   }
-
-  function toggleDropdown() {
-    setShowDropdown(prevShowDropdown => !prevShowDropdown);
-}
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleScroll = () => {
-
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    const bottomOfPage = (scrollTop + clientHeight + 200 >= scrollHeight);
-
-    setReachedEnd(bottomOfPage);
-  };
-
-  let video1 = "https://www.youtube.com/watch?v=Sklc_fQBmcs";
-  let subRedditRules=["rule 1","read rule 1 again",]
-  video1 = convertToEmbedLink(video1);
-  const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}]
+  getPost();
+}, [token]);
 
 
-  useEffect(() => {
-    async function getSub() { //this use Effect will probably be moved to the useEffect right below it when we get the actual array from the backend
-      try {
-        if(reachedEnd || postArray.length === 0) {
-        const subs = await apiHandler("/communities", "GET");
-        setSubArray(prevSubArray => [...prevSubArray, subs.sub1, subs.sub2, subs.sub3]);//subs.sub1 etc will be changed in integration when we get an actual array from backend same for posts.post1 in getPost
-        }
   
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    getSub();
-  }, [reachedEnd,sortBy]);
-
-
-  useEffect(() => {
-    async function getPost() {
-      try {
-
-        if(reachedEnd || postArray.length === 0) {
-        const posts = await apiHandler("/posts", "GET");//todo change api endpoint according to sortBy state
-        setPostArray(prevPostArray => [...prevPostArray, posts.post1, posts.post2, posts.post3]);
-        //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
-      }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } 
-    }
-    getPost();
-  }, [reachedEnd,sortBy]);
-
-  function convertToEmbedLink(videoLink) {
-    // Regular expression to check if the link is a YouTube link
-    const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
-
-    if (youtubeRegex.test(videoLink)) {
-        // If it's a YouTube link, replace "watch" with "embed"
-        return videoLink.replace("/watch?v=", "/embed/");
-    } else {
-        // If it's not a YouTube link, return the original link
-        return videoLink;
-    }
-}
-
-
-
-  return (
+  return (!loading &&
     <div className={styles.profile_container}>
-      <ToolBar page={"Profile"} loggedin={true} />
+      <ToolBar page={`u/${username}`} loggedin={true} />
 
       <div className={styles.main_container}>
 
@@ -168,12 +145,10 @@ function Profile({params : {username}}) {
 
             <div className={styles.posts}>
 
-              {postArray.map((postObject, index) => (
-
-                  <div className={styles.post} key={index}>
-                    <Post subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={postObject.images} video={postObject.videos} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={false} />
-                  </div>
-                  ))}
+            {!loading && postArray.map((postObject, index) => (
+                <div className={styles.post} key={index}>
+                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={[]} video={[]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subscribedArray[index].isSubscribed} />
+                </div>))}
 
             </div>
           </div>

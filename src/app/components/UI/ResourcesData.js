@@ -16,61 +16,61 @@ export const ResourcesData = [
    {
    title: "About Spreadit",
    icon: <BreakfastDiningTwoToneIcon/> ,
-   link: ""
+   link: "aboutspreadit"
    },
    {
     title: "Advertise",
     icon: <CampaignOutlinedIcon/> ,
-    link: ""
+    link: "advertise"
     },
      {
      title: "Help",
      icon: <HelpOutlineOutlinedIcon/> ,
-     link: ""
+     link: "help"
      },
      {
      title: "Blog",
      icon: <ImportContactsOutlinedIcon/> ,
-     link: ""
+     link: "blog"
      },
      {
       title: "Careers",
       icon: <BuildOutlinedIcon /> ,
-      link: ""
+      link: "careers"
       },
     {
     title: "Press",
     icon: <CreateOutlinedIcon/> ,
-    link: ""
+    link: "press"
     },
     {
      title: "Communities",
      icon: <PanoramaFishEyeRoundedIcon/> ,
-     link: ""
+     link: "topcommunities"
      },
      {
-      title: "Best od Spreadit",
+      title: "Best of Spreadit",
       icon: <HourglassBottomOutlinedIcon/> ,
-      link: ""
+      link: "bestofspreadit"
       },
       {
       title: "Topics",
       icon: <GridViewOutlinedIcon/> ,
-      link: ""
+      link: "topics"
       },
       {
       title: "Content Policy",
       icon: <ContentCopyIcon/> ,
-      link: ""
+      link: "contentpolicy"
       },
       {
        title: "Privacy Policy",
        icon: <BalanceIcon/> ,
-       link: ""
+       link: "privacypolicy"
        },
        {
        title: "User Agreement",
        icon: <ArticleOutlinedIcon/> ,
-       link: ""
+       link: "useragreement"
        }
  ] 

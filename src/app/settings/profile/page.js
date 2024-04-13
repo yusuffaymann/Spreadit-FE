@@ -10,7 +10,7 @@ import SettingItem from "../../components/UI/SettingItem.jsx";
 import BlueButton from "../../components/UI/BlueButton.jsx";
 import SettingsLayout from "../SettingsLayout.jsx";
 import optionData from "../options.js";
-import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
+import GrayOutMenuWrapper from "./components/GrayOutMenuWrapper.jsx"; // Import the wrapper component
 
 const API_URL = "/settings/profile/";
 const DEBOUNCE_DELAY = 1500;
