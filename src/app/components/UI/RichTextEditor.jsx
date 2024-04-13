@@ -32,7 +32,8 @@ function RichTextEditor({ mediaArray, setMediaArray, content, setContent, rawCon
   const [editorState, setEditorState] = useState(() => {
     // Initialize editor state with the content passed as a prop
     if (rawContent) {
-      return EditorState.createWithContent(rawContent);
+      const contentState = convertFromRaw(rawContent);
+      return EditorState.createWithContent(contentState);
     }
     return EditorState.createEmpty();
   });
@@ -311,7 +312,10 @@ function closeTag(style) {
 
   useEffect(() => {
     const html = convertEditorStateToHTML(editorState);
-    setContent(html);
+    setContent(html);;
+    const contentState = editorState.getCurrentContent();
+    const newRawContent = convertToRaw(contentState);
+    setRawContent(newRawContent);
 }, [editorState]);
 
   const handleBoldToggle = () => {
