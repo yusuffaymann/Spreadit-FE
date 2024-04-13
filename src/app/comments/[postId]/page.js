@@ -2,22 +2,25 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { useState,useEffect } from 'react';
-import ToolBar from "../components/UI/Toolbar";
-import Sidebar from "../components/UI/Sidebar";
-import Comment from "../components/UI/Comment";
-import apiHandler from "../utils/apiHandler";
-import Post from "../components/post/Post"
-import CommentPost from "../components/UI/CommentPost";
-import CommentInput from "../components/UI/CommentInput";
-import RightCommentsSidebar from "../components/UI/RightCommentsSidebar";
+import ToolBar from "../../components/UI/Toolbar";
+import Sidebar from "../../components/UI/Sidebar";
+import Comment from "../../components/UI/Comment";
+import apiHandler from "../../utils/apiHandler";
+import Post from "../../components/post/Post"
+import CommentPost from "../../components/UI/CommentPost";
+import CommentInput from "../../components/UI/CommentInput";
+import RightCommentsSidebar from "../../components/UI/RightCommentsSidebar";
+import { useSearchParams } from "next/navigation";
 
-const Home=()=> {
+const Home=({params : {postId}})=> {
   const UserName="Teachers";
+  const searchParams=useSearchParams();
+  const isedit=searchParams.has("isEditing");
   const [userData, setUserData] = useState(null);
   const [addingComment,setAddingComment]=useState(false);
   const [comments,setComments]=useState(null);
   const [isEditing,setIsEditing]=useState(true);
-  const [postId, setPostId] = useState(0);
+  const [postIdState, setPostIdState] = useState(postId);
   const [posterUserName,setPosterUserName] = useState("");
   const [upVotes,setUpVotes] = useState(0);
   const [downVotes,setDownVotes] = useState(0);
@@ -40,7 +43,9 @@ const Home=()=> {
   const [loading,setLoading] = useState(true);
 
 
-
+useEffect(()=>{
+  setIsEditing(isedit);
+});
 useEffect(() => {
   async function getSub() {
       setLoading(true);
@@ -93,7 +98,7 @@ useEffect(() => {
       const post0 = posts;
       console.log(post0);
     
-      setPostId(post0.postId);
+      setPostIdState(post0.postId);
       setUpVotes(post0.votesUpCount);
       setDownVotes(post0.votesDownCount);
       setCommentsCount(post0.commentsCount);
@@ -117,7 +122,7 @@ useEffect(() => {
 
   const onComment = async (newComment) => {
     try {
-          const response = await apiHandler(`/post/comment/${postId}`, "POST",newComment);
+          const response = await apiHandler(`/post/comment/${postIdState}`, "POST",newComment);
           console.log('New comment added:', response);
           setComments((prev) => [...prev, newComment]);
 
@@ -142,7 +147,7 @@ useEffect(() => {
     }
     async function fetchData2() {
       try {
-        const response = await fetch(`http://localhost:3002/posts/comment/${postId}`);
+        const response = await fetch(`http://localhost:3002/posts/comment/${postIdState}`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -173,11 +178,9 @@ useEffect(() => {
           <Sidebar />
         </div>
         <div className={styles.mainbar}>
-          {isEditing&&(
             <div className={styles.postarea}>
-             <CommentPost postId={postId} description={"link1: https://search.yahoo.com/search?d=%7b%22dn%22%3a%22yk%22%2c%22subdn%22%3a%22software%22%2c%22ykid%22%3a%22236aff65-e6dc-456c-a1c5-cf15b5e12c43%22%7d&fr2=p%3ads%2cv%3aomn%2cm%3asa%2cbrws%3achrome%2cpos%3a2&fr=mcafee&type=E210US91105G0&p=Bootstrap jjjjj link2: https://docs.google.com/document/d/1NPsRCvTLL89FX1jr3JwNyadTWpVnsDFnWzvO_DHhfyg/edit"} userName={posterUserName} title={title} profilePicture={profilePicture} subRedditName={subName} subRedditDescription={subDescription} cakeDate={"1/1/2024"} subRedditPicture={subImage} banner={subBanner} upVotes={upVotes-downVotes} time={"2 mon"} comments={commentsCount} video={video1} isSpoiler={false} isNSFW={isNSFW} images={images} isMember={isMember} pollIsOpen={true} subRedditRules={subRules} pollOptions={pollOptions} Editing={false}/>
+             <CommentPost postId={postIdState} description={"link1: https://search.yahoo.com/search?d=%7b%22dn%22%3a%22yk%22%2c%22subdn%22%3a%22software%22%2c%22ykid%22%3a%22236aff65-e6dc-456c-a1c5-cf15b5e12c43%22%7d&fr2=p%3ads%2cv%3aomn%2cm%3asa%2cbrws%3achrome%2cpos%3a2&fr=mcafee&type=E210US91105G0&p=Bootstrap jjjjj link2: https://docs.google.com/document/d/1NPsRCvTLL89FX1jr3JwNyadTWpVnsDFnWzvO_DHhfyg/edit"} userName={posterUserName} title={title} profilePicture={profilePicture} subRedditName={subName} subRedditDescription={subDescription} cakeDate={"1/1/2024"} subRedditPicture={subImage} banner={subBanner} upVotes={upVotes-downVotes} time={"2 mon"} comments={commentsCount} video={video1} isSpoiler={false} isNSFW={isNSFW} images={images} isMember={isMember} pollIsOpen={true} subRedditRules={subRules} pollOptions={pollOptions} Editing={isEditing}/>
             </div>
-          )}
           <div className={styles.inputarea}>
             {addingComment&&(<CommentInput onComment={onComment} close={()=>{setAddingComment(false)}} buttonDisplay={"comment"} isPost={false} /> )}
             {!addingComment&&(<button className={styles.addcommentbutton} onClick={()=>{setAddingComment(true)}}>Add Comment</button>)}

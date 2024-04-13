@@ -1,4 +1,5 @@
 import React,{ useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./CommentPost.module.css";
 import Image from 'next/image'
 import Header from "../post/PostHeader";
@@ -10,14 +11,16 @@ import close from "../../assets/close.svg";
 import CommentInput from "./CommentInput";
 import nextImage from "../../assets/right-chevron-svgrepo-com.svg"
 import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
+import getCookies from "../../utils/getCookies";
 
 /**
  * Component for displaying the post.
  * @component
  */
 
-function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions,Editing }) {
+function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
 
+    const router = useRouter();
     const [isEditing,setIsEditing]=useState(Editing);
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -25,12 +28,24 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     const [hidden,setHidden] = useState(false);
     const [view, setView] = useState(false);
     const [deleted,setDeleted] = useState(false);
+    const [myPost,setMyPost] = useState(false);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
     const [saved,setSaved] = useState(isSaved);
     const [followed,setFollowed]=useState(isFollowed);
     const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
 
+    useEffect(() => {
+        async function fetchData() {
+          const cookie = await getCookies();
+    
+          if(cookie.username === userName){
+            setMyPost(true);
+          }
+        }
+        fetchData();
+      }, []);
+    
     useEffect(() => {
         setNSFW(isNSFW);
         
@@ -125,6 +140,20 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     }
     };
 
+
+    function convertToEmbedLink(videoLink) {
+        // Regular expression to check if the link is a YouTube link
+        const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
+    
+        if (youtubeRegex.test(videoLink)) {
+            // If it's a YouTube link, replace "watch" with "embed"
+            return videoLink.replace("/watch?v=", "/embed/");
+        } else {
+            // If it's not a YouTube link, return the original link
+            return videoLink;
+        }
+    }
+
     const parseAndStyleLinks = (text) => {
         // Regular expression to find URLs in text
         const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -184,7 +213,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header profilePicture={profilePicture} userName={userName} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={false} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onEdit={()=>setIsEditing(true)} />
+                    <Header profilePicture={profilePicture} userName={userName} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={false} joined={joined} onJoin={handleJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onEdit={()=>setIsEditing(true)} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {isEditing&& <CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={description} buttonDisplay={"Save edits"} isPost={true}/>}
@@ -243,11 +272,11 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                             {video.length !==0 &&
                                 <iframe className={styles.video} title="Posted video"
                                 allowFullScreen
-                                src={video[0]}
+                                src={convertToEmbedLink(video[0])}
                             />}
                         </div>
                         </div>
-                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} />}
+                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} />}
                     <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={upVotes} commentCount={comments} isMod={true} />
                 </div>
                 </div>}

@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useState } from "react";
 import Post from "../../components/post/Post";
 import Sidebar from "../../components/UI/Sidebar";
 import ToolBar from "../../components/UI/Toolbar";
@@ -16,6 +17,7 @@ import getCookies from "../../utils/getCookies";
 import { useEffect } from "react";
 
 import apiHandler from "../../utils/apiHandler"
+import parseTime from "../../utils/timeDifference"
 
 function Profile({params : {username}}) {
   const router = useRouter();
@@ -25,24 +27,7 @@ function Profile({params : {username}}) {
   const [avatar, setAvatar] = React.useState(profilepicture);
   const [isMe, setIsMe] = React.useState(false);
 
-  const images = [
-    "https://media.gettyimages.com/id/1132402360/photo/cat-sleeping-on-her-back.jpg?s=612x612&w=gi&k=20&c=EgyglqP76bDYcs_QAHQ-4ZLI0_Bldwtajfnw7UpE89M=",
-    "https://media.istockphoto.com/id/94056427/photo/adorable-silver-tabby-kitten-sleeping-stretched-out.jpg?s=1024x1024&w=is&k=20&c=E_AZrLVF6sT8sEN43vs-lE5xuAJabayHTQ8O2RH9VTs=",
-    "https://media1.popsugar-assets.com/files/thumbor/fKpl-doFLDJWfxYCz5X1mAr5jRI=/0x0:2003x2003/2011x2011/filters:format_auto():quality(85):extract_cover()/2019/09/23/864/n/1922243/74b4f2275d89208a0f2ad4.00493766_.jpg",
-  ];
-  function convertToEmbedLink(videoLink) {
-    // Regular expression to check if the link is a YouTube link
-    const youtubeRegex =
-      /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
-
-    if (youtubeRegex.test(videoLink)) {
-      // If it's a YouTube link, replace "watch" with "embed"
-      return videoLink.replace("/watch?v=", "/embed/");
-    } else {
-      // If it's not a YouTube link, return the original link
-      return videoLink;
-    }
-  }
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -61,6 +46,88 @@ function Profile({params : {username}}) {
     }
     fetchData();
   }, []);
+
+
+
+  const [reachedEnd, setReachedEnd] = useState(false);
+  const [postArray,setPostArray] = useState([]);
+  const [subArray,setSubArray] = useState([]);
+  const [sortBy,setSortBy] = useState("Best");
+
+  function changeSort (newSort) {
+    setSortBy(newSort);
+    setPostArray([]);
+  }
+
+  function toggleDropdown() {
+    setShowDropdown(prevShowDropdown => !prevShowDropdown);
+}
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScroll = () => {
+
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const bottomOfPage = (scrollTop + clientHeight + 200 >= scrollHeight);
+
+    setReachedEnd(bottomOfPage);
+  };
+
+  let video1 = "https://www.youtube.com/watch?v=Sklc_fQBmcs";
+  let subRedditRules=["rule 1","read rule 1 again",]
+  video1 = convertToEmbedLink(video1);
+  const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}]
+
+
+  useEffect(() => {
+    async function getSub() { //this use Effect will probably be moved to the useEffect right below it when we get the actual array from the backend
+      try {
+        if(reachedEnd || postArray.length === 0) {
+        const subs = await apiHandler("/communities", "GET");
+        setSubArray(prevSubArray => [...prevSubArray, subs.sub1, subs.sub2, subs.sub3]);//subs.sub1 etc will be changed in integration when we get an actual array from backend same for posts.post1 in getPost
+        }
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    getSub();
+  }, [reachedEnd,sortBy]);
+
+
+  useEffect(() => {
+    async function getPost() {
+      try {
+
+        if(reachedEnd || postArray.length === 0) {
+        const posts = await apiHandler("/posts", "GET");//todo change api endpoint according to sortBy state
+        setPostArray(prevPostArray => [...prevPostArray, posts.post1, posts.post2, posts.post3]);
+        //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
+      }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } 
+    }
+    getPost();
+  }, [reachedEnd,sortBy]);
+
+  function convertToEmbedLink(videoLink) {
+    // Regular expression to check if the link is a YouTube link
+    const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
+
+    if (youtubeRegex.test(videoLink)) {
+        // If it's a YouTube link, replace "watch" with "embed"
+        return videoLink.replace("/watch?v=", "/embed/");
+    } else {
+        // If it's not a YouTube link, return the original link
+        return videoLink;
+    }
+}
+
+
 
   return (
     <div className={styles.profile_container}>
@@ -102,71 +169,14 @@ function Profile({params : {username}}) {
             <ProfileBar selected={selected} setSelected={setSelected} isMe={isMe} username={username} />
 
             <div className={styles.posts}>
-              <Post
-                title={"Post example with multiple images"}
-                subRedditName={"r/aww"}
-                subRedditPicture={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
-                }
-                images={images}
-                time={"2 days ago"}
-                upVotes={"11k"}
-                comments={"976"}
-                banner={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
-                }
-                subRedditDescription={
-                  "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
-                }
-              />
-              <Post
-                title={"Post example with multiple images"}
-                subRedditName={"r/aww"}
-                subRedditPicture={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
-                }
-                images={images}
-                time={"2 days ago"}
-                upVotes={"11k"}
-                comments={"976"}
-                banner={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
-                }
-                subRedditDescription={
-                  "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
-                }
-              />
-              <Post
-                title={"Post example with multiple images"}
-                subRedditName={"r/aww"}
-                subRedditPicture={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
-                }
-                images={images}
-                time={"2 days ago"}
-                upVotes={"11k"}
-                comments={"976"}
-                banner={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"
-                }
-                subRedditDescription={
-                  "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things."
-                }
-              />
-              <Post
-                title={"post example with a description only"}
-                subRedditName={"r/aww"}
-                subRedditPicture={
-                  "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd"
-                }
-                description={"the description"}
-                time={"1 day ago"}
-                upVotes={"0"}
-                comments={"35"}
-                banner={
-                  "https://styles.redditmedia.com/t5_2qs0q/styles/bannerBackgroundImage_7glcgg5ymxp21.png"
-                }
-              />
+
+              {postArray.map((postObject, index) => (
+
+                  <div className={styles.post} key={index}>
+                    <Post subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={postObject.images} video={postObject.videos} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={false} />
+                  </div>
+                  ))}
+
             </div>
           </div>
 

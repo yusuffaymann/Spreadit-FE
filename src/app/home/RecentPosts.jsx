@@ -45,7 +45,7 @@ import { useEffect, useState } from "react";
             {loading === false && <div className={styles.body}>
               {postArray.map((postObject, index) => (
                     <div className={styles.post} key={index}>
-                      <MiniaturePost subRedditName={postObject.community} subRedditPicture={postObject.images[1]} subRedditDescription={"asdasda"} subRedditBanner={postObject.images[2]} postTitle={postObject.title} postPicture={postObject.images[0]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} video={postObject.videos} isNSFW={postObject.isNsfw} isSpoiler={postObject.isSpoiler} />
+                      <MiniaturePost postId={postObject.postId} subRedditName={postObject.community} subRedditPicture={postObject.images[1]} subRedditDescription={"asdasda"} subRedditBanner={postObject.images[2]} postTitle={postObject.title} postPicture={postObject.images[0]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} video={postObject.videos} isNSFW={postObject.isNsfw} isSpoiler={postObject.isSpoiler} />
                     </div>))}
             </div>}
         </div>

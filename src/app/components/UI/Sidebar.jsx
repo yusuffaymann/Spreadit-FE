@@ -64,11 +64,6 @@ function Sidebar() {
             <li
               key={key}
               className={styles.row}
-              id={
-                window.location.pathname == val.link
-                  ? styles.active
-                  : styles.notactive
-              }
               onClick={() => {
                 router.push(`/${val.link}`);
               }}
@@ -101,13 +96,8 @@ function Sidebar() {
               <li
                 key={key}
                 className={styles.row}
-                id={
-                  window.location.pathname == val.link
-                    ? styles.active
-                    : styles.notactive
-                }
                 onClick={() => {
-                  window.location.pathname = val.link;
+                  router.push(`/${val.link}`);
                 }}
               >
                 <div id={styles.icon}>{val.icon}</div>{" "}
@@ -139,11 +129,6 @@ function Sidebar() {
               <li
                 key={key}
                 className={styles.row}
-                id={
-                  window.location.pathname == val.link
-                    ? styles.active
-                    : styles.notactive
-                }
                 onClick={() => {
                   router.push(`/${val.link}`);
                 }}
@@ -214,11 +199,6 @@ function Sidebar() {
               <li
                 key={key}
                 className={styles.row}
-                id={
-                  window.location.pathname == val.link
-                    ? styles.active
-                    : styles.notactive
-                }
                 onClick={() => {
                   router.push(`/${val.link}`);
                 }}
@@ -233,5 +213,4 @@ function Sidebar() {
     </div>
   );
 }
-
 export default Sidebar;
