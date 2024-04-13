@@ -79,7 +79,7 @@ function GrayOutMenu({ onClose, onSelectGray, addSocial }) {
       <>
         {social.map(
           (optionSocial, index) =>
-            optionSocial.id === selectedLinkId + 1 && (
+            optionSocial.id === selectedLinkId && (
               <SocialLink
                 key={index}
                 id={index}
