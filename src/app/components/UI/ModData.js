@@ -11,7 +11,7 @@ export const ModData = [
    {
       title: "Mod Mail",
       icon: <MailOutlineIcon/> ,
-      link: "/popular"
+      link: ""
    }
 ]
 

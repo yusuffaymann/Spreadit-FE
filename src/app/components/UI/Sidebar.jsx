@@ -9,13 +9,16 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import CreateCommunityModal from "./CreateCommunityModal";
 import CommunitySidebarItem from "./CommunitySidebarItem";
+import { useRouter } from "next/navigation";
 
 function Sidebar() {
+  const router = useRouter();
   const [showModDropdown, setShowModDropdown] = useState(false);
   const [showRecentDropdown, setShowRecentDropdown] = useState(false);
   const [showCommunitiesDropdown, setShowCommunitiesDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
-  const [showCreateCommunityModal, setShowCreateCommunityModal] = useState(false);
+  const [showCreateCommunityModal, setShowCreateCommunityModal] =
+    useState(false);
 
   function toggleDropdown(dropdown) {
     switch (dropdown) {
@@ -67,7 +70,7 @@ function Sidebar() {
                   : styles.notactive
               }
               onClick={() => {
-                window.location.pathname = val.link;
+                router.push(`/${val.link}`);
               }}
             >
               <div id={styles.icon}>{val.icon}</div>{" "}
@@ -142,7 +145,7 @@ function Sidebar() {
                     : styles.notactive
                 }
                 onClick={() => {
-                  window.location.pathname = val.link;
+                  router.push(`/${val.link}`);
                 }}
               >
                 <div id={styles.icon}>{val.icon}</div>{" "}
@@ -154,7 +157,7 @@ function Sidebar() {
       </div>
 
       <p className={styles.spliter}>_____________________________</p>
-      
+
       <div
         className={styles.dropdown}
         onClick={() => toggleDropdown("communities")}
@@ -187,7 +190,6 @@ function Sidebar() {
         </ul>
       </div>
 
-
       <p className={styles.spliter}>_____________________________</p>
 
       <div
@@ -218,7 +220,7 @@ function Sidebar() {
                     : styles.notactive
                 }
                 onClick={() => {
-                  window.location.pathname = val.link;
+                  router.push(`/${val.link}`);
                 }}
               >
                 <div id={styles.icon}>{val.icon}</div>{" "}
