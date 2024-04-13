@@ -4,6 +4,7 @@ import { Editor, EditorState, Modifier, Entity, convertToRaw, convertFromRaw  } 
 import MediaArea from "@/app/submit/MediaArea";
 import { RichUtils } from "draft-js";
 import draftToHtml from 'draftjs-to-html';
+import RichToolbarItem from "./RichToolbarItem";
 
 
 const DEBOUNCE_DELAY = 600;
@@ -501,7 +502,7 @@ function closeTag(style) {
             <div className={styles.RichTextToolbarPosition}>
               <div className={styles.RichTextToolbarItemFlex}>
               {toolbarItems.map((item, index) => (
-        <ToolbarItem key={index} {...item} />
+        <RichToolbarItem key={index} {...item} />
       ))}
               </div>
             </div>
@@ -555,25 +556,5 @@ function closeTag(style) {
     </div>
   );
 }
-
-function ToolbarItem({ onClick, ariaLabel, ariaSelected, className, icon })
-{
-  return (
-    <span>
-      <button
-        role="button"
-        onClick={onClick}
-        tabIndex="-1"
-        aria-label={ariaLabel}
-        aria-selected={ariaSelected}
-        className={`${styles.RichTextToolbarItem} ${className}`}
-      >
-        <span className={`${styles.miscIcon} icon icon-add`}>
-          {icon}
-        </span>
-      </button>
-    </span>
-  );
-};
 
 export default RichTextEditor;
