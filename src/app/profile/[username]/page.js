@@ -76,12 +76,11 @@ function Profile({params : {username}}) {
 
 useEffect(() => {
   async function getPost() {
-    setLoading(true);
     try {
       console.log("da5alt agib el posts")
       const posts = await apiHandler(`/posts/username/${username}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");//todo change api endpoint according to sortBy state
       console.log(posts)
-      setPostArray(posts);
+      
 
       //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
       const subs = await Promise.all(posts.map(async (postObj) => {
@@ -92,18 +91,17 @@ useEffect(() => {
       console.log(returnedData)
         return returnedData
       }))
-      setSubArray(subs)
+      
 
       const getSubscribed = await Promise.all(posts.map(async (postObj) => {
         const data = await apiHandler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
       console.log(data)
         return data
       }))
+      setPostArray(posts);
+      setSubArray(subs)
       setSubscribedArray(getSubscribed)
 
-      
-   
-    
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -115,7 +113,7 @@ useEffect(() => {
 
 
 
-  return (
+  return (!loading &&
     <div className={styles.profile_container}>
       <ToolBar page={`u/${username}`} loggedin={true} />
 
