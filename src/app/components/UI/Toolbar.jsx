@@ -13,11 +13,14 @@ import settingsicon from "../../assets/gear.svg"
 import logouticon from "../../assets/logout.svg"
 import profilepicture from "../../assets/PP1.png"
 import styles from "./Toolbar.module.css"
+import { redirect } from 'next/navigation'
+import getCookies from "@/app/utils/getCookies";
 
 
 const ToolBar =({page,loggedin})=>{
     const [showList, setShowList] = useState(false);
     const [showModal,setShowModal]=useState(false);
+    const [avatar, setAvatar] = useState(profilepicture);
     const ref = useRef(null);
 
     useEffect(() => {
@@ -34,6 +37,18 @@ const ToolBar =({page,loggedin})=>{
         window.removeEventListener("mousedown", handleOutSideClick);
       };
     }, [ref]);
+
+    useEffect(() => {
+        async function fetchData() {
+          const cookies = await getCookies();
+          if(cookies !== null && cookies.avatar){
+            setAvatar(cookies.avatar)
+          }else{
+            redirect("/login")
+          }
+        }
+        fetchData();
+      }, []);
 
     return(
         <div className={styles.barcontainer}>
@@ -71,14 +86,14 @@ const ToolBar =({page,loggedin})=>{
                         <Link className={styles.link} href="/notifications">
                             <Image src={notificationicon} alt="notification icon" className={styles.icons} />
                         </Link>
-                        <Image src={profilepicture} alt="profile picture" className={styles.profilepicture} onClick={()=> setShowList(!showList)}/> 
+                        <Image src={avatar} width={40} height={40} alt="profile picture" className={styles.profilepicture} onClick={()=> setShowList(!showList)}/> 
                     </div>  
                 )}
                 {showList&&(
                     <ul className={styles.unorderedlist} ref = {ref} >
                         <Link className={styles.link} href="/profile">
                             <li className={styles.listitem} >
-                                <Image src={profilepicture} alt="profile picture" className={styles.icons}/>
+                                <Image src={avatar} width={40} height={40} alt="profile picture" className={styles.icons}/>
                                 <p className={styles.itemlabel}>View profile</p>
                             </li>
                         </Link>
