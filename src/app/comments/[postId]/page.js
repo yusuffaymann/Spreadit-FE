@@ -11,6 +11,7 @@ import CommentPost from "../../components/UI/CommentPost";
 import CommentInput from "../../components/UI/CommentInput";
 import RightCommentsSidebar from "../../components/UI/RightCommentsSidebar";
 import { useSearchParams } from "next/navigation";
+import parseTime from "@/app/utils/timeDifference"
 
 const Home=({params : {postId}})=> {
   const UserName="Teachers";
@@ -19,7 +20,7 @@ const Home=({params : {postId}})=> {
   const isedit=searchParams.has("isEditing");
   const [userData, setUserData] = useState(null);
   const [addingComment,setAddingComment]=useState(false);
-  const [comments,setComments]=useState(null);
+  const [comments,setComments]=useState([]);
   const [isEditing,setIsEditing]=useState(true);
   const [postIdState, setPostIdState] = useState(postId);
   const [posterUserName,setPosterUserName] = useState("");
@@ -97,7 +98,7 @@ useEffect(() => {
   async function getPost() {
       setLoading(true);
     try {
-      const post = await apiHandler(`/posts/624a6962a85ed5a6d6ca9373`, "GET", "","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk" );//todo change api endpoint according to sortBy state
+      const post = await apiHandler(`/posts/${postId}/one`, "GET", "","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk" );//todo change api endpoint according to sortBy state
       console.log(post);
       setThePost(post);
 
@@ -109,6 +110,10 @@ useEffect(() => {
 
         const subscribeData = await apiHandler(`/community/is-subscribed?communityName=${post.community}`, "GET", "", temporaryToken)
         setSubscribe(subscribeData);
+
+        const commentsData = await apiHandler(`/posts/comment/${post._id}?include_replies=true`, "GET", "", temporaryToken)
+        console.log(commentsData)
+        setComments(commentsData.comments)
     
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -131,10 +136,10 @@ useEffect(() => {
     }
 }
 
-  useEffect(() => {
+  /* useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`http://localhost:3002/community/${UserName}`);
+        const response = await fetch(http://localhost:3002/community/${UserName});
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -147,7 +152,7 @@ useEffect(() => {
     }
     async function fetchData2() {
       try {
-        const response = await fetch(`http://localhost:3002/posts/comment/${postIdState}`);
+        const response = await fetch(http://localhost:3002/posts/comment/${postIdState});
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -160,17 +165,12 @@ useEffect(() => {
     }
     fetchData();
     fetchData2();
-  }, []);
-  if (!userData||!comments) {
+  }, []); */
+  if (loading) {
     return <div>Loading...</div>;
   }
-  const {communityName, communityRules, communityDescription,numberofmembers,isJoined,moderators} = userData;
-  const subRedditName="bb";
-  const subRedditPicture="https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd";
-  const banner="https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png";
-  const subRedditDescription="Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things.";
 
-  return (
+  return (!loading &&
     <div>
       <ToolBar page="spreadit"  loggedin={true} />
       <div className={styles.page}>
@@ -179,8 +179,8 @@ useEffect(() => {
         </div>
         <div className={styles.mainbar}>
             <div className={styles.postarea}>
-            <CommentPost postId={thePost._id} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[0]} images={[]} video={[]} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isMember={subscribe.isSubscribed} Editing={isEditing} />
-             {/* <CommentPost postId={postIdState} description={"link1: https://search.yahoo.com/search?d=%7b%22dn%22%3a%22yk%22%2c%22subdn%22%3a%22software%22%2c%22ykid%22%3a%22236aff65-e6dc-456c-a1c5-cf15b5e12c43%22%7d&fr2=p%3ads%2cv%3aomn%2cm%3asa%2cbrws%3achrome%2cpos%3a2&fr=mcafee&type=E210US91105G0&p=Bootstrap jjjjj link2: https://docs.google.com/document/d/1NPsRCvTLL89FX1jr3JwNyadTWpVnsDFnWzvO_DHhfyg/edit"} userName={posterUserName} title={title} profilePicture={profilePicture} subRedditName={subName} subRedditDescription={subDescription} cakeDate={"1/1/2024"} subRedditPicture={subImage} banner={subBanner} upVotes={upVotes-downVotes} time={"2 mon"} comments={commentsCount} video={video1} isSpoiler={false} isNSFW={isNSFW} images={images} isMember={isMember} pollIsOpen={true} subRedditRules={subRules} pollOptions={pollOptions} Editing={isEditing}/> */}
+            <CommentPost postId={thePost._id} profilePicture={thePost.userProfilePic} cakeDate={"1/1/2024"} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[0]} images={[]} video={[]} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isMember={subscribe.isSubscribed} Editing={isEditing} />
+             {/* <CommentPost profilePicture={profilePicture} cakeDate={"1/1/2024"} /> */}
             </div>
           <div className={styles.inputarea}>
             {addingComment&&(<CommentInput onComment={onComment} close={()=>{setAddingComment(false)}} buttonDisplay={"comment"} isPost={false} /> )}
@@ -191,7 +191,7 @@ useEffect(() => {
             <div>
               {comments.map((comment)=>(
               <div>
-                <Comment comment={comment} subRedditName={subName} subRedditPicture={subImage} subRedditRules={subRules}/>
+                <Comment comment={comment} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditRules={theSub.rules}/>
               </div>
               ))}
             </div>
@@ -199,7 +199,7 @@ useEffect(() => {
           {comments.length===0&&(<p>Be the first to add a comment</p>)}
         </div>
         <div className={styles.rightbar}>
-          <RightCommentsSidebar name={subName} description={subDescription} rules={communityRules} members={numberofmembers} isJoined={isJoined} moderators={moderators} />
+          <RightCommentsSidebar name={thePost.community} description={theSub.description} rules={theSub.rules} members={"200K"} isJoined={subscribe.isSubscribed} moderators={[]} />
         </div>
       </div>
     </div>
