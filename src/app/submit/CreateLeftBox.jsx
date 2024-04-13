@@ -31,7 +31,7 @@ function CreateLeftBox({setTitle, title, setUrl, url, spoiler, setSpoiler, nsfw,
       <div className={styles.mainBoxHeader}>
         <div className={styles.mainBoxHeaderFlex}>
           <button
-            className={`${styles.mainBoxHeaderItem} ${
+            className={`${styles.mainBoxHeaderItem} ${styles.mainBoxHeaderItemFirst} ${
               selectedOption === "post" ? styles.mainBoxHeaderSelected : ""
             }`}
             onClick={() => handleOptionClick("post")}
@@ -64,7 +64,7 @@ function CreateLeftBox({setTitle, title, setUrl, url, spoiler, setSpoiler, nsfw,
             Link
           </button>
           <button
-            className={`${styles.mainBoxHeaderItem} ${
+            className={`${styles.mainBoxHeaderItem} ${styles.mainBoxHeaderItemLast} ${
               selectedOption === "poll" ? styles.mainBoxHeaderSelected : ""
             }`}
             onClick={() => handleOptionClick("poll")}
