@@ -2,23 +2,29 @@ import React, { useState, useRef, useEffect } from "react";
 import DropdownCommunity from "./DropdownCommunity";
 import styles from "./CreateDropdownMenu.module.css";
 
-function CreateDropdownMenu() {
+const handleRedirect = () => {
+  // Redirect to the desired URL when the div is clicked
+  window.location.href = "profile";
+};
+
+function CreateDropdownMenu({userName= "Testing",
+userIcon = "https://styles.redditmedia.com/t5_7r9ed6/styles/profileIcon_ljpm97v13fpc1.jpg"}) {
   return (
     <div className={`${styles.createDropdownMenu} ${styles.DropdownMenu}`}>
       <div className={`${styles.DropdownMenuSection}`}>
         <div className={`${styles.userHeader}`}>Your profile</div>
-        <div className={`${styles.menuCommunityContainer}`}>
+        <div className={`${styles.menuCommunityContainer}`} onClick={handleRedirect}>
           <div className={`${styles.menuCommunity}`}>
             <div className={`${styles.userIconPosition}`}>
               <img
                 alt="User avatar"
                 className={`${styles.userIconRadius} ${styles.userIconIdent}
             ${styles.userIconBorder} ${styles.userIconSize}`}
-                src="https://styles.redditmedia.com/t5_7r9ed6/styles/profileIcon_ljpm97v13fpc1.jpg?width=256&amp;height=256&amp;crop=256:256,smart&amp;s=7ea7274e9112af1a5bf84b2549d997c4c627f72b"
+                src={userIcon}
               />
             </div>
             <div className={`${styles.userNameFlex}`}>
-              <span className={`${styles.userNameText}`}>u/Testing</span>
+              <span className={`${styles.userNameText}`}>u/{userName}</span>
             </div>
           </div>
         </div>
@@ -37,7 +43,7 @@ function CreateDropdownMenu() {
             Create New
           </button>
         </div>
-        <DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity />
+        <DropdownCommunity communityMembers={1} /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity />
       </div>
     </div>
   );
