@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { RulesData } from "./RulesData";
 import styles from "./CommunityRightSidebar.module.css";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import RulesRightSidebarItem from "./RulesRightSidebarItem";
 
 function CommunityRightSidebar() {
-  const [showRulesModal, setShowRulesModal] = useState(false);
-
   const [communityData, setCommunityData] = useState({
     communityType: "A subreddit for cute and cuddly pictures",
     description:
@@ -14,11 +11,6 @@ function CommunityRightSidebar() {
     members: "36M",
     rankbysize: "5",
   });
-  const [showDescp, setShowDescp] = useState(false);
-
-  function toggleDropdown() {
-    setShowDescp((prevShowDescp) => !prevShowDescp);
-  }
 
   return (
     <div className={styles.sidebar}>
@@ -48,32 +40,18 @@ function CommunityRightSidebar() {
       <h1 className={styles.sidebartitles}>RULES</h1>
       <br></br>
       <div>
-        <ol className={styles.sidebarlist}>
+        <ul className={styles.sidebarlist}>
           {RulesData.map((val, key) => {
             return (
-              <div className={`${styles.dropdownmenu} $`}>
-                <li key={key} onClick={() => toggleDropdown()}>
-                  {showDescp ? (
-                    <>
-                      <div className={styles.dropdown}>
-                        <p className={styles.dropdowntitle}>{val.title}</p>
-                        <KeyboardArrowUpOutlinedIcon
-                          className={styles.arrowbutton}
-                        />
-                      </div>
-                      <p>{val.description}</p>
-                    </>
-                  ) : (
-                    <div className={styles.dropdown}>
-                      <p className={styles.dropdowntitle}>{val.title}</p>
-                      <KeyboardArrowDownIcon className={styles.arrowbutton} />
-                    </div>
-                  )}
-                </li>
-              </div>
+              <RulesRightSidebarItem
+                title={val.title}
+                description={val.description}
+                key={key}
+                count={key + 1}
+              />
             );
           })}
-        </ol>
+        </ul>
       </div>
 
       <p className={styles.spliter}>_______________________________________</p>
