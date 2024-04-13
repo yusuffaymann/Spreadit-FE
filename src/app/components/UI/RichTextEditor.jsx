@@ -54,73 +54,83 @@ function RichTextEditor({ mediaArray, setMediaArray, content, setContent, rawCon
     setInlineToggled(currentStyle.has("INLINE_CODE"));
     setSuperToggled(currentStyle.has("SUPERSCRIPT"));
     setHeadingToggled(currentStyle.has("HEADING"));
-    console.log(convertEditorStateToHTML(editorState))
   }, [editorState]);
 
-function convertEditorStateToHTML(editorState) {
-  const contentState = editorState.getCurrentContent();
-  const blockMap = contentState.getBlockMap();
-
-  let html = '';
-
-  blockMap.forEach(block => {
-    const text = block.getText();
-    const characterList = block.getCharacterList();
-
-    // Open a new block tag
-    html += '<p>';
-
-    let lastStyles = [];
-
-    // Define style priority
-    const stylePriority = [
-      'SPOILER',
-      'BOLD',
-      'ITALIC',
-      'UNDERLINE',
-      'INLINE_CODE',
-      'STRIKETHROUGH',
-      'LINK',
-      'SUPERSCRIPT',
-      'HEADING'
-    ];
-
-    // Loop through each character in the block
-    text.split('').forEach((char, index) => {
-      const styles = characterList.get(index).getStyle();
-      
-      // Detect style changes
-      const removedStyles = lastStyles.filter(style => !styles.includes(style));
-      const addedStyles = styles.filter(style => !lastStyles.includes(style));
-
-      // Close tags for removed styles
-      if (removedStyles.size > 0 || addedStyles.size > 0) {
-        lastStyles = sortStyles(lastStyles, stylePriority);
-        html += closeCurrentTags(lastStyles);
-
-      stylePriority.forEach(style => {
-        if (styles.includes(style)) {
-          html += openTag(style);
+  function convertEditorStateToHTML(editorState) {
+    const contentState = editorState.getCurrentContent();
+    const blockMap = contentState.getBlockMap();
+  
+    let html = '';
+  
+    const totalBlocks = blockMap.size;
+    let blockIndex = 0;
+  
+    blockMap.forEach(block => {
+      const text = block.getText();
+      const characterList = block.getCharacterList();
+  
+      // Open a new block tag
+      html += '<p>';
+  
+      let lastStyles = [];
+  
+      // Define style priority
+      const stylePriority = [
+        'SPOILER',
+        'BOLD',
+        'ITALIC',
+        'UNDERLINE',
+        'INLINE_CODE',
+        'STRIKETHROUGH',
+        'LINK',
+        'SUPERSCRIPT',
+        'HEADING'
+      ];
+  
+      // Loop through each character in the block
+      text.split('').forEach((char, index) => {
+        const styles = characterList.get(index).getStyle();
+        
+        // Detect style changes
+        const removedStyles = lastStyles.filter(style => !styles.includes(style));
+        const addedStyles = styles.filter(style => !lastStyles.includes(style));
+  
+        // Close tags for removed styles
+        if (removedStyles.size > 0 || addedStyles.size > 0) {
+          lastStyles = sortStyles(lastStyles, stylePriority);
+          html += closeCurrentTags(lastStyles);
+  
+          stylePriority.forEach(style => {
+            if (styles.includes(style)) {
+              html += openTag(style);
+            }
+          });
         }
-      });}
-
-      // Append character
-      html += char;
-
-      // Update current styles
-      lastStyles = styles;
+  
+        // Append character
+        html += char;
+  
+        // Update current styles
+        lastStyles = styles;
+      });
+  
+      // Close any remaining tags
+      lastStyles = sortStyles(lastStyles, stylePriority);
+      html += closeCurrentTags(lastStyles);
+  
+      // Close the block tag
+      html += '</p>';
+      
+      // Add <br> tag if not the last block
+      blockIndex++;
+      if (blockIndex !== totalBlocks) {
+        html += '<br>';
+      }
     });
-
-    // Close any remaining tags
-    lastStyles = sortStyles(lastStyles, stylePriority);
-    html += closeCurrentTags(lastStyles);
-
-    // Close the block tag
-    html += '</p>';
-  });
-
-  return html;
-}
+  
+    return html;
+  }
+  
 
 // Helper function to sort styles based on priority
 function sortStyles(styles, stylePriority) {
@@ -197,6 +207,7 @@ function closeTag(style) {
     return '</span>';
   }
 }
+
 
   const customStyleMap = {
     INLINE_CODE: {
