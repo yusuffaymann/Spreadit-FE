@@ -195,6 +195,12 @@ body{
   line-height: 22px;
 }
 
+body.modal-open {
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+
 .input-error{
   border: 1px solid #ff0000;
 }
