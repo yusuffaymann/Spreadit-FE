@@ -22,7 +22,7 @@ import handler from "@/app/utils/apiHandler";
  * @component
  */
 
-function Post({postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration }) {
+function Post({postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration }) {
 
     const router = useRouter();
     const displayDescription = (video.length === 0 && images.length === 0) ? true : false;
@@ -92,100 +92,176 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     const formattedDescription = parseAndStyleLinks(description);
 
     async function handleJoin() {
+        let response;
         try{
             if(joined){
-                const  response = await handler("/community/unsubscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-                console.log(response)
+                response = await handler("/community/unsubscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
                 setJoined(false);
             }else{
-                const  response = await handler("/community/subscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-                console.log(response)
+                response = await handler("/community/subscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
                 setJoined(true);
             }
+            console.log(response);
         } catch(e){
             console.error("Error fetching Data: " ,e)
         }
-        
-
-
         //api call to join subreddit
     }
 
     async function handleHide() {
-        if(hidden){
-            const  response = await handler(`/posts/${postId}/unhide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-            console.log(response)
-            setHidden(false);
-        }else{
-            const  response = await handler(`/posts/${postId}/hide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-            console.log(response)
-            setHidden(true)
+        let response;
+        try {
+            if(hidden){
+                response = await handler(`/posts/${postId}/unhide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setHidden(false);
+            }else{
+                response = await handler(`/posts/${postId}/hide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setHidden(true)
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
         }
-        
         //api call to hide a post
     }
 
     async function handleDelete () {
-        const response = await handler(`/posts/${postId}`, "DELETE", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
-        setDeleted(true);
+        let response;
+        try {
+            response = await handler(`/posts/${postId}`, "DELETE", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+            setDeleted(true);
+            console.log(response);
+        }  catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to delete a post
     }
 
     async function handleUpVote(vote) {
+        let response;
+        try {
+            if(vote === 1)
+            {
+                response = await handler(`/posts/${postId}/upvote`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+            }
+            else
+            {
+                response = await handler(`/posts/${postId}/downvote`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+            }
+            console.log(response);
+        }  catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
+
         //api call to upvote or down vote
     }
 
     async function handlePollVote(choice) {
-        console.log(choice);
+        let response;
+        try {
+            response = await handler(`/posts/${postId}/poll/vote`, "POST", {selectedOptions: choice}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to vote 
     }
 
     async function handleNSFW() {
+        let response;
+        console.log(`${postId}`)
+        try{
+            if(NSFW){
+                response = await handler(`/posts/${postId}/unnsfw`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setNSFW(false);
+            }else{
+                response = await handler(`/posts/${postId}/nsfw`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setNSFW(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to invert NSFW
     }
 
     async function handleSpoiler() {
+        let response;
+        try{
+            if(spoiler){
+                response = await handler(`/posts/${postId}/unspoiler`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setSpoiler(false);
+            }else{
+                response = await handler(`/posts/${postId}/spoiler`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setSpoiler(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to invert Spoiler
     }
 
     async function handleFollow() {
-        setFollowed(!followed);
-        onFollow();
+        let response;
+        try{
+            if(followed){
+                response = await handler(`/users/unfollow`, "POST",{username:userName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setFollowed(false);
+            }else{
+                response = await handler(`/users/follow`, "POST",{username:userName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setFollowed(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to follow or unfollow a user
     }
 
     async function handleReport(mainReason,subReason) {
-        console.log(subReason);
+        let response;
+        try{
+            response = await handler(`/posts/${postId}/report`, "POST", {reason: mainReason, sureason: subReason}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to report a post
     }
 
     async function handleBlock() {
-        console.log("block");
+        let response;
+        try{
+        response = await handler(`/users/block`, "POST",{username:userName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+        console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to block a user
     }
 
-    async function handleNSFW () {
-        setNSFW(!NSFW);
-        //api call to set one of your posts as nsfw
-    }
-
-    async function handleSpoiler () {
-        setSpoiler(!spoiler);
-        //api call to set one of your posts as spoiler
-    }
-
     async function handleSaved () {
-        setSaved(!saved);
+        let response;
+        try{
+            if(saved){
+                response = await handler(`/posts/${postId}/unsave`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setSaved(false);
+            }else{
+                response = await handler(`/posts/${postId}/save`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                setSaved(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to save a post
-
     }
 
     async function handleReplyNotifications () {
         setReplyNotifications(!sendReplyNotifications);
         //api call to set reply notifications
     }
-
-    console.log(`this is hidden: ${hidden}`)
 
     return (
         <div className={styles.post} onClick={() => deleted ? "" : router.push(`/comments/${postId}?isEditing=${false}`)}>
@@ -229,7 +305,7 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header postId={postId} subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
+                    <Header postId={postId} subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {(!view && (isNSFW || isSpoiler) ) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
