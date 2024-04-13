@@ -1,5 +1,13 @@
 .menuCommunityContainer {
     cursor: pointer;
+    transition: margin 0.1s ease;
+}
+
+.menuCommunityContainer:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    margin:5px;
+    transition: margin 0.15s ease;
 }
 
 
