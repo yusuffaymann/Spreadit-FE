@@ -3,16 +3,13 @@ import styles from "./DropdownCommunity.module.css";
 
 function DropdownCommunity({communityName = "announcements",
 communityIcon = "https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png",
-communityMembers = 0}) {
-  const handleRedirect = () => {
-    // Redirect to the desired URL when the div is clicked
-    window.location.href = `https://www.reddit.com/r/${communityName}`;
-  };
+communityMembers = 0, setCommunity}) {
+
 
   return (
     <div
       className={`${styles.menuCommunityContainer}`}
-      onClick={handleRedirect}
+      onClick={() => setCommunity(communityName)}
       // Adding tabIndex={0} to make the div focusable
       tabIndex={0}
       role="link"

@@ -9,8 +9,15 @@ import Toolbar from "../components/UI/Toolbar.jsx";
 import handler from "@/app/utils/apiHandler.js";
 import CommunityInfoBox from "./CommunityInfoBox.jsx";
 import CommunityRulesBox from "./CommunityRulesBox.jsx";
+import getCookies from "../utils/getCookies.js";
+import { useRouter } from "next/navigation.js";
+
+import awwpfp from "@/app/assets/awwpfp.jpg";
+import awwbanner from "@/app/assets/awwbanner.jpeg";
 
 function Submit({ currentCommunity = "" }) {
+  const router = useRouter();
+  const [token, setToken] = useState("");
   const [community, setCommunity] = useState(currentCommunity);
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -38,9 +45,9 @@ function Submit({ currentCommunity = "" }) {
     useState("Empty Description");
   const [communityDate, setCommunityDate] = useState("Empty Date");
   const [communityBanner, setCommunityBanner] = useState(
-    "example.com/banner.jpg"
+    awwbanner
   );
-  const [communityIcon, setCommunityIcon] = useState("example.com/icon.jpg");
+  const [communityIcon, setCommunityIcon] = useState(awwpfp);
   const [communityType, setCommunityType] = useState("Public");
   const [content, setContent] = useState("");
 
@@ -48,23 +55,33 @@ function Submit({ currentCommunity = "" }) {
 
   const DEBOUNCE_DELAY = 1500;
 
+
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
+        const cookies = await getCookies();
+        if (cookies !== null && cookies.access_token && cookies.username){
+          setToken(cookies.access_token);
+        }
+        else {router.push("/login");}
         // Fetch user preferences
+        if(currentCommunity !== ""){
         const prefsData = await handler(
           `/community/get-info?communityName=${community}`,
-          "GET"
+          "GET",
+          "",
+          cookies.access_token
         );
         setIsCommunityFound(true);
         setCommunityRules(prefsData.rules);
-        setCommunityMembers(prefsData.memberscount);
+        setCommunityMembers(prefsData.membersCount);
         setCommunityDescription(prefsData.description);
         setCommunityDate(prefsData.dateCreated);
-        setCommunityBanner(prefsData.communityBanner);
-        setCommunityIcon(prefsData.image);
+        setCommunityBanner(awwbanner);
+        setCommunityIcon(awwpfp);
         setCommunityType(prefsData.communityType);
+      }
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsCommunityFound(false);
@@ -73,7 +90,6 @@ function Submit({ currentCommunity = "" }) {
         setLoading(false); // Set loading state to false regardless of success or error
       }
     }
-
     fetchData();
   }, []);
 
@@ -81,18 +97,22 @@ function Submit({ currentCommunity = "" }) {
     async function fetchData() {
       try {
         // Fetch user preferences
+        if(community !== ""){
         const prefsData = await handler(
           `/community/get-info?communityName=${community}`,
-          "GET"
+          "GET",
+          "",
+          token
         );
         setIsCommunityFound(true);
         setCommunityRules(prefsData.rules);
-        setCommunityMembers(prefsData.memberscount);
+        setCommunityMembers(prefsData.membersCount);
         setCommunityDescription(prefsData.description);
         setCommunityDate(prefsData.dateCreated);
-        setCommunityBanner(prefsData.communityBanner);
-        setCommunityIcon(prefsData.image);
+        setCommunityBanner(awwbanner);
+        setCommunityIcon(awwpfp);
         setCommunityType(prefsData.communityType);
+      }
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsCommunityFound(false);
@@ -140,20 +160,6 @@ function Submit({ currentCommunity = "" }) {
     setRealVoteOptions(filteredOptions);
   }, [voteOptions]);
 
-  useEffect(() => {
-    console.log(realVoteOptions);
-    console.log(voteOptions);
-  }, [realVoteOptions]);
-
-
-
-  useEffect(() => {
-    console.log({ notify });
-  }, [notify]);
-
-  useEffect(() => {
-    console.log({ mediaArray });
-  }, [mediaArray]);
 
   if (loading) {
     return (
@@ -165,6 +171,61 @@ function Submit({ currentCommunity = "" }) {
     );
   }
 
+  async function createPost(){
+    try{
+      const formData = new FormData();
+      formData.append(`title`, title);
+      formData.append(`community`, community);
+      formData.append(`sendPostReplyNotification`, notify);
+      formData.append(`isNsfw`, nsfw);
+      formData.append(`isSpoiler`, spoiler);
+      
+      if(mediaArray.length > 0){
+        mediaArray.forEach((file, index) => {
+          formData.append(`files`, file);
+          
+        });
+      }
+      if(selectedOption === "post"){
+        formData.append(`content`, content);
+        formData.append(`type`, "Post");
+      }
+      else if(selectedOption === "image"){
+        formData.append(`type`, "Images & Video");
+        formData.append(`fileType`, `image`)
+      }
+      else if(selectedOption === "link"){
+        formData.append(`type`, "Link");
+        formData.append(`link`, url);
+      } else if(selectedOption === "poll"){
+        formData.append(`type`, "Poll");
+        formData.append(`pollVotingLength`, `${voteLength} Days`);
+        formData.append(`pollOptions`, JSON.stringify(realVoteOptions));
+        formData.append(`content`, content);
+      }
+
+      const response = await fetch(`http://localhost:80/posts`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.error}`);
+    }
+    const responseData = await response.json();
+    console.log('New Post added:', responseData);
+
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+
+    
+  }
+
+  console.log(mediaArray)
   return (
     <div>
       <header>
@@ -199,6 +260,7 @@ function Submit({ currentCommunity = "" }) {
               ready={ready}
               content={content}
               setContent={setContent}
+              createPost={createPost}
             />
           </div>
           <div className="createRightFlex">
