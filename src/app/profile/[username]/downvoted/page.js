@@ -21,15 +21,14 @@ import parseTime from "../../../utils/timeDifference"
 
 function Profile({params : {username}}) {
   const router = useRouter();
-  const [selected, setSelected] = React.useState(6);
+  const [selected, setSelected] = React.useState(0);
   const [token, setToken] = React.useState(null);
 
   const [avatar, setAvatar] = React.useState(profilepicture);
   const [isMe, setIsMe] = React.useState(false);
-  const [subscribedArray, setSubscribedArray] = useState([])
   const [postArray,setPostArray] = useState([]);
   const [subArray,setSubArray] = useState([]);
-  const [loading,setLoading] = useState(true);
+  const [reachedEnd, setReachedEnd] = useState(false);
 
   
 
@@ -62,49 +61,60 @@ function Profile({params : {username}}) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const bottomOfPage = (scrollTop + clientHeight + 200 >= scrollHeight);
+
+    setReachedEnd(bottomOfPage);
+  };
 
 
-useEffect(() => {
-  async function getPost() {
-    if(token === null) return
-    try {
-      console.log(token)
-      const posts = await apiHandler(`/posts/downvote`, "GET", "", token);//todo change api endpoint according to sortBy state
-      console.log(posts)
-      
+  useEffect(() => {
 
-      //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
-      const subs = await Promise.all(posts.map(async (postObj) => {
-        const data = await apiHandler(`/community/get-info?communityName=${postObj.community}`, "GET", "", token)
-        const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
-        communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png",
+    async function getPosts() {
+      if(token === null) return;
+      try {
+        if(reachedEnd || postArray.length === 0) {
+          const posts = await apiHandler(`/posts/downvote`, "GET", "", token);//todo change api endpoint according to sortBy state
+          console.log(posts);
+          setPostArray([...postArray, ...posts]);
+        }
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
       }
-      console.log(returnedData)
-        return returnedData
-      }))
-      
+    }
+    getPosts();
+  },[reachedEnd, token]);
 
-      const getSubscribed = await Promise.all(posts.map(async (postObj) => {
-        const data = await apiHandler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", token)
-      console.log(data)
-        return data
-      }))
-      setPostArray(posts);
-      setSubArray(subs)
-      setSubscribedArray(getSubscribed)
-
+  useEffect(() => {
+    async function getRemainingData() {
+      if(token === null) return;
+      try {
+      const subsPromises = postArray.map(async (postObj) => {
+        const subData = await apiHandler(`/community/get-info?communityName=${postObj.community}`, "GET", "", token);
+        const subscribed = await apiHandler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", token);
+        return { ...subData, ...subscribed};
+        /* return { description: subData.description, rules: subData.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd", communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png", ...subscribed}; */
+    });
+      const subs = await Promise.all(subsPromises);
+      setSubArray([...subArray, ...subs]);
     } catch (error) {
       console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
     }
   }
-  getPost();
-}, [token]);
-
+  getRemainingData();
+  },[postArray, token]);
 
   
-  return (!loading &&
+  return (
     <div className={styles.profile_container}>
       <ToolBar page={`u/${username}`} loggedin={true} />
 
@@ -145,9 +155,10 @@ useEffect(() => {
 
             <div className={styles.posts}>
 
-            {!loading && postArray.map((postObject, index) => (
+            {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
-                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]?postObject.content[0]:""} images={[]} video={[]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subscribedArray[index].isSubscribed} />
+                  {/* {console.log(postArray)} */}
+                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index] ? subArray[index].image : ""} subRedditDescription={subArray[index] ? subArray[index].description : ""} banner={subArray[index] ? subArray[index].communityBanner : ""} subRedditRules={subArray[index] ? subArray[index].rules : ""} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[postObject.content.length-1]?postObject.content[postObject.content.length-1]:""} attachments={postObject.attachments} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} isSaved={postObject.isSaved} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subArray[index] ? subArray[index].isSubscribed : true} />
                 </div>))}
 
             </div>
