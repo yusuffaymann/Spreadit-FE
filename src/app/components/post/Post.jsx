@@ -22,17 +22,30 @@ import handler from "@/app/utils/apiHandler";
  * @component
  */
 
-function Post({postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration }) {
+function Post({type, postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, attachments, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration, pollVote }) {
 
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M"
     const router = useRouter();
-    const displayDescription = (video.length === 0 && images.length === 0) ? true : false;
+    const { images, videos } = attachments.reduce(
+        (acc, attachment) => {
+          if (attachment.type === 'image') {
+            acc.images.push(attachment.link);
+          } else if (attachment.type === 'video') {
+            acc.videos.push(attachment.link);
+          }
+          return acc;
+        },
+        { images: [], videos: [] }
+      );
+
+    const displayDescription = (videos.length === 0 && images.length === 0) ? true : false;
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [joined,setJoined] = useState(false);
     const [hidden,setHidden] = useState(false);
     const [view, setView] = useState(false);
     const [deleted,setDeleted] = useState(false);
-    const [myPost,setMyPost] = useState(false);
+    const [votes,setVotes] = useState(upVotes);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
     const [saved,setSaved] = useState(isSaved);
@@ -61,6 +74,10 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     useEffect(() => {
         setSaved(isSaved);
     }, [isSaved]);
+
+    useEffect(() => {
+        setVotes(upVotes);
+    }, [upVotes]);
 
     useEffect(() => {
         setReplyNotifications(sendReplyNotifications);
@@ -95,10 +112,10 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
         let response;
         try{
             if(joined){
-                response = await handler("/community/unsubscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler("/community/unsubscribe", "POST", {communityName: subRedditName}, token)
                 setJoined(false);
             }else{
-                response = await handler("/community/subscribe", "POST", {communityName: subRedditName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler("/community/subscribe", "POST", {communityName: subRedditName}, token)
                 setJoined(true);
             }
             console.log(response);
@@ -112,10 +129,10 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
         let response;
         try {
             if(hidden){
-                response = await handler(`/posts/${postId}/unhide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/unhide`, "POST", "", token)
                 setHidden(false);
             }else{
-                response = await handler(`/posts/${postId}/hide`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/hide`, "POST", "", token)
                 setHidden(true)
             }
             console.log(response);
@@ -128,7 +145,7 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     async function handleDelete () {
         let response;
         try {
-            response = await handler(`/posts/${postId}`, "DELETE", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+            response = await handler(`/posts/${postId}`, "DELETE", "", token)
             setDeleted(true);
             console.log(response);
         }  catch(e){
@@ -142,13 +159,14 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
         try {
             if(vote === 1)
             {
-                response = await handler(`/posts/${postId}/upvote`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+                response = await handler(`/posts/${postId}/upvote`, "POST", "", token);
             }
             else
             {
-                response = await handler(`/posts/${postId}/downvote`, "POST", "", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+                response = await handler(`/posts/${postId}/downvote`, "POST", "", token);
             }
             console.log(response);
+            setVotes(response.votes);
         }  catch(e){
             console.error("Error fetching Data: " ,e)
         }
@@ -159,7 +177,7 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     async function handlePollVote(choice) {
         let response;
         try {
-            response = await handler(`/posts/${postId}/poll/vote`, "POST", {selectedOptions: choice}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+            response = await handler(`/posts/${postId}/poll/vote`, "POST", { selectedOption:choice.option}, token);
             console.log(response);
         } catch(e){
             console.error("Error fetching Data: " ,e)
@@ -169,13 +187,12 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
 
     async function handleNSFW() {
         let response;
-        console.log(`${postId}`)
         try{
             if(NSFW){
-                response = await handler(`/posts/${postId}/unnsfw`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/unnsfw`, "POST","", token)
                 setNSFW(false);
             }else{
-                response = await handler(`/posts/${postId}/nsfw`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/nsfw`, "POST","", token)
                 setNSFW(true);
             }
             console.log(response);
@@ -189,10 +206,10 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
         let response;
         try{
             if(spoiler){
-                response = await handler(`/posts/${postId}/unspoiler`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/unspoiler`, "POST","", token)
                 setSpoiler(false);
             }else{
-                response = await handler(`/posts/${postId}/spoiler`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/spoiler`, "POST","", token)
                 setSpoiler(true);
             }
             console.log(response);
@@ -206,10 +223,10 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
         let response;
         try{
             if(followed){
-                response = await handler(`/users/unfollow`, "POST",{username:userName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/users/unfollow`, "POST",{username:userName}, token)
                 setFollowed(false);
             }else{
-                response = await handler(`/users/follow`, "POST",{username:userName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/users/follow`, "POST",{username:userName}, token)
                 setFollowed(true);
             }
             console.log(response);
@@ -222,7 +239,7 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     async function handleReport(mainReason,subReason) {
         let response;
         try{
-            response = await handler(`/posts/${postId}/report`, "POST", {reason: mainReason, sureason: subReason}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk");
+            response = await handler(`/posts/${postId}/report`, "POST", {reason: mainReason, sureason: subReason}, token);
             console.log(response);
         } catch(e){
             console.error("Error fetching Data: " ,e)
@@ -233,7 +250,7 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     async function handleBlock() {
         let response;
         try{
-        response = await handler(`/users/block`, "POST",{username:userName}, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+        response = await handler(`/users/block`, "POST",{username:userName}, token)
         console.log(response);
         } catch(e){
             console.error("Error fetching Data: " ,e)
@@ -245,10 +262,10 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
         let response;
         try{
             if(saved){
-                response = await handler(`/posts/${postId}/unsave`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/unsave`, "POST","", token)
                 setSaved(false);
             }else{
-                response = await handler(`/posts/${postId}/save`, "POST","", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEyOTQyMzYzfQ.E0PFDU6ISE1SGY6P-Yrew1Mw1wGPOUaUCRybHj09uDk")
+                response = await handler(`/posts/${postId}/save`, "POST","", token)
                 setSaved(true);
             }
             console.log(response);
@@ -264,7 +281,7 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
     }
 
     return (
-        <div className={styles.post} onClick={() => deleted ? "" : router.push(`/comments/${postId}?isEditing=${false}`)}>
+        <div className={styles.post} onClick={() => deleted ? "" : router.push(`/comments/${postId}`)}>
             {isFullScreen && 
                     <div className={styles.fullImage} onClick={(e) => {e.stopPropagation();}} >
                         <button type="button" className={`${styles.changeImage} ${styles.exitFullScreen}`} onClick={() => {setIsFullScreen(false)}}>
@@ -314,14 +331,14 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
                             {(isSpoiler && !isNSFW) && <Button className={styles.viewButton} name={"View spoiler"} onClick={() => setView(true)} active={true} />}
                             {(isSpoiler && isNSFW)  && <Button className={styles.viewButton} name={"View NSFW content & spoilers"} onClick={() => setView(true)} active={true} />}
                         </div>}
-                        {displayDescription && <div className={`${styles.description} ${!view ? styles.view : ""}`} dangerouslySetInnerHTML={{ __html: formattedDescription }} ></div>}
+                        {displayDescription && <div className={`${styles.description} ${(!view && (isNSFW || isSpoiler)) ? styles.view : ""}`} dangerouslySetInnerHTML={{ __html: formattedDescription }} ></div>}
                         {!displayDescription && <div className={styles.media} onClick={(e) => {e.stopPropagation();}}>
-                            {video.length !== 0 &&
-                                <iframe className={styles.video} title="Posted video"
+                            {videos.length !== 0 &&
+                                <iframe className={styles.video} title="Posted videos"
                                 allowFullScreen
-                                src={convertToEmbedLink(video[0])}
+                                src={convertToEmbedLink(videos[0])}
                             />}
-                            {(video.length === 0 && images.length !== 0) &&       
+                            {(videos.length === 0 && images.length !== 0) &&       
                                 <div className={styles.image} onClick={() => setIsFullScreen(true)}  >
                                     <div className={styles.blurBackground}></div>
                                     <div className={styles.backgroundImage} style={{backgroundImage: `url(${images[imageIndex]})`}}></div>
@@ -356,8 +373,8 @@ function Post({postId, title, description, userName, subRedditName, subRedditPic
                             }
                         </div>}
                     </div>
-                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} />}
-                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={upVotes} commentCount={comments} isMod={true} />
+                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} myVote={pollVote} />}
+                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} commentCount={comments} isMod={true} />
                 </div>}
             </div>
         </div>

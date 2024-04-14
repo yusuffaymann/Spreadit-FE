@@ -139,7 +139,7 @@ function PostHeader ({postId, userName, profilePicture, subRedditName, subReddit
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={() => router.push(`/comments/${postId}?isEditing=${true}`)} /> 
+                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={() => router.push(`/comments/${postId}?isEditing`)} /> 
                     {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
                     {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />
