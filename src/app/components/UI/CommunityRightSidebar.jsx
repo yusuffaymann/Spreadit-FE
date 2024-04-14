@@ -3,27 +3,21 @@ import { RulesData } from "./RulesData";
 import styles from "./CommunityRightSidebar.module.css";
 import RulesRightSidebarItem from "./RulesRightSidebarItem";
 
-function CommunityRightSidebar() {
-  const [communityData, setCommunityData] = useState({
-    communityType: "A subreddit for cute and cuddly pictures",
-    description:
-      "Things that make you go AWW! -- like puppies, bunnies, babies, and so on... Feel free to post original pictures and videos of cute things.",
-    members: "36M",
-    rankbysize: "5",
-  });
+function CommunityRightSidebar({communityData}) {
+
 
   return (
     <div className={styles.sidebar}>
-      <h1 className={styles.communitytype}>{communityData.communityType}</h1>
+      <h1 className={styles.communitytype}>{communityData.category}</h1>
       <p className={styles.description}>{communityData.description}</p>
 
       <div className={styles.communityinfo}>
         <div className={styles.communityinfo1}>
-          <h1 className={styles.nums}>{communityData.members}</h1>
+          <h1 className={styles.nums}>{communityData.membersCount}</h1>
           <p className={styles.numstitle}>Members</p>
         </div>
         <div className={styles.communityinfo2}>
-          <h1 className={styles.nums}>{communityData.rankbysize}</h1>
+          <h1 className={styles.nums}>{1}</h1>
           <p className={styles.numstitle}>Rank by size</p>
         </div>
       </div>
@@ -41,7 +35,7 @@ function CommunityRightSidebar() {
       <br></br>
       <div>
         <ul className={styles.sidebarlist}>
-          {RulesData.map((val, key) => {
+          {communityData.rules.map((val, key) => {
             return (
               <RulesRightSidebarItem
                 title={val.title}

@@ -214,3 +214,35 @@ body{
     display: inline-block;
     cursor: pointer;
   }
+
+  .sortButton {
+    position: relative;
+    border: none;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    width: auto;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: black;
+    background-color: transparent;
+  }
+
+
+  .sortButton:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .sortArrow {
+    filter: invert(86%) sepia(16%) saturate(995%) hue-rotate(172deg) brightness(50%) contrast(100%);
+    transform: rotate(180deg);
+    margin-left: 5px;
+  }
+
+  .sort-options{
+    display: flex;
+    gap: 15px;
+  }

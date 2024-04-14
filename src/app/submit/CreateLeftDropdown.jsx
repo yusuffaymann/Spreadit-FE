@@ -3,9 +3,11 @@ import CreateDropdownMenu from "./CreateDropdownMenu";
 import styles from "./CreateLeftDropdown.module.css";
 import getCookies from "../utils/getCookies";
 import handler from "../utils/apiHandler";
+import { useRouter } from "next/navigation";
 import "./Create.css";
 
 export default function CreateLeftDropdown({ current, setter }) {
+  const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
   const [communities, setCommunities] = useState([]);
   const dropdownRef = useRef(null);

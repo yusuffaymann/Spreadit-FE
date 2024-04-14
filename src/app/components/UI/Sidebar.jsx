@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
 import { SidebarData } from "./SidebarData";
 import { ModData } from "./ModData";
@@ -10,6 +10,10 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import CreateCommunityModal from "./CreateCommunityModal";
 import CommunitySidebarItem from "./CommunitySidebarItem";
 import { useRouter } from "next/navigation";
+import getCookies from "@/app/utils/getCookies";
+import handler from "@/app/utils/apiHandler";
+import ProfileIcon from "./ProfileIcon.jsx";
+import AddIcon from '@mui/icons-material/Add';
 
 function Sidebar() {
   const router = useRouter();
@@ -17,8 +21,8 @@ function Sidebar() {
   const [showRecentDropdown, setShowRecentDropdown] = useState(false);
   const [showCommunitiesDropdown, setShowCommunitiesDropdown] = useState(false);
   const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
-  const [showCreateCommunityModal, setShowCreateCommunityModal] =
-    useState(false);
+  const [showCreateCommunityModal, setShowCreateCommunityModal] = useState(false);
+  const [communities, setCommunities] = useState([]);
 
   function toggleDropdown(dropdown) {
     switch (dropdown) {
@@ -44,6 +48,20 @@ function Sidebar() {
         break;
     }
   }
+
+  useEffect( () => {
+    const fetchData = async () => {
+     const cookies = await getCookies();
+     if(cookies === null || !cookies.access_token){router.push("/login")}
+
+     // Fetch user subscribed communities
+     const userData = await handler(`/user/profile-info/${cookies.username}`, "GET", "", cookies.access_token);
+     console.log(userData.subscribedCommunities)
+     setCommunities(userData.subscribedCommunities) 
+   }
+   fetchData();
+ }, []);
+ 
 
   function CreateCommunity() {
     setShowCreateCommunityModal(true);
@@ -160,13 +178,13 @@ function Sidebar() {
         className={`${styles.dropdownmenu} ${showCommunitiesDropdown ? styles.active : styles.inactive}`}
       >
         <ul className={styles.sidebarlist}>
-          {CommunitiesData.map((val, key) => {
+          <CommunitySidebarItem title="Create a Community" icon={<AddIcon />} onCreate={CreateCommunity} />
+          {communities.map((communityObj, key) => {
+            
             return (
               <CommunitySidebarItem
-                title={val.title}
-                icon={val.icon}
-                link={val.link}
-                isfavoriteprop={val.isfavorite}
+                title={communityObj.name}
+                icon={<ProfileIcon url={communityObj.image} />}
                 onCreate={CreateCommunity}
                 key={key}
               />
