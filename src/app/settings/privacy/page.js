@@ -4,8 +4,10 @@ import styles from "../account/page.module.css";
 import Layout from "../SettingsLayout";
 import Blockmute from "../../components/UI/Blockmute";
 import Blockedmuted from "../../components/UI/Blockedmuted";
+import apiHandler from "../../utils/apiHandler";
 
 export default function Home() {
+    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [userData, setUserData] = useState(null); 
     const [blockedUsers, setBlockedUsers] = useState([]); 
     const [mutedCommunities, setMutedCommunities] = useState([]);
@@ -13,17 +15,13 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3002/settings/privacy');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        console.log(data);
-        setUserData(data);
+        const response = await apiHandler(`/settings/safety-privacy`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
+        console.log(response);
+        setUserData(response);
         setBlockedUsers(data.blockedUsers);
         setMutedCommunities(data.mutedCommunities);
       } catch (error) {
-        console.error('Error fetching data:', error.message);
+        console.error('Error', error);
       }
     }
     fetchData();
@@ -46,7 +44,7 @@ export default function Home() {
   }
   const updatePrivacySettings= async (newBlockedUsers,newMutedCommunities)=>{
     try {
-        const response = await apiHandler(`settings/safety-privacy`, "PUT",{ blockedUsers: newBlockedUsers, mutedCommunities: newMutedCommunities });
+        const response = await apiHandler(`/settings/safety-privacy`, "PUT",{ blockedUsers: newBlockedUsers, mutedCommunities: newMutedCommunities },temporaryToken);
         console.log('Privacy settings updated successfully ', response);
     } catch (error) {
       console.error('Error updating privacy settings:', error.message);

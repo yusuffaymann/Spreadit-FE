@@ -19,8 +19,20 @@ import handler from "@/app/utils/apiHandler";
  * @component
  */
 
-function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isMember, isJoined, onJoin, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
+function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, attachments,  upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isMember, isJoined, onJoin, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
 
+    const { images, video } = attachments.reduce(
+        (acc, attachment) => {
+          if (attachment.type === 'image') {
+            acc.images.push(attachment.link);
+          } else if (attachment.type === 'video') {
+            acc.video.push(attachment.link);
+          }
+          return acc;
+        },
+        { images: [], video: [] }
+      );
+    
     const router = useRouter();
     const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isEditing,setIsEditing]=useState(Editing);
@@ -30,6 +42,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     const [view, setView] = useState(false);
     const [deleted,setDeleted] = useState(false);
     const [myPost,setMyPost] = useState(false);
+    const [votes,setVotes] = useState(upVotes);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
     const [saved,setSaved] = useState(isSaved);
@@ -58,6 +71,10 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     useEffect(() => {
         setSaved(isSaved);
     }, [isSaved]);
+
+    useEffect(() => {
+        setVotes(upVotes);
+    }, [upVotes]);
 
     useEffect(() => {
         setReplyNotifications(sendReplyNotifications);
@@ -362,8 +379,8 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                             />}
                         </div>
                         </div>
-                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} />}
-                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={upVotes} commentCount={comments} isMod={true} />
+                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} myVote={pollVote}/>}
+                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} commentCount={comments} isMod={true} />
                 </div>
                 </div>}
             </div>
