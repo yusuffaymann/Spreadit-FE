@@ -14,24 +14,39 @@ import parseTime from "../utils/timeDifference"
 
 function homepage() {
 
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [showTimeSort, setShowTimeSort] = useState(false);
   const [loading,setLoading] = useState(true);
   const [showButton, setShowButton] = useState(false);
   const [reachedEnd, setReachedEnd] = useState(false);
   const [postArray,setPostArray] = useState([]);
   const [subArray,setSubArray] = useState([]);
   const [sortBy,setSortBy] = useState("best");
-  const [subscribedArray, setSubscribedArray] = useState([])
+  const [timeSort,setTimeSort] = useState("today");
+
+  const sortTimes = {
+    now: "Now", today: "Today", week: "This Week", month: "This Month", year: "This Year", alltime: "All Time"
+  }
 
   function changeSort (newSort) {
     setSortBy(newSort);
     setPostArray([]);
   }
 
-  function toggleDropdown() {
-    setShowDropdown(prevShowDropdown => !prevShowDropdown);
-}
+  function changeTimeSort (newSort) {
+    setTimeSort(newSort);
+    setPostArray([]);
+  }
+
+  function toggleSortDropDown() {
+    setShowSort(prevShowSort => !prevShowSort);
+  }
+
+  function toggleTimeSortDropDown() {
+  setShowTimeSort(prevShowTimeSort => !prevShowTimeSort);
+  }
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -63,7 +78,52 @@ function homepage() {
     };
   }, []);
 
+
   useEffect(() => {
+
+    async function getPosts() {
+      setLoading(true);
+      try {
+        if(reachedEnd || postArray.length === 0) {
+          const posts = await handler(`/home/${sortBy}${sortBy === "top" ? `/${timeSort}` : "" }`, "GET", "", token);//todo change api endpoint according to sortBy state
+          console.log(posts);
+          if(sortBy === "new")
+            setPostArray([...postArray, ...posts.posts]);
+          else
+            setPostArray([...postArray, ...posts]);
+        }
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getPosts();
+  },[reachedEnd,sortBy,timeSort]);
+
+  useEffect(() => {
+    async function getRemainingData() {
+      try {
+      const subsPromises = postArray.map(async (postObj) => {
+        const subData = await handler(`/community/get-info?communityName=${postObj.community}`, "GET", "", token);
+        const subscribed = await handler(`/community/is-subscribed?communityName=${postObj.community}`, "GET", "", token);
+        return { ...subData, ...subscribed};
+        /* return { description: subData.description, rules: subData.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd", communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png", ...subscribed}; */
+    });
+      const subs = await Promise.all(subsPromises);
+      setSubArray([...subArray, ...subs]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+  getRemainingData();
+  },[postArray])
+
+
+
+/*   useEffect(() => {
     async function getPost() {
         setLoading(true);
       try {
@@ -98,10 +158,10 @@ function homepage() {
       }
     }
     getPost();
-  }, [reachedEnd,sortBy]);
+  }, [reachedEnd,sortBy]); */
 
 
-    return (!loading &&
+    return (
         <div className={styles.page}>
         <ToolBar loggedin={true} page={"Spreadit"} />
         {showButton === true && 
@@ -116,26 +176,44 @@ function homepage() {
         {windowWidth > 1400 &&<div className={styles.sideBar}> <Sidebar /></div>}
         <div className={styles.feed}>
           <div className={styles.feedHeader}>
-            <button type="button" className={styles.sortButton} onClick={toggleDropdown}>
-              <div style={{color: "rgb(87, 111, 118)"}}>{`${sortBy}`}</div>
+            <button type="button" className={styles.sortButton} onClick={toggleSortDropDown}>
+              <div style={{color: "rgb(87, 111, 118)"}}>{`${sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}`}</div>
               <Image className={styles.sortArrow}
                 src={up}
                 width={12}
                 height={12} 
                 viewBox="0 0 20 20"
                 alt="return to top" />
-                <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    <PostDropDownItem description="Best" onClick={() => changeSort("Best")} />
-                    <PostDropDownItem description="Hot" onClick={() => changeSort("Hot")} />
-                    <PostDropDownItem description="New" onClick={() => changeSort("New")} />
-                    <PostDropDownItem description="Top" onClick={() => changeSort("Top")} />
+                <PostDropDownMenu showDropdown={showSort} setShowDropDown={setShowSort} > 
+                    <PostDropDownItem description="Best" onClick={() => changeSort("best")} />
+                    <PostDropDownItem description="Hot" onClick={() => changeSort("hot")} />
+                    <PostDropDownItem description="New" onClick={() => changeSort("new")} />
+                    <PostDropDownItem description="Top" onClick={() => changeSort("top")} />
                 </PostDropDownMenu>
             </button>
+            {sortBy === "top" && <button type="button" className={styles.sortButton} onClick={toggleTimeSortDropDown}>
+              <div style={{color: "rgb(87, 111, 118)"}}>{`${sortTimes[timeSort]}`}</div>
+              <Image className={styles.sortArrow}
+                src={up}
+                width={12}
+                height={12} 
+                viewBox="0 0 20 20"
+                alt="return to top" />
+                <PostDropDownMenu showDropdown={showTimeSort} setShowDropDown={setShowTimeSort} > 
+                    <PostDropDownItem description="Now" onClick={() => changeTimeSort("now")} />
+                    <PostDropDownItem description="Today" onClick={() => changeTimeSort("today")} />
+                    <PostDropDownItem description="This Week" onClick={() => changeTimeSort("week")} />
+                    <PostDropDownItem description="This Month" onClick={() => changeTimeSort("month")} />
+                    <PostDropDownItem description="This Year" onClick={() => changeTimeSort("year")} />
+                    <PostDropDownItem description="All Time" onClick={() => changeTimeSort("alltime")} />
+                </PostDropDownMenu>
+            </button>}
           </div>
-          {!loading && <div className={styles.feedContent}>
+          {<div className={styles.feedContent}>
               {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
-                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index].image} subRedditDescription={subArray[index].description} banner={subArray[index].communityBanner} subRedditRules={subArray[index].rules} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[0]} images={[]} video={[]} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subscribedArray[index].isSubscribed} />
+                  {/* {console.log(postArray)} */}
+                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index] ? subArray[index].image : ""} subRedditDescription={subArray[index] ? subArray[index].description : ""} banner={subArray[index] ? subArray[index].communityBanner : ""} subRedditRules={subArray[index] ? subArray[index].rules : ""} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[postObject.content.length-1]?postObject.content[postObject.content.length-1]:""} attachments={postObject.attachments} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} isSaved={postObject.isSaved} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subArray[index] ? subArray[index].isSubscribed : true} />
                 </div>))}
           </div>}
         </div>

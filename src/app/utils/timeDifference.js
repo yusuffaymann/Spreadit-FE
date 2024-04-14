@@ -27,15 +27,13 @@ function getTimeDifferenceString(dateString) {
   }
 
   diffInMinutes = Math.round(differenceInMinutes(newerDate, olderDate));
-  
-  if (diffInMinutes < 60) {
-    returnString = `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'}` + returnString;
-  }
 
   const diffInHours = differenceInHours(newerDate, olderDate);
   const diffInDays = differenceInDays(newerDate, olderDate);
 
-  if (diffInHours < 24) {
+  if (diffInMinutes < 60) {
+    returnString = `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'}` + returnString;
+  } else if (diffInHours < 24) {
     returnString = `${diffInHours} hour${diffInHours === 1 ? '' : 's'}` + returnString;
   } else if (diffInDays < 7) {
     returnString = `${diffInDays} day${diffInDays === 1 ? '' : 's'}` + returnString;

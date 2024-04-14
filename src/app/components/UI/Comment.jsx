@@ -11,6 +11,7 @@ import apiHandler from "../../utils/apiHandler"
 import styles from "./Comment.module.css";
 import getCookies from "../../utils/getCookies";
 import { redirect } from 'next/navigation';
+import handler from "../../utils/apiHandler";
 
 const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,showProfilePicture})=>{
     const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
@@ -20,7 +21,7 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
     const [replies,setReplies]=useState(comment.replies);
     const [hidden,setHidden]=useState(comment.is_hidden);
     const [saved,setSaved]=useState(comment.is_saved);
-    const [isFollowed,setIsFollowed]=useState(false);
+    
     const [isUser,setIsUser]=useState(false);
     const [isDeleted,setIsDeleted]=useState(false);
 
@@ -32,21 +33,12 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
                 setIsUser(true);
             }
           }
+          
             
         }
         fetchData();
       }, []);
 
-    
-    const handleFollow=async()=> {
-        setIsFollowed(!isFollowed);
-        try {
-            const response = await apiHandler(`/users/follow`, "POST",comment.user.username);
-            console.log(response);
-          } catch (error) {
-            console.error('Error toggling follow :', error);
-          }
-    }
     
     const onDelete=async()=>{
         try {
@@ -105,10 +97,10 @@ const onComment = async (newReply) => {
             const response = await apiHandler(`/comments/${comment.id}/edit`, "POST",newComment, temporaryToken);
             console.log('edit done:', response);
             comment.content=newComment.content;
-            const newcommentmedia={
+            /*const newcommentmedia={
                 link:newComment.attachments
             }
-            /* console.log()
+             console.log()
             comment.media=[newcommentmedia];
             console.log(comment.media); */
             setIsEditing(false);
@@ -206,17 +198,27 @@ const onComment = async (newReply) => {
         
     }
 
-    function handleReport(mainReason,subReason) {
-        console.log(mainReason);
-        console.log(subReason);
+    async function handleReport(mainReason,subReason) {
+        let response;
+        try{
+            response = await apiHandler(`/comments/${comment.id}/report`, "POST", {reason: mainReason, sureason: subReason}, temporaryToken);
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to report a post
     }
 
-    function handleBlock() {
-        console.log("block");
+    async function handleBlock() {
+        let response;
+        try{
+        response = await apiHandler(`/users/block`, "POST",{username:comment.user.username}, temporaryToken)
+        console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to block a user
     }
-
     const formattedDescription = parseAndStyleLinks(comment.content);
 
     return( 
@@ -224,7 +226,7 @@ const onComment = async (newReply) => {
        
             {!hidden&&!isDeleted&&(
                     <div className={styles.commentbody}>
-                       <PostHeader isUser={isUser} isProfile={true} isInComment={false} showProfilePicture={showProfilePicture} userName={comment.user.username} profilePicture={comment.user.avatar_url} time={comment.created_at} cakeDate={comment.user.cakeDay} isFollowed={isFollowed} onFollow={handleFollow}/>
+                       <PostHeader isUser={isUser} isProfile={true} isInComment={false} showProfilePicture={showProfilePicture} userName={comment.user.username} profilePicture={comment.user.avatar_url} time={comment.created_at} cakeDate={comment.user.created_at}/>
                        {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.content} commentImage={comment.media[0].link} buttonDisplay={"Save edits"} isPost={false}/>)}
                         {!isEditing&&(
                         <div className={styles.commentcontent}>

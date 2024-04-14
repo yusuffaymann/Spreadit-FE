@@ -1,16 +1,18 @@
-import React from "react";
+import React,{useState} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import messageicon from "../../assets/envelope.svg"
 import Changebutton from "./Changebutton"
+import handler from "@/app/utils/apiHandler";
 import styles from "./RightCommentsSidebar.module.css"
 
-const rightCommentsSidebar=({name,description,members,rules,isJoined,moderators})=>{
+const rightCommentsSidebar=({name,description,members,rules,isJoined, onJoin,moderators})=>{
+    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     return(
         <div className={styles.rightsidebar}>
             <div className={styles.sectioninfo}>
-                {!isJoined&&(<Changebutton type={name} description="" display="join" activate={()=>{alert("join this group")}} />)}
-                {isJoined&&(<Changebutton type={name} description="" display="joined" activate={()=>{alert("unjoin this group")}} />)}
+                {!isJoined&&(<Changebutton type={name} description="" display="join" activate={onJoin} />)}
+                {isJoined&&(<Changebutton type={name} description="" display="joined" activate={onJoin} />)}
                 <h1 className={styles.title}>{name}</h1>
                 <p className={styles.description}>{description}</p>
                 <h1 className={styles.title}>{members}</h1>
