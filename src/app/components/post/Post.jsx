@@ -51,6 +51,7 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     const [saved,setSaved] = useState(isSaved);
     const [followed,setFollowed]=useState(isFollowed);
     const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
+    const [myPost, setMyPost] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
