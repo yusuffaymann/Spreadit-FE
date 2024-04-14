@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation.js";
 import FormInfo from "../components/form/FormInfo.jsx";
 import ContinueWith from "../components/UI/ContinueWith";
 import LoginForm from "./LoginForm.jsx";
@@ -11,6 +11,7 @@ import storeCookies from "../utils/storeCookies.js";
 import apiHandler from "../utils/apiHandler.js";
 
 function Login() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -38,8 +39,13 @@ function Login() {
 
   const url = "http://localhost:3002/login";
   const loginSubmit = async (values) => {
+    try {
     const response = await apiHandler("/login", "POST", values);
     await storeCookies(response);
+    } catch (error) {
+      console.log("Error Please Login Again");
+    }
+    router.push("/home");
   };
 
   function HandleRememberMe() {
