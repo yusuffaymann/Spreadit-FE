@@ -5,6 +5,7 @@ import SignupForm from "./SignupForm.jsx";
 import Validation from "../utils/Validation.js"
 import "./Signup.css";
 import Link from "next/link.js";
+import apiHandler from "../utils/apiHandler.js"
 
 
 function Signup() {
@@ -19,11 +20,10 @@ function Signup() {
     async function handleSubmit(event) {
       await event.preventDefault();
       const valErrors = Validation(formData)
-      console.log(valErrors);
       setErrors(valErrors);
       if(valErrors.username === "" && valErrors.password === "" && valErrors.email === "")
       {
-        await loginSubmit(JSON.stringify(formData));
+        await loginSubmit(formData);
       }
     }
 
@@ -31,17 +31,10 @@ function Signup() {
         console.log("data submitted")
     }
 
-    const url = "http://localhost:3001/signup"
+    const url = "http://localhost/signup"
     const loginSubmit = async(values)=>{
-      console.log(values)
-        const options = {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: values
-          }
-           fetch(url, options).then(response => response.json()).then(data => console.log(data.message));
+        const request = await apiHandler("/signup", "POST", values)
+        console.log(request)
         };
 
     const handleGoogleSignIn = async () => {

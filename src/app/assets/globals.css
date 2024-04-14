@@ -197,6 +197,8 @@ body{
 
 body.modal-open {
   pointer-events: none;
+  user-select: none;
+  overflow: hidden;
 }
 
 .input-error{
@@ -206,4 +208,76 @@ body.modal-open {
 .error-message{
   color: #ff0000;
   margin: 0;
+}
+
+
+/* Global Styiling for Home page */
+
+.neutral{
+  background-color: #EAEDEF;
+}
+
+.neutral-hover{
+  background-color: #E2E7E9;
+}
+
+.upvoted{
+  background-color: #D93A00 !important;
+}
+
+.upvoted-hover{
+  background-color: #962900 !important;
+
+}
+
+.downvoted{
+  background-color: #6A5CFF !important;
+}
+
+.downvoted-hover{
+  background-color: #453BB5 !important;
+}
+
+
+
+
+
+.create--link {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--brightcolor);
+  display: block;
+  margin-right: 4px;
+  text-decoration: none;
+}
+
+.spoiler {
+  background-color: black !important;
+  padding: 5px;
+  border-radius: 5px;
+  color: black !important;
+  display: block;
+  text-decoration: none !important;
+  transition: background-color 0.3s ease;
+  overflow: hidden;
+}
+
+.spoiler a {
+  color: inherit ;
+  transition: color 0.3s ease;
+}
+
+.spoiler:hover a {
+  color: var(--brightcolor) !important;
+}
+
+.spoiler:hover {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: inherit !important;
+  color: inherit !important;
+  display: block;
+  text-decoration: inherit;
+  cursor: pointer;
 }

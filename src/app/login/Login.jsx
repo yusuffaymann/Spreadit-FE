@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation.js";
 import FormInfo from "../components/form/FormInfo.jsx";
 import ContinueWith from "../components/UI/ContinueWith";
 import LoginForm from "./LoginForm.jsx";
@@ -6,9 +7,11 @@ import Validation from "../utils/Validation.js";
 import "./Login.css";
 import { signIn } from "next-auth/react";
 import Link from "next/link.js";
-
+import storeCookies from "../utils/storeCookies.js";
+import apiHandler from "../utils/apiHandler.js";
 
 function Login() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -26,36 +29,33 @@ function Login() {
 
   async function handleSubmit(event) {
     await event.preventDefault();
-    const valErrors = Validation(formData)
+    const valErrors = Validation(formData);
     console.log(valErrors);
     setErrors(valErrors);
-    if(valErrors.username === "" && valErrors.password === "")
-    {
-      await loginSubmit(JSON.stringify(formData));
+    if (valErrors.username === "" && valErrors.password === "") {
+      await loginSubmit(formData);
     }
   }
 
-  const url = "http://localhost:3001/login";
+  const url = "http://localhost:3002/login";
   const loginSubmit = async (values) => {
-    console.log(values);
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: values,
-    };
-    fetch(url, options)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    try {
+    const response = await apiHandler("/login", "POST", values);
+    await storeCookies(response);
+    } catch (error) {
+      console.log("Error Please Login Again");
+    }
+    router.push("/home");
   };
 
   function HandleRememberMe() {
     setRememberMe(!rememberMe);
-  };
+  }
 
   const handleGoogleSignIn = async () => {
-    await signIn("google");
+    await signIn("google", {
+      callbackUrl: "http://localhost:3000/redirecting",
+    });
   };
 
   return (
@@ -65,7 +65,7 @@ function Login() {
           title="Log in"
           description="Tell us the username and email address. By continuing, you agree to our User Agreement and Privacy Policy."
         />
-        <ContinueWith handleGoogleSignIn={handleGoogleSignIn}/>
+        <ContinueWith handleGoogleSignIn={handleGoogleSignIn} />
         <p className="or_spliter">______________ OR ______________</p>
         <LoginForm
           handleSubmit={handleSubmit}
@@ -75,10 +75,13 @@ function Login() {
           passwordErrors={errors.password}
           username={formData.username}
           password={formData.password}
-          />
+        />
         <div className="bottom-text">
           New to Spreadit?
-          <Link href="./signup" className="bottom-link"> SIGN UP </Link>
+          <Link href="./signup" className="bottom-link">
+            {" "}
+            SIGN UP{" "}
+          </Link>
         </div>
       </div>
     </div>

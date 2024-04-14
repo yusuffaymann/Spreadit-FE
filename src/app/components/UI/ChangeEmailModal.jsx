@@ -3,6 +3,9 @@ import Image from "next/image";
 import mailp from "../../assets/mailimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./ChangeEmailModal.module.css";
+import apiHandler from "../../utils/apiHandler";
+import { useRouter } from "next/navigation";
+import getCookies from "@/app/utils/getCookies";
 
 /**
  * modal that takes new email and password and checks on them then updates the email
@@ -17,6 +20,20 @@ import  Styles from "./ChangeEmailModal.module.css";
  */
 
 const ChangeEmailmodal =(props)=>{
+  const router = useRouter();
+  const [temporaryToken, setToken] = useState(null);
+    useEffect(() => {
+      async function cookiesfn() {
+        const cookies = await getCookies();
+        if(cookies !== null && cookies.access_token){
+          setToken(cookies.access_token);
+        } else {
+          router.push("/login")
+        }
+
+      }
+      cookiesfn();
+    }, []);
     
     const [currentPassword, setCurrentPassword] = useState('');
     const [isPasswordValid, setIsPasswordValid] = useState(true);
@@ -65,44 +82,30 @@ const ChangeEmailmodal =(props)=>{
 
       async function updateEmail(newEmail) {
         try {
-            const response = await fetch('http://localhost:3002/settings/account', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: newEmail
-                })
-            });
-      
-            if (!response.ok) {
-                throw new Error('Failed to change email');
-            }
-            props.updatetext(newEmail);
-            console.log("email changed to "+newEmail);
+          const response = await apiHandler(`/settings/account`, "PUT", {email:newEmail},temporaryToken );
+          console.log(response);
+          props.updatetext(newEmail);
+          console.log("email changed to "+newEmail);
         } catch (error) {
-            console.error('Error updating email:', error.message);
+          console.error('Error', error);
         }
       } 
-      async function post(url, data) {
+
+      async function post( data) {
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          });
+          const response = await apiHandler(`/settings/layout`, "PUT", {enteredPassword:data},temporaryToken );
+          console.log(response);
           return response;
         } catch (error) {
-          console.error('Error:', error);
-          throw new Error('Failed to make POST request');
+          setIsPasswordValid(false);
+          setCurrentPasswordErrorMessage('Incorrect password.');
+          console.error('Error', error);
         }
       }
       async function checkpassword() {
         try {
-          const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
-          if (!response.ok) {
+          const response = await post(currentPassword);
+          if (response.message!=='Password matches') {
             setIsPasswordValid(false);
             setCurrentPasswordErrorMessage('Incorrect password.');
           }else{

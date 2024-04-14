@@ -1,18 +1,14 @@
-import { signOut } from "firebase/auth";
 import React, {useEffect, useState} from "react";
+import Sidebar from "../components/UI/Sidebar";
+import ToolBar from "../components/UI/Toolbar";
+import "./Home.css";
 
 function Home(){
-
-    const Logout=()=>{
-          localStorage.clear()
-          window.location.reload()
-          
-    }
-
     return (
-        <div>
+        <div className="home">
+            <ToolBar/>
+            <Sidebar/>
             <h1>homepage</h1>
-            <button onClick={Logout}>Logout</button>
         </div>
     )
 }

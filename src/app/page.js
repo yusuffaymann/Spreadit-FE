@@ -1,13 +1,33 @@
 "use client"
 
-import Image from "next/image";
-import Layout from "./settings/SettingsLayout";
-import Toogle from "./components/UI/Switch";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import getCookies from "./utils/getCookies";
+import Post from "./components/Post/Post"
+import ReportModal from "./components/UI/ReportModal";
+import handler from "./utils/apiHandler";
+import DeletePost from "./components/Post/DeletePostModal";
 
-export default function Home() {
+function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchData() {
+      const cookies = await getCookies();
+      if(cookies === null || !cookies.access_token){
+        router.push("/login")
+      }else{
+        router.push("/home")
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div>
-      <h1>Hello World</h1>
-    </div>
+
+      </div>
   );
 }
+
+export default Home;

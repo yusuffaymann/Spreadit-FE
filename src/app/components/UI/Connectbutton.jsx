@@ -4,6 +4,9 @@ import Image from "next/image";
 import mailp from "../../assets/mailimage.png"
 import googlep from "../../assets/Google.png"
 import Styles from "./Connectbutton.module.css"
+import apiHandler from "../../utils/apiHandler"
+import { useRouter } from "next/navigation";
+import getCookies from "@/app/utils/getCookies";
 
 /**
  * connect/disconnect button to google account
@@ -27,6 +30,21 @@ import Styles from "./Connectbutton.module.css"
  */
 
 const Connectbutton=(props)=>{
+  const router = useRouter();
+    const [temporaryToken, setToken] = useState(null);
+    useEffect(() => {
+      async function cookiesfn() {
+        const cookies = await getCookies();
+        if(cookies !== null && cookies.access_token){
+          setToken(cookies.access_token);
+        } else {
+          router.push("/login")
+        }
+  
+      }
+      cookiesfn();
+    }, []);
+    //const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [currentPassword, setCurrentPassword] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
@@ -53,25 +71,21 @@ const Connectbutton=(props)=>{
             setIsFormValid(true);
           }
       }
-      async function post(url, data) {
+      async function post(data) {
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          });
+          const response = await apiHandler(`/settings/layout`, "PUT", {enteredPassword:data},temporaryToken );
+          console.log(response);
           return response;
         } catch (error) {
-          console.error('Error:', error);
-          throw new Error('Failed to make POST request');
+          console.error('Error', error);
+          setIsPasswordValid(false);
+          setPasswordErrorMessage('Incorrect password.');
         }
       }
       async function checkpassword() {
         try {
-          const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
-          if (!response.ok) {
+          const response = await post(currentPassword);
+          if (response.message!=='Password matches') {
             setIsPasswordValid(false);
             setPasswordErrorMessage('Incorrect password.');
           }else{

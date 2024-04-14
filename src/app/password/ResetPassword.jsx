@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import FormInfo from "../components/form/FormInfo.jsx";
 import BottomHelp from "../components/UI/BottomHelp.jsx";
 import submitToApi from "../utils/submitToApi.js";
+import apiHandler from "../utils/apiHandler.js"
 import { useRouter } from "next/navigation";
 import Validation from "../utils/Validation.js";
 import PasswordForm from "./PasswordForm";
@@ -24,7 +25,7 @@ function ResetPassword() {
     const errors = Validation(formData);
     setValidationErrors(errors);
     if(errors.username === "" && errors.email === ""){
-    const responseData = await submitToApi(url, "POST", formData);
+    const responseData = await apiHandler("/forgot-password", "POST", formData);
     await console.log(responseData);
     await setFormData({ username: "", email: "" });
     if (responseData.message) {

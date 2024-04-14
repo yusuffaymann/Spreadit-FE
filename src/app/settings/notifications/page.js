@@ -9,6 +9,7 @@ import styles from "../emails_messages_notifications.module.css"
 
 export default function Notification () {
 
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M"
     const [mentions, setMentions] = useState(false); // Assuming default value is false
     const [comments, setComments] = useState(false); // Assuming default value is false
     const [upvotesComments, setUpvotesComments] = useState(false); // Assuming default value is false
@@ -25,7 +26,7 @@ export default function Notification () {
             setLoading(true);
           try {
             // Fetch user preferences
-            const prefsData = await handler("/settings/notifications", "GET")
+            const prefsData = await handler("/settings/notifications", "GET","", token)
             setMentions(prefsData.mentions);
             setComments(prefsData.comments);
             setUpvotesPosts(prefsData.upvotesPosts);
@@ -59,7 +60,7 @@ export default function Notification () {
         
         try {
           // Fetch user preferences
-          const prefsData = await handler("/settings/notifications", "PUT", newPrefsData);
+          const prefsData = await handler("/settings/notifications", "PUT", newPrefsData, token);
           console.log(prefsData);
     
         } catch (error) {

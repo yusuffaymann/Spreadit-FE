@@ -23,15 +23,16 @@
  * return (handler(url, method, body));
  */
 
-async function handler(url, method, body) {
+async function handler(url, method, body, token="") {
     try {
-      const base_url = 'http://localhost:3002';
-  
+      const base_url = 'http://localhost:80';
+      const headers = token !== "" ? {"Content-Type": "application/json","Authorization": `Bearer ${token}`} : {"Content-Type": "application/json"}
+
   
       // Conditionally include the body only when it's provided and the method is not 'GET'
       const requestOptions = {
         method: `${method}`,
-        headers: {},
+        headers: headers,
         body: method !== ('GET' || 'DELETE') && body ? JSON.stringify(body) : undefined
       };
   

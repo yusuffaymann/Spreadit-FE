@@ -10,7 +10,7 @@ import SettingItem from "../../components/UI/SettingItem.jsx";
 import BlueButton from "../../components/UI/BlueButton.jsx";
 import SettingsLayout from "../SettingsLayout.jsx";
 import optionData from "../options.js";
-import GrayOutMenuWrapper from "./components/GrayOutMenu.jsx"; // Import the wrapper component
+import GrayOutMenuWrapper from "./components/GrayOutMenuWrapper.jsx"; // Import the wrapper component
 
 const API_URL = "/settings/profile/";
 const DEBOUNCE_DELAY = 1500;
@@ -33,14 +33,13 @@ function Profile() {
   const [displayName, setDisplayName] = useState(""); // Assuming default value is false
   const [about, setAbout] = useState(""); // Assuming default value is false
   const [socialLinks, setSocialLinks] = useState([]);
-  const [counter, setCounter] = useState(0);
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [bannerUrl, setBannerUrl] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [banner, setBanner] = useState("");
   const [clearHistory, setClearHistory] = useState(false);
   const [loading, setLoading] = useState(true); // Loading indicator
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData() {  
       setLoading(true);
       try {
         // Fetch user preferences
@@ -51,8 +50,8 @@ function Profile() {
         setActiveVisibility(prefsData.activeInCommunityVisibility);
         setDisplayName(prefsData.displayName);
         setAbout(prefsData.about);
-        setAvatarUrl(prefsData.profilePicture);
-        setBannerUrl(prefsData.banner);
+        setAvatar(prefsData.profilePicture);
+        setBanner(prefsData.banner);
         setSocialLinks(prefsData.socialLinks); // Assuming sociallinks is the array containing social links
         setClearHistory(prefsData.clearHistory);
         /*
@@ -86,8 +85,8 @@ function Profile() {
       activeInCommunityVisibility: activeVisibility,
       displayName: displayName,
       about: about,
-      profilePicture: avatarUrl,
-      banner: bannerUrl,
+      profilePicture: avatar,
+      banner: banner,
       socialLinks: socialLinks,
       clearHistory: clearHistory,
     };
@@ -109,8 +108,8 @@ function Profile() {
     allowFollow,
     contentVisibility,
     activeVisibility,
-    avatarUrl,
-    bannerUrl,
+    avatar,
+    banner,
     socialLinks,
     clearHistory,
   ]);
@@ -195,16 +194,14 @@ function Profile() {
    * However, when `socialLinks` are loaded from the API, they werent accounted for, so if for example you had previously saved 5 links then reloaded
    * , you will find yourself able to add up to 10 links in the page
    * 
-   * @param {number} id      `socialLink` ID
-   * @param {string} name      `socialLink` display name
+   * @param {number} platform      `socialLink` platform
    * @param {string} url      `socialLink` url
    * @param {string} logo      `socialLink` logo hyperlink
    */
-  const addSocialLink = (id, name, url, logo) => {
-    if (counter < MAX_SOCIAL_LINKS) {
+  const addSocialLink = (platform, url, displayName) => {
+    if (socialLinks.length < MAX_SOCIAL_LINKS) {
       // Spread the existing socialLinks array and add the new object to it
-      setSocialLinks([...socialLinks, { id, name, url, logo }]);
-      setCounter(counter + 1);
+      setSocialLinks([...socialLinks, { platform, url, displayName }]);
     }
   };
 
@@ -220,14 +217,13 @@ function Profile() {
    * This means for example, if you had 5 links of the same type (same `id`), then deleted one of them, they will all get deleted, but the `counter` will
    * only decrement from 5 to 4, thus if you add another link, you will find the "add link" button disabled due to the `counter` actually being set to 5
    * 
-   * @param {number} id      `socialLink` ID to be deleted
+   * @param {number} myIndex      `socialLink` index to be deleted
    */
-  const deleteSocialLink = (id) => {
+  const deleteSocialLink = (myIndex) => {
     // Filter out the social link with the given id
-    const updatedSocialLinks = socialLinks.filter((link) => link.id !== id);
+    const updatedSocialLinks = socialLinks.filter((link,index) => index !== myIndex);
     // Update the state with the new array
     setSocialLinks(updatedSocialLinks);
-    setCounter(counter - 1);
   };
 
   if (loading) {
@@ -272,12 +268,11 @@ function Profile() {
               addSocialLink={addSocialLink}
               deleteSocialLink={deleteSocialLink}
               socialLinks={socialLinks}
-              counter={counter}
             />
             <h3 className="uppercase-h3-description">Images</h3>
             <ProfileImages
-              setAvatarUrl={setAvatarUrl}
-              setBannerUrl={setBannerUrl}
+              setAvatar={setAvatar}
+              setBanner={setBanner}
             />
             <h3 className="uppercase-h3-description">Profile Category</h3>
             {optionData.map(
