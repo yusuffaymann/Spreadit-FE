@@ -21,9 +21,9 @@ const rightCommentsSidebar=({name,description,members,rules,isJoined, onJoin,mod
             <div className={styles.sectioninfo}>
                 <p className={styles.description}>RULES</p>
                 <ol className={styles.orderedlist}>
-                    {rules.map((item, index) => (
+                    {rules.map((rule, index) => (
                     <li className={styles.listitem} key={index} >
-                        {item}
+                        {rule.title}
                     </li>
                     ))}
                 </ol>
