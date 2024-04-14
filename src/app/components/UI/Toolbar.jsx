@@ -77,7 +77,7 @@ const ToolBar =({page,loggedin})=>{
                         <Link className={styles.link} href="/chats">
                             <Image src={chaticon} alt="chat icon" className={styles.icons} />
                         </Link>
-                        <Link className={styles.link} href="/createpost">
+                        <Link className={styles.link} href="/submit">
                             <div className={styles.createbutton} >
                                 <Image src={createicon} className={styles.icons} />
                                 <p className={styles.buttondescription}>Create</p>

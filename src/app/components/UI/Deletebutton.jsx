@@ -3,6 +3,9 @@ import Image from "next/image";
 import binp from"../../assets/binimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./Deletebutton.module.css";
+import apiHandler from "../../utils/apiHandler";
+import { useRouter } from "next/navigation";
+import getCookies from "@/app/utils/getCookies";
 
 /**
  * Delete modal that checks on the inputs and deletes the account
@@ -17,6 +20,20 @@ import  Styles from "./Deletebutton.module.css";
 
 
 const Deleteaccount=(props)=>{
+  const router = useRouter();
+  const [temporaryToken, setToken] = useState(null);
+  useEffect(() => {
+    async function cookiesfn() {
+      const cookies = await getCookies();
+      if(cookies !== null && cookies.access_token){
+        setToken(cookies.access_token);
+      } else {
+        router.push("/login")
+      }
+
+    }
+    cookiesfn();
+  }, []);
     const [currentPassword, setCurrentPassword] = useState('');
     const [UserName, setUserName] = useState('');
     const [CheckBox,setCheckBox]=useState(false);
@@ -52,6 +69,7 @@ const Deleteaccount=(props)=>{
 
       // Validate email
       if (UserName!=props.username) {
+        console.log(props.username);
         setIsUserNameValid(false);
       } else {
         setIsUserNameValid(true);
@@ -72,25 +90,21 @@ const Deleteaccount=(props)=>{
     }
     
 
-    async function post(url, data) {
+    async function post( data) {
       try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+        const response = await apiHandler(`/settings/layout`, "PUT", {enteredPassword:data},temporaryToken );
+        console.log(response);
         return response;
       } catch (error) {
-        console.error('Error:', error);
-        throw new Error('Failed to make POST request');
+        console.error('Error', error);
+        setIsPasswordValid(false);
+        setPasswordErrorMessage('Incorrect password.');
       }
     }
     async function checkpassword() {
       try {
-        const response = await post('http://localhost:3002/settings/layout/check-password',{currentPassword});
-        if (!response.ok) {
+        const response = await post(currentPassword);
+        if (response.message!=='Password matches') {
           setIsPasswordValid(false);
           setPasswordErrorMessage('Incorrect password.');
         }else{       
@@ -103,21 +117,14 @@ const Deleteaccount=(props)=>{
     }
     async function deleteaccount() {
       try {
-          const response = await fetch(`http://localhost:3002/settings/account/${UserName}`, {
-              method: 'DELETE',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-          });
-          if (!response.ok) {
-              throw new Error('Failed to alter connection');
-          }
-          console.log("Accountdeleted");
-          alert("redirect to the home page without an account");
+        const response = await apiHandler(`/settings/account`, "DELETE", "",temporaryToken );
+        console.log(response);
+        router.push(`/home`);
       } catch (error) {
-          console.error('Error deleting:', error.message);
+        console.error('Error', error);
       }
     }
+
     useEffect(() => {
       // Submit form 
       if (isFormValid&&isUserNameValid&&isPasswordValid) {

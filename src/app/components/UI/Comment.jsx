@@ -14,29 +14,39 @@ import { redirect } from 'next/navigation';
 import handler from "../../utils/apiHandler";
 
 const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,showProfilePicture})=>{
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    const [temporaryToken, setToken] = useState(null);
     const [isReplying,setIsReplying]=useState(false);
     const [isEditing,setIsEditing]=useState(false);
     const [showReply,setShowReply]=useState(true);
     const [replies,setReplies]=useState(comment.replies);
     const [hidden,setHidden]=useState(comment.is_hidden);
     const [saved,setSaved]=useState(comment.is_saved);
+    const [upVoteStatus,setupVoteStatus]=useState("");
     
     const [isUser,setIsUser]=useState(false);
     const [isDeleted,setIsDeleted]=useState(false);
 
     useEffect(() => {
-        async function fetchData() {
-          const cookie = await getCookies();
-          if(cookie&&cookie.username){
-            if(cookie.username === comment.user.username){
-                setIsUser(true);
-            }
+        async function cookiesfn() {
+          const cookies = await getCookies();
+          if(cookies&&cookies.username&&cookies.access_token){
+                setToken(cookies.access_token);
+                if(cookies.username === comment.user.username){
+                    setIsUser(true);
+                }
+          }else{
+            router.push("/login")
           }
-          
+          if(comment.is_upvoted){
+            setupVoteStatus("upvoted")
+          }else if(comment.is_downvoted){
+            setupVoteStatus("downvoted");
+          }else{
+            setupVoteStatus("neutral");
+          }
             
         }
-        fetchData();
+        cookiesfn();
       }, []);
 
     
@@ -49,18 +59,6 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
             console.error('Error deleteing comment :', error);
           }
     }
-    
-  /*   const onComment= async (newReply)=>{
-        try {
-            const response = await apiHandler(`/comment/${comment.id}/reply`, "POST",newReply,temporaryToken);
-            console.log('New reply added:', response);
-            setIsReplying(false);
-            setReplies((prev)=>[...prev,response.reply]);
-
-    } catch (error) {
-        console.error('Error adding reply:', error.message);
-    }
-} */
 
 const onComment = async (newReply) => {
     try {
@@ -70,8 +68,9 @@ const onComment = async (newReply) => {
   
         if (newReply.attachments) {
           formData.append('attachments', newReply.attachments);
-      }
-  
+        }
+        formData.append('fileType',"image");
+        console.log(formData);
         const response = await fetch(`http://localhost:2000/comment/${comment.id}/reply`, {
             method: 'POST',
             headers: {
@@ -97,47 +96,11 @@ const onComment = async (newReply) => {
             const response = await apiHandler(`/comments/${comment.id}/edit`, "POST",newComment, temporaryToken);
             console.log('edit done:', response);
             comment.content=newComment.content;
-            /*const newcommentmedia={
-                link:newComment.attachments
-            }
-             console.log()
-            comment.media=[newcommentmedia];
-            console.log(comment.media); */
             setIsEditing(false);
 
     } catch (error) {
         console.error('Error editing', error.message);
     }
-    /* try {
-        const formData = new FormData();
-  
-        formData.append('content', newComment.content);
-  
-        if (newComment.attachments) {
-          formData.append('attachments', newComment.attachments);
-      }
-  
-        const response = await fetch(`http://localhost:2000/comments/${comment.id}/edit`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${temporaryToken}`
-            },
-            body: formData
-        });
-  
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-  
-        const responseData = await response.json();
-        console.log('edit done:', response);
-        comment.content=newComment.content;
-        comment.media=newComment.attachments;
-        setIsEditing(false);
-        setReplies((prev)=>[...prev,responseData.reply]);
-    } catch (error) {
-        console.error('Error adding reply:', error.message);
-    } */
     };
 
     const onHide= async ()=>{
@@ -227,14 +190,14 @@ const onComment = async (newReply) => {
             {!hidden&&!isDeleted&&(
                     <div className={styles.commentbody}>
                        <PostHeader isUser={isUser} isProfile={true} isInComment={false} showProfilePicture={showProfilePicture} userName={comment.user.username} profilePicture={comment.user.avatar_url} time={comment.created_at} cakeDate={comment.user.created_at}/>
-                       {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.content} commentImage={comment.media[0].link} buttonDisplay={"Save edits"} isPost={false}/>)}
+                       {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.content} commentImage={comment.media.length!==0?comment.media[0].link:[]} buttonDisplay={"Save edits"} isPost={false}/>)}
                         {!isEditing&&(
                         <div className={styles.commentcontent}>
                             {comment.media.length!==0&&(<img src={comment.media[0].link} className={styles.commentimage} />)}
                             <span className={styles.commenttext} dangerouslySetInnerHTML={{ __html: formattedDescription }}></span>
                         </div>
                         )}
-                        {!isEditing&&(<CommentFooter upvote={onUpVote} downvote={onDownVote} voteCount={comment.likes_count} isSaved={saved} onSave={onSave} onHide={onHide} isUser={isUser} onEdit={onClickEdit} onReply={()=>setIsReplying(true)}  onDelete={onDelete} userName={comment.user.username} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} onReport={handleReport} onBlock={handleBlock}/>)}
+                        {!isEditing&&(<CommentFooter upvote={onUpVote} downvote={onDownVote} voteCount={comment.likes_count} voteStatus={upVoteStatus} isSaved={saved} onSave={onSave} onHide={onHide} isUser={isUser} onEdit={onClickEdit} onReply={()=>setIsReplying(true)}  onDelete={onDelete} userName={comment.user.username} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} onReport={handleReport} onBlock={handleBlock}/>)}
                         {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"} isPost={false}/>)}  
                         {showProfilePicture&&replies.length !== 0 &&(
                             <div>

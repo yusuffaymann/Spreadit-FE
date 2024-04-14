@@ -5,15 +5,16 @@ import messageicon from "../../assets/envelope.svg"
 import Changebutton from "./Changebutton"
 import handler from "@/app/utils/apiHandler";
 import styles from "./RightCommentsSidebar.module.css"
+import { useRouter } from "next/navigation";
 
 const rightCommentsSidebar=({name,description,members,rules,isJoined, onJoin,moderators})=>{
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
-    return(
+    const router = useRouter();
+     return(
         <div className={styles.rightsidebar}>
             <div className={styles.sectioninfo}>
                 {!isJoined&&(<Changebutton type={name} description="" display="join" activate={onJoin} />)}
                 {isJoined&&(<Changebutton type={name} description="" display="joined" activate={onJoin} />)}
-                <h1 className={styles.title}>{name}</h1>
+                <h1 className={styles.title} onClick={() => {router.push(`/community/${name}`)}}>{name}</h1>
                 <p className={styles.description}>{description}</p>
                 <h1 className={styles.title}>{members}</h1>
                 <p className={styles.description}>Members</p>
@@ -21,9 +22,9 @@ const rightCommentsSidebar=({name,description,members,rules,isJoined, onJoin,mod
             <div className={styles.sectioninfo}>
                 <p className={styles.description}>RULES</p>
                 <ol className={styles.orderedlist}>
-                    {rules.map((item, index) => (
+                    {rules.map((rule, index) => (
                     <li className={styles.listitem} key={index} >
-                        {item}
+                        {rule.title}
                     </li>
                     ))}
                 </ol>

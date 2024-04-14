@@ -13,7 +13,8 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
     const inputRef = useRef(null);
 
     const updateImage=()=>{
-        if(commentImage!==undefined){
+        if(commentImage!==undefined&&commentImage.length!==0){
+            console.log(commentImage);
             setImageURL(commentImage);
         }
     }

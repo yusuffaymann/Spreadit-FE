@@ -78,6 +78,7 @@
       position: absolute;
       z-index: 1;
       top: 30px;
+      right: 20px;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
       border-radius: 5px;
       max-height: 200px;
@@ -93,6 +94,7 @@
     border-block-width: 0.7px;
     border-bottom-color: #c3bdbda1;
     padding: 8px 16px 8px 8px;
+    box-sizing: content-box;
   }
 
   .list .unorderedlist .selected {

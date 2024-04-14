@@ -22,9 +22,9 @@ import handler from "@/app/utils/apiHandler";
  * @component
  */
 
-function Post({type, postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, attachments, upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration, pollVote }) {
+function Post({type, postId, title, description, userName, subRedditName, subRedditPicture, subRedditRules, attachments, upVotes, upVoteStatus, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, isMember, isSpoiler, isNSFW, isSaved, sendReplyNotifications, pollIsOpen, pollOptions, pollExpiration, pollVote }) {
 
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M"
+    let token ="" ;
     const router = useRouter();
     const { images, videos } = attachments.reduce(
         (acc, attachment) => {
@@ -62,7 +62,7 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
           }
         }
         fetchData();
-      }, []);
+      }, [token]);
 
     useEffect(() => {
         setNSFW(isNSFW);
@@ -110,6 +110,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     const formattedDescription = parseAndStyleLinks(description);
 
     async function handleJoin() {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
             if(joined){
@@ -127,6 +134,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleHide() {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try {
             if(hidden){
@@ -144,6 +158,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleDelete () {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try {
             response = await handler(`/posts/${postId}`, "DELETE", "", token)
@@ -156,6 +177,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleUpVote(vote) {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try {
             if(vote === 1)
@@ -176,6 +204,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handlePollVote(choice) {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try {
             response = await handler(`/posts/${postId}/poll/vote`, "POST", { selectedOption:choice.option}, token);
@@ -187,6 +222,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleNSFW() {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
             if(NSFW){
@@ -204,6 +246,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleSpoiler() {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
             if(spoiler){
@@ -221,6 +270,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleFollow() {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
             if(followed){
@@ -238,6 +294,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleReport(mainReason,subReason) {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
             response = await handler(`/posts/${postId}/report`, "POST", {reason: mainReason, sureason: subReason}, token);
@@ -249,6 +312,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleBlock() {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
         response = await handler(`/users/block`, "POST",{username:userName}, token)
@@ -260,6 +330,13 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
     }
 
     async function handleSaved () {
+        const cookie = await getCookies();
+        if(cookie !== null && cookie.access_token && cookie.username){
+            token = (cookie.access_token);
+    
+          } else {
+            router.push("/login")
+          }
         let response;
         try{
             if(saved){
@@ -323,7 +400,7 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header postId={postId} subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={true} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
+                    <Header postId={postId} subRedditName={subRedditName} userName={userName} subRedditPicture={subRedditPicture} showProfilePicture={true} time={time} banner={banner} subRedditDescription={subRedditDescription} subRedditRules={subRedditRules} isProfile={isProfile} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {(!view && (isNSFW || isSpoiler) ) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
@@ -375,7 +452,7 @@ function Post({type, postId, title, description, userName, subRedditName, subRed
                         </div>}
                     </div>
                     {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} myVote={pollVote} />}
-                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} commentCount={comments} isMod={true} />
+                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} commentCount={comments} voteStatus={upVoteStatus} isMod={true} />
                 </div>}
             </div>
         </div>

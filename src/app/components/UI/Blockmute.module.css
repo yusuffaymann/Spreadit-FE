@@ -61,7 +61,7 @@
   .inputbox:valid+label,
   .inputbox:not(:placeholder-shown) + label{
     font-size: 8px;
-    top:-5px;
+    top:-10px;
     left: 5px;
   }
   
@@ -95,5 +95,5 @@
     line-height: 32px;
     border: none;
     padding: 0px;
-    height: 45px;
+    height: 40px;
   }

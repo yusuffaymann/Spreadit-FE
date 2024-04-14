@@ -32,7 +32,6 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [showProfileInfo,setShowProfileInfo] = useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
-    
     const [showDeleteModal,setShowDeleteModal] = useState(false);
 
     let timeOut;
@@ -59,9 +58,9 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
         {showDeleteModal && <DeletePost onDelete={onDelete} closeModal={() => setShowDeleteModal(false)} />}
 
         <div className={styles.postHeaderInfo} onClick={(e) => {e.stopPropagation();}}>
-            {!isInComment&&(<div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()}  onClick={() => {router.push(`/community/${subRedditName}`)}}>
+            {!isInComment&&(<div className={styles.subRedditNameAndPicture} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()} >
                 {showSubRedditInfo &&
-                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}}>
+                <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}} >
 
                     {isProfile && <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} />}
                     {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/> }
@@ -72,11 +71,12 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
                     height={256}
                     alt="The subReddit picture "
                     quality={100}
+                    onClick={() => {router.push(`/community/${subRedditName}`)}}
                 />}
                 
                 <div className={styles.subredditandusername}>
                     <div className={styles.postInfo}>
-                    <div className={styles.subRedditName}>{`r/${subRedditName || userName}`}</div>
+                    <div className={styles.subRedditName} onClick={() => {router.push(subRedditName ? `/community/${subRedditName}`:`/profile/${userName}`)}}>{subRedditName ? `r/${subRedditName}` : `u/${userName}`}</div>
                     <div>•</div>
                     </div>
                 </div>
@@ -101,11 +101,11 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
                 />
                 <div className={styles.subredditandusername}>
                     <div className={styles.postInfo}>
-                        <div className={styles.subRedditName} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()}>{subRedditName}</div>
+                        <div className={styles.subRedditName} onMouseEnter={() => setShowSubRedditInfo(true)} onMouseLeave={() => handleMouseLeaveSubreddit()} onClick={() => {router.push(`/community/${subRedditName}`)}}>{subRedditName}</div>
                         <div>•</div>
                         <div className={styles.time}>{time}</div>
                     </div>
-                    <div className={styles.userName} onMouseEnter={() => setShowProfileInfo(true)} onMouseLeave={() => handleMouseLeaveProfile()} >{userName}</div>
+                    <div className={styles.userName} onMouseEnter={() => setShowProfileInfo(true)} onMouseLeave={() => handleMouseLeaveProfile()} onClick={() => {router.push(`/profile/${userName}`)}}>{userName}</div>
                 </div>
             </div>)}
             {!isInComment&&<div className={styles.time}>{time}</div>}
