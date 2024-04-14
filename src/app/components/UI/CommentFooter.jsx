@@ -43,10 +43,21 @@ import PostDropDownMenu from "../post/PostDropDownMenu";
 
 
 
-function commentFooter({upvote, downvote, voteCount, isSaved, onSave, isUser, onEdit, onReply, onHide, onDelete,userName, subRedditPicture, subRedditName, subRedditRules, onBlock,onReport}) {
+function commentFooter({upvote, downvote, voteCount, voteStatus, isSaved, onSave, isUser, onEdit, onReply, onHide, onDelete,userName, subRedditPicture, subRedditName, subRedditRules, onBlock,onReport}) {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
+
+    React.useEffect(() => {
+        setButtonState(prevButtonState => {
+            if (voteStatus === "upvoted") {
+            return({...prevButtonState, type: "upvoted", upvoteIcon: upvoteFilled, downvoteIcon: downvoteOutlined});
+          } else if (voteStatus === "downvoted") {
+            return({...prevButtonState, type: "downvoted", upvoteIcon: upvoteOutlined, downvoteIcon: downvoteFilled});
+          } else {
+            return({...prevButtonState, type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon});
+          }}) 
+      }, [voteStatus]);
 
     const handleSave =()=>{
         onSave();

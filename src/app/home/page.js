@@ -11,10 +11,12 @@ import PostDropDownItem from "../components/post/PostDropDownItem";
 import handler from "../utils/apiHandler";
 import up from "../assets/up-arrow.svg";
 import parseTime from "../utils/timeDifference"
+import getCookies from "../utils/getCookies";
 
 function homepage() {
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+  //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+  const [token, setToken] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showSort, setShowSort] = useState(false);
   const [showTimeSort, setShowTimeSort] = useState(false);
@@ -25,6 +27,20 @@ function homepage() {
   const [subArray,setSubArray] = useState([]);
   const [sortBy,setSortBy] = useState("best");
   const [timeSort,setTimeSort] = useState("today");
+
+  useEffect(() => {
+    async function fetchData() {
+      const cookies = await getCookies();
+      if(cookies !== null && cookies.access_token && cookies.username){
+        setToken(cookies.access_token);
+
+      } else {
+        router.push("/login")
+      }
+
+    }
+    fetchData();
+  }, []);
 
   const sortTimes = {
     now: "Now", today: "Today", week: "This Week", month: "This Month", year: "This Year", alltime: "All Time"
@@ -80,7 +96,7 @@ function homepage() {
 
 
   useEffect(() => {
-
+    if(token === null) return
     async function getPosts() {
       setLoading(true);
       try {
@@ -88,9 +104,37 @@ function homepage() {
           const posts = await handler(`/home/${sortBy}${sortBy === "top" ? `/${timeSort}` : "" }`, "GET", "", token);//todo change api endpoint according to sortBy state
           console.log(posts);
           if(sortBy === "new")
+          {
             setPostArray([...postArray, ...posts.posts]);
+          }
           else
+          {
             setPostArray([...postArray, ...posts]);
+          }
+
+/*           let posts = await handler(`/home/${sortBy}${sortBy === "top" ? `/${timeSort}` : "" }`, "GET", "", token);//todo change api endpoint according to sortBy state
+          console.log(posts);
+          if(sortBy === "new")
+          {
+            posts.posts.map(async (postObj) => {
+              const post = await handler(`/posts/${postObj._id}`, "GET", "", token);
+              setPostArray(prevPosts => [...prevPosts, post]);
+          });
+          }
+          else
+          {
+
+          async function update () {
+            const slicedPosts = posts.slice(6,9);
+                slicedPosts.map(async (postObj) => {
+                  const post = await handler(`/posts/${postObj._id}`, "GET", "", token);
+                  console.log(post);
+                  setPostArray(prevPosts => [...prevPosts, post]);
+              });
+            }
+            await update();
+          } */
+
         }
 
 
@@ -101,9 +145,10 @@ function homepage() {
       }
     }
     getPosts();
-  },[reachedEnd,sortBy,timeSort]);
+  },[reachedEnd,sortBy,timeSort,token]);
 
   useEffect(() => {
+    if(token === null) return
     async function getRemainingData() {
       try {
       const subsPromises = postArray.map(async (postObj) => {
@@ -118,6 +163,7 @@ function homepage() {
       console.error('Error fetching data:', error);
     }
   }
+
   getRemainingData();
   },[postArray])
 
@@ -213,7 +259,7 @@ function homepage() {
               {postArray.map((postObject, index) => (
                 <div className={styles.post} key={index}>
                   {/* {console.log(postArray)} */}
-                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index] ? subArray[index].image : ""} subRedditDescription={subArray[index] ? subArray[index].description : ""} banner={subArray[index] ? subArray[index].communityBanner : ""} subRedditRules={subArray[index] ? subArray[index].rules : ""} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[postObject.content.length-1]?postObject.content[postObject.content.length-1]:""} attachments={postObject.attachments} upVotes={postObject.votesUpCount - postObject.votesDownCount} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} isSaved={postObject.isSaved} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subArray[index] ? subArray[index].isSubscribed : true} />
+                  <Post postId={postObject._id} subRedditName={postObject.community} subRedditPicture={subArray[index] ? subArray[index].image : ""} subRedditDescription={subArray[index] ? subArray[index].description : ""} banner={subArray[index] ? subArray[index].communityBanner : ""} subRedditRules={subArray[index] ? subArray[index].rules : []} time={parseTime(postObject.date)} title={postObject.title} description={postObject.content[postObject.content.length-1]?postObject.content[postObject.content.length-1]:""} attachments={postObject.attachments} upVotes={postObject.votesUpCount - postObject.votesDownCount} upVoteStatus={postObject.hasUpvoted ? "upvoted" : (postObject.hasDownvoted ? "downvoted" : "neutral")} comments={postObject.commentsCount} userName={postObject.username} isSpoiler={postObject.isSpoiler} isNSFW={postObject.isNsfw} isSaved={postObject.isSaved} pollOptions={postObject.pollOptions} pollIsOpen={postObject.isPollEnabled} pollExpiration={postObject.pollExpiration} pollVote={postObject.hasVotedOnPoll === true ? postObject.selectedPollOption : ""} sendReplyNotifications={postObject.sendPostReplyNotification} isMember={subArray[index] ? subArray[index].isSubscribed : true} />
                 </div>))}
           </div>}
         </div>
