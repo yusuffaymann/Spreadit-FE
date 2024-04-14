@@ -11,14 +11,20 @@ import AddedList from "../../components/UI/Blockedmuted"
 
 export default function messaging() {
 
-    const [privateMesssages, setPrivateMessages] = useState("EVERYONE");
-    const [chatRequests, setChatRequests] = useState("EVERYONE");
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M"
+    const [privateMesssages, setPrivateMessages] = useState("Everyone");
+    const [chatRequests, setChatRequests] = useState("Everyone");
     const [markAllAsRead, setMarkAllAsRead] = useState(false);
     const [approvedUsers, setApprovedUsers] = useState([]);
     const [loading, setLoading] = useState(true); // Loading indicator
-    const chatRequestOptions = ["EVERYONE", "ACCOUNTS OLDER THAN 30 DAYS", "NOBODY"];
-    const privateMessagesOptions = ["EVERYONE", "NOBODY"];
-    const showApprovedUsers = (chatRequests !== "EVERYONE" || privateMesssages !== "EVERYONE" );
+    const chatRequestOptionsUpper = ["EVERYONE", "ACCOUNTS OLDER THAN 30 DAYS", "NOBODY"];
+    const privateMessagesOptionsUpper = ["EVERYONE", "NOBODY"];
+    const showApprovedUsers = (chatRequests !== "Everyone" || privateMesssages !== "Everyone" );
+
+    function capitalizeFirstLetters(str) {
+      const lowerString = str.toLowerCase();
+      return lowerString.replace(/(^\w|\s\w)/g, match => match.toUpperCase());
+    }
     
 
 
@@ -27,11 +33,11 @@ export default function messaging() {
             try { 
               setLoading(true);
               // Fetch user preferences
-              const prefsData = await handler("/settings/messaging", "GET")
-              setPrivateMessages(prefsData.sendPrivateMessages);
-              setChatRequests(prefsData.sendFriendRequests);
-              setMarkAllAsRead(false);
-              setApprovedUsers(prefsData.aprovedList);
+              const prefsData = await handler("/settings/chat-and-messaging", "GET", "", token)
+              setPrivateMessages(prefsData.sendYouPrivateMessages);
+              setChatRequests(prefsData.sendYouFriendRequests);
+              setApprovedUsers(prefsData.approvedUsers);
+              console.log(prefsData);
         
             } catch (error) {
               console.error('Error fetching data:', error);
@@ -46,17 +52,27 @@ export default function messaging() {
 
 
     async function patchData() {
-
+/*       let temporaryChatRequests = chatRequests;
+      if(chatRequests === "Accounts older than 30 days")
+      {
+        temporaryChatRequests="Accounts Older Than 30 Days";
+      } */
+      console.log(chatRequests);
         let newPrefsData = {
-          sendFriendRequests: chatRequests,
-          sendPrivateMessages: privateMesssages,
-          markAllChatsAsRead: markAllAsRead,
-          aprovedList: approvedUsers
+          sendYouFriendRequests: chatRequests,
+          sendYouPrivateMessages: privateMesssages,
+          approvedUsers: approvedUsers
         };
         
         try {
           // patch user preferences
-          const prefsData = await handler("/settings/messaging", "PUT", newPrefsData);
+          const prefsData = await handler("/settings/chat-and-messaging", "PUT", newPrefsData, token);
+          if(markAllAsRead === true)
+          {
+            const markRead = await handler("/settings/chat-and-messaging/mark-as-read", "POST", {markAllChatsAsRead: true}, token);
+            setMarkAllAsRead(false);
+            console.log(markRead);
+          }
           console.log(prefsData);
     
         } catch (error) {
@@ -90,8 +106,8 @@ export default function messaging() {
                 <div className={styles.body}>
                     <div className={styles.header}>Chat & Messaging</div>
                     <div className={styles.subsection}>
-                        <List list= {chatRequestOptions} initialv={chatRequests} type={"Who can send you chat requests"} displayedColor={"grey"} choose={(item) => {setChatRequests(item)}}/>
-                        <List list= {privateMessagesOptions} initialv={privateMesssages} type={"Who can send you private messages"} description={"Heads up—Reddit admins and moderators of communities you’ve joined can message you even if they’re not approved."} displayedColor={"grey"} choose={(item) => {setPrivateMessages(item)}} />
+                        <List list= {chatRequestOptionsUpper} initialv={chatRequests.toUpperCase()} type={"Who can send you chat requests"} displayedColor={"grey"} choose={(item) => {setChatRequests(capitalizeFirstLetters(item))}}/>
+                        <List list= {privateMessagesOptionsUpper} initialv={privateMesssages.toUpperCase()} type={"Who can send you private messages"} description={"Heads up—Reddit admins and moderators of communities you’ve joined can message you even if they’re not approved."} displayedColor={"grey"} choose={(item) => {setPrivateMessages(capitalizeFirstLetters(item))}} />
                         {showApprovedUsers && (
                         <div style={{ paddingLeft: "32px" }}>
                         <Add type={"Approved Users"} description={"Approved users can always send you private messages."} inputmsg={"ADD NEW USER TO APPROVED LIST"} onAdd={(newName) => setApprovedUsers([...approvedUsers, {profilename: newName}])} />

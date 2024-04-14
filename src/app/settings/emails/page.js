@@ -8,6 +8,7 @@ import styles from "../emails_messages_notifications.module.css"
 
 export default function Email() {
 
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M"
     const [newFollower, setNewFollower] = useState(false); // Assuming default value is false
     const [chatRequests, setChatRequests] = useState(false); // Assuming default value is false
     const [unsubscribeFromAllEmails, setUnsubscribeFromAllEmails] = useState(false); // Assuming default value is false
@@ -20,10 +21,11 @@ export default function Email() {
             setLoading(true);
           try {
             // Fetch user preferences
-            const prefsData = await handler("/settings/emails", "GET")
-            setNewFollower(prefsData.email_user_new_follower);
-            setChatRequests(prefsData.email_chat_request);
-            setUnsubscribeFromAllEmails(prefsData.email_unsubscribe_all);
+            const prefsData = await handler("/settings/email", "GET", "", token)
+            setNewFollower(prefsData.newFollowerEmail);
+            setChatRequests(prefsData.chatRequestEmail);
+            setUnsubscribeFromAllEmails(prefsData.unsubscribeAllEmails);
+            console.log(prefsData);
     
           } catch (error) {
             console.error('Error fetching data:', error);
@@ -39,14 +41,14 @@ export default function Email() {
     async function patchData() {
 
         let newPrefsData = {
-            email_user_new_follower: newFollower,
-            email_chat_request: chatRequests,
-            email_unsubscribe_all: unsubscribeFromAllEmails
+            newFollowerEmail: newFollower,
+            chatRequestEmail: chatRequests,
+            unsubscribeAllEmails: unsubscribeFromAllEmails
         };
         
         try {
           // Fetch user preferences
-          const prefsData = await handler("/settings/emails", "PUT", newPrefsData);
+          const prefsData = await handler("/settings/email", "PUT", newPrefsData, token);
           console.log(prefsData);
     
         } catch (error) {
