@@ -74,7 +74,6 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                             downvote();
                         } else if(buttonState.type === "downvoted") { // if post is downvoted and user clicks upvote, we need to upvote twice
                             upvote();
-                            upvote();
                         } else {   // if post is neutral and user clicks upvote, we need to upvote once
                             upvote();
                         }
@@ -106,7 +105,6 @@ function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
                         if (buttonState.type === "downvoted") { // if post is downvoted and user clicks downvote, we need to upvote once
                             upvote();
                         } else if(buttonState.type === "upvoted") { // if post is upvoted and user clicks downvote, we need to downvote twice
-                            downvote();
                             downvote();
                         } else {   // if post is neutral and user clicks downvote, we need to downvote once
                             downvote();
