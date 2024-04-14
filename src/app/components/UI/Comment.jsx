@@ -15,7 +15,6 @@ import handler from "../../utils/apiHandler";
 
 const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,showProfilePicture})=>{
     const [temporaryToken, setToken] = useState(null);
-    //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isReplying,setIsReplying]=useState(false);
     const [isEditing,setIsEditing]=useState(false);
     const [showReply,setShowReply]=useState(true);
@@ -60,18 +59,6 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
             console.error('Error deleteing comment :', error);
           }
     }
-    
-  /*   const onComment= async (newReply)=>{
-        try {
-            const response = await apiHandler(`/comment/${comment.id}/reply`, "POST",newReply,temporaryToken);
-            console.log('New reply added:', response);
-            setIsReplying(false);
-            setReplies((prev)=>[...prev,response.reply]);
-
-    } catch (error) {
-        console.error('Error adding reply:', error.message);
-    }
-} */
 
 const onComment = async (newReply) => {
     try {
@@ -108,47 +95,11 @@ const onComment = async (newReply) => {
             const response = await apiHandler(`/comments/${comment.id}/edit`, "POST",newComment, temporaryToken);
             console.log('edit done:', response);
             comment.content=newComment.content;
-            /*const newcommentmedia={
-                link:newComment.attachments
-            }
-             console.log()
-            comment.media=[newcommentmedia];
-            console.log(comment.media); */
             setIsEditing(false);
 
     } catch (error) {
         console.error('Error editing', error.message);
     }
-    /* try {
-        const formData = new FormData();
-  
-        formData.append('content', newComment.content);
-  
-        if (newComment.attachments) {
-          formData.append('attachments', newComment.attachments);
-      }
-  
-        const response = await fetch(`http://localhost:2000/comments/${comment.id}/edit`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${temporaryToken}`
-            },
-            body: formData
-        });
-  
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-  
-        const responseData = await response.json();
-        console.log('edit done:', response);
-        comment.content=newComment.content;
-        comment.media=newComment.attachments;
-        setIsEditing(false);
-        setReplies((prev)=>[...prev,responseData.reply]);
-    } catch (error) {
-        console.error('Error adding reply:', error.message);
-    } */
     };
 
     const onHide= async ()=>{

@@ -50,7 +50,6 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
         }
         cookiesfn();
     }, []);
-    //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isEditing,setIsEditing]=useState(Editing);
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -180,22 +179,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
         //api call to invert Spoiler
     }
 
-/*     async function handleFollow() {
-        let response;
-        try{
-            if(followed){
-                response = await handler(`/users/unfollow`, "POST",{username:userName},temporaryToken)
-                setFollowed(false);
-            }else{
-                response = await handler(`/users/follow`, "POST",{username:userName}, temporaryToken)
-                setFollowed(true);
-            }
-            console.log(response);
-        } catch(e){
-            console.error("Error fetching Data: " ,e)
-        }
-        //api call to follow or unfollow a user
-    } */
+
 
     async function handleReport(mainReason,subReason) {
         let response;
@@ -338,12 +322,6 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                                 </div>
                             </div>
                         )}
-                        {/* {!view && <div className={styles.overlay}></div>}
-                        {!view && <div className={styles.viewButton} >
-                            {(isNSFW && !isSpoiler ) && <Button className={styles.viewButton} name={"View NSFW content"} onClick={() => setView(true)} active={true} />}
-                            {(isSpoiler && !isNSFW) && <Button className={styles.viewButton} name={"View spoiler"} onClick={() => setView(true)} active={true} />}
-                            {(isSpoiler && isNSFW)  && <Button className={styles.viewButton} name={"View NSFW content & spoilers"} onClick={() => setView(true)} active={true} />}
-                        </div>} */}
                         {!isEditing&& <div className={`${styles.description} ${!view ? styles.view : ""}`} dangerouslySetInnerHTML={{ __html: formattedDescription }}></div>}
                         <div className={styles.media}>
                             {(images.length !==0) &&       

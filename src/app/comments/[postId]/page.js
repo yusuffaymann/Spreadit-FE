@@ -30,7 +30,7 @@ const Home=({params : {postId}})=> {
     }
     cookiesfn();
   }, []);
-  //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+  
   const searchParams=useSearchParams();
   const isedit=searchParams.has("isEditing");
   const [addingComment,setAddingComment]=useState(false);
@@ -41,54 +41,10 @@ const Home=({params : {postId}})=> {
   const [theSub,setTheSub]=useState(null);
   const [joined,setJoined] = useState(false);
   const [subscribe,setSubscribe]=useState(null);
-  /* const [addedcomment,setAddedComment]=useState(false); */
 
 useEffect(()=>{
   setIsEditing(isedit);
 });
-/* useEffect(() => {
-  async function getSub() {
-      setLoading(true);
-    try {
-      const subs = await apiHandler("/community/get-info", "GET","",temporaryToken);
-      const sub0 = subs;
-      console.log("hello");
-      console.log(subs);
-    
-      setSubDescription(sub0.description);
-      setSubImage(sub0.image);
-      setSubBanner(sub0.communityBanner);
-      setMembers(sub0.members);
-      setSubRules(sub0.rules);
-      setIsMember(sub0.members && sub0.members.includes(myUserName));
-      setIsMember(sub0.members.includes(myUserName));
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-  getSub();
-}, []);
-
-
-function convertToEmbedLink(videoLink) {
-  // Regular expression to check if the link is a YouTube link
-  const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
-
-  if (youtubeRegex.test(videoLink)) {
-      // If it's a YouTube link, replace "watch" with "embed"
-      return videoLink.replace("/watch?v=", "/embed/");
-  } else {
-      // If it's not a YouTube link, return the original link
-      return videoLink;
-  }
-}
-
-let video1 = "https://www.youtube.com/watch?v=Sklc_fQBmcs";
-video1 = convertToEmbedLink(video1);
-const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}] */
 
 useEffect(() => {
   async function getPost() {
@@ -105,8 +61,6 @@ useEffect(() => {
       console.log(subData);
       setSubscribe(subscribed);
       setJoined(subscribed.isSubscribed);
-
-      //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -131,73 +85,6 @@ useEffect(()=>{
   }
 }getComments();
 },[temporaryToken]);
-
-/* useEffect(() => {
-  async function getRemainingData() {
-    try {
-      const subData = await apiHandler(`/community/get-info?communityName=${thePost.community}`, "GET", "", temporaryToken);
-      const subscribed = await apiHandler(`/community/is-subscribed?communityName=${thePost.community}`, "GET", "", temporaryToken);
-      setTheSub(subData);
-      console.log(subData);
-      setSubscribe(subscribed);
-      setJoined(subscribed.isSubscribed);
-       return { description: subData.description, rules: subData.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd", communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png", ...subscribed};
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
-getRemainingData();
-},[thePost]) */
-
-/* useEffect(()=>{
-  async function getcomments(){
-    try {
-        const commentsData = await apiHandler(`/posts/comment/${thePost._id}?include_replies=true`, "GET", "", temporaryToken)
-        console.log(commentsData);
-        setComments(commentsData.comments);
-    } catch(error){
-      console.error('Error fetching data:', error);
-    }
-  }
-  getcomments();
-},[addedcomment]) */
-
-
-  /* async function handler(url, method, body, token="") {
-    try {
-      const base_url = 'http://localhost:2000';
-      const headers = token !== "" ? {"Content-Type": "application/json","Authorization": `Bearer ${token}`} : {"Content-Type": "application/json"}
-
-  
-      // Conditionally include the body only when it's provided and the method is not 'GET'
-      const requestOptions = {
-        method: `${method}`,
-        headers: headers,
-        body: method !== ('GET' || 'DELETE') && body ? JSON.stringify(body) : undefined
-      };
-  
-      const response = await fetch(`${base_url}${url}`, requestOptions);
-  
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
-  
-      return response.json();
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error; // Re-throw for further handling
-    }
-  };
-  const onComment = async (newComment) => {
-    try {
-          const response = await apiHandler(`/post/comment/${thePost._id}`, "POST",newComment,temporaryToken);
-          console.log('New comment added:', response);
-          setAddingComment(false);
-          setComments((prev) => [...prev, response.comment]);
-    } catch (error) {
-        console.error('Error adding comment:', error.message);
-    }
-} */
 
 const onComment = async (newComment) => {
   try {
@@ -244,40 +131,8 @@ async function handleJoin() {
   } catch(e){
       console.error("Error fetching Data: " ,e)
   }
-  //api call to join subreddit
 }
 
-
-  /* useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(http://localhost:3002/community/${UserName});
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        console.log(data[UserName]);
-        setUserData(data[UserName]);
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-      }
-    }
-    async function fetchData2() {
-      try {
-        const response = await fetch(http://localhost:3002/posts/comment/${postIdState});
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        console.log(data);
-        setComments(data);
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-      }
-    }
-    fetchData();
-    fetchData2();
-  }, []); */
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -292,7 +147,6 @@ async function handleJoin() {
         <div className={styles.mainbar}>
             <div className={styles.postarea}>
             <CommentPost postId={thePost._id} profilePicture={thePost.userProfilePic} cakeDate={"1/1/2024"} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[thePost.content.length-1]?thePost.content[thePost.content.length-1]:""} attachments={thePost.attachments} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isSaved={thePost.isSaved} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isJoined={joined} onJoin={handleJoin} isMember={subscribe.isSubscribed} upVoteStatus={thePost.hasUpvoted ? "upvoted" : (thePost.hasDownvoted ? "downvoted" : "neutral")} Editing={isEditing} />
-             {/* <CommentPost profilePicture={profilePicture} cakeDate={"1/1/2024"} /> */}
             </div>
           <div className={styles.inputarea}>
             {addingComment&&(<CommentInput onComment={onComment} close={()=>{setAddingComment(false)}} buttonDisplay={"comment"} isPost={false} /> )}

@@ -34,7 +34,7 @@ const ChangeEmailmodal =(props)=>{
       }
       cookiesfn();
     }, []);
-    //const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M"
+    
     const [currentPassword, setCurrentPassword] = useState('');
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [currentPasswordErrorMessage, setCurrentPasswordErrorMessage] = useState('');
