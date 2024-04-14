@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./RenderMiscOptions.module.css";
 import OutlineButton from "../components/UI/OutlineButton";
 
-function RenderMiscOptions({setSpoiler, setNsfw, nsfw, spoiler, ready}) {
+function RenderMiscOptions({setSpoiler, setNsfw, nsfw, spoiler, ready, createPost}) {
   return (
     <div className={`${styles.miscOptionPad}`}>
       <div className={`${styles.miscOptionFlex}`}>
@@ -60,6 +60,7 @@ function RenderMiscOptions({setSpoiler, setNsfw, nsfw, spoiler, ready}) {
               children="Post"
               isInverted={true}
               isDisabled={!ready}
+              btnClick={createPost}
             />
             {/*<OutlineButton children="Save Draft" isDisabled={true} />*/}
           </div>

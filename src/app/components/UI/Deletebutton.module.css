@@ -89,6 +89,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     z-index: 1001;
+    box-sizing: content-box;
   }
 
   .deleteform{
@@ -115,6 +116,7 @@
   }
   .dlabel+.whyleaving{
     margin-bottom: 10px;
+    width: 100%;
   }
   .verify{
     color: var(--graycolor);

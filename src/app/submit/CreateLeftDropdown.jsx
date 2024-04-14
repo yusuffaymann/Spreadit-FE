@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import CreateDropdownMenu from "./CreateDropdownMenu";
 import styles from "./CreateLeftDropdown.module.css";
+import getCookies from "../utils/getCookies";
+import handler from "../utils/apiHandler";
 import "./Create.css";
 
 export default function CreateLeftDropdown({ current, setter }) {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [communities, setCommunities] = useState([]);
   const dropdownRef = useRef(null);
-
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -19,6 +21,21 @@ export default function CreateLeftDropdown({ current, setter }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  
+
+  useEffect( () => {
+     const fetchData = async () => {
+      const cookies = await getCookies();
+      if(cookies === null || !cookies.access_token){router.push("/login")}
+
+      // Fetch user subscribed communities
+      const userData = await handler(`/user/profile-info/${cookies.username}`, "GET", "", cookies.access_token);
+      console.log(userData.subscribedCommunities)
+      setCommunities(userData.subscribedCommunities) 
+    }
+    fetchData();
+  }, []);
 
   function handleInputChange(event) {
     const { value } = event.target;
@@ -63,7 +80,7 @@ export default function CreateLeftDropdown({ current, setter }) {
             </svg>
           </span>
         </div>
-        {menuVisible && <CreateDropdownMenu />}
+        {(menuVisible && communities ) && <CreateDropdownMenu communities={communities} setCommunity={setter}/>}
       </div>
     </div>
   );

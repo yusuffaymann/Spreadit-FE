@@ -24,6 +24,7 @@ const Home=({params : {postId}})=> {
   const [loading,setLoading] = useState(true);
   const [thePost,setThePost]=useState(null);
   const [theSub,setTheSub]=useState(null);
+  const [joined,setJoined] = useState(false);
   const [subscribe,setSubscribe]=useState(null);
   /* const [addedcomment,setAddedComment]=useState(false); */
 
@@ -78,7 +79,7 @@ useEffect(() => {
   async function getPost() {
       setLoading(true);
     try {
-      const post = await apiHandler(`/posts/${postId}/one`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
+      const post = await apiHandler(`/posts/${postId}`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
       console.log(post);
       setThePost(post);
 
@@ -87,9 +88,11 @@ useEffect(() => {
         const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
         communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"};
         setTheSub(returnedData);
+        console.log(returnedData);
 
-        const subscribeData = await apiHandler(`/community/is-subscribed?communityName=${post.community}`, "GET", "", temporaryToken)
+        const subscribeData = await apiHandler(`/community/is-subscribed?communityName=${post.community}`, "GET", "", temporaryToken);
         setSubscribe(subscribeData);
+        setJoined(subscribeData.isSubscribed);
 
         const commentsData = await apiHandler(`/posts/comment/${post._id}?include_replies=true`, "GET", "", temporaryToken)
         console.log(commentsData)
@@ -185,7 +188,22 @@ const onComment = async (newComment) => {
   }
 }
 
-
+async function handleJoin() {
+  let response;
+  try{
+      if(joined){
+          response = await apiHandler("/community/unsubscribe", "POST", {communityName: thePost.community}, temporaryToken)
+          setJoined(false);
+      }else{
+          response = await apiHandler("/community/subscribe", "POST", {communityName: thePost.community}, temporaryToken)
+          setJoined(true);
+      }
+      console.log(response);
+  } catch(e){
+      console.error("Error fetching Data: " ,e)
+  }
+  //api call to join subreddit
+}
 
 
   /* useEffect(() => {
@@ -231,7 +249,7 @@ const onComment = async (newComment) => {
         </div>
         <div className={styles.mainbar}>
             <div className={styles.postarea}>
-            <CommentPost postId={thePost._id} profilePicture={thePost.userProfilePic} cakeDate={"1/1/2024"} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[0]} images={[]} video={[]} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isMember={subscribe.isSubscribed} Editing={isEditing} />
+            <CommentPost postId={thePost._id} profilePicture={thePost.userProfilePic} cakeDate={"1/1/2024"} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[thePost.content.length-1]?thePost.content[thePost.content.length-1]:""} attachments={thePost.attachments} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isSaved={thePost.isSaved} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isJoined={joined} onJoin={handleJoin} isMember={subscribe.isSubscribed} Editing={isEditing} />
              {/* <CommentPost profilePicture={profilePicture} cakeDate={"1/1/2024"} /> */}
             </div>
           <div className={styles.inputarea}>
@@ -251,7 +269,7 @@ const onComment = async (newComment) => {
           {comments.length===0&&(<p>Be the first to add a comment</p>)}
         </div>
         <div className={styles.rightbar}>
-          <RightCommentsSidebar name={thePost.community} description={theSub.description} rules={theSub.rules} members={"200K"} isJoined={subscribe.isSubscribed} moderators={[]} />
+          <RightCommentsSidebar name={thePost.community} description={theSub.description} rules={theSub.rules} members={"200K"} isJoined={joined}  onJoin={handleJoin} moderators={[]} />
         </div>
       </div>
     </div>

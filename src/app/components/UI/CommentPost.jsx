@@ -12,27 +12,40 @@ import CommentInput from "./CommentInput";
 import nextImage from "../../assets/right-chevron-svgrepo-com.svg"
 import previousImage from "../../assets/left-chevron-svgrepo-com.svg"
 import getCookies from "../../utils/getCookies";
+import handler from "@/app/utils/apiHandler";
 
 /**
  * Component for displaying the post.
  * @component
  */
 
-function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, video, images, upVotes, upVoteStatus, comments, time, banner, subRedditDescription, isProfile, cakeDate, isFollowed, onFollow, isMember, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
+function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, attachments,  upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isMember, isJoined, onJoin, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
 
+    const { images, video } = attachments.reduce(
+        (acc, attachment) => {
+          if (attachment.type === 'image') {
+            acc.images.push(attachment.link);
+          } else if (attachment.type === 'video') {
+            acc.video.push(attachment.link);
+          }
+          return acc;
+        },
+        { images: [], video: [] }
+      );
+    
     const router = useRouter();
+    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isEditing,setIsEditing]=useState(Editing);
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
-    const [joined,setJoined] = useState(false);
     const [hidden,setHidden] = useState(false);
     const [view, setView] = useState(false);
     const [deleted,setDeleted] = useState(false);
     const [myPost,setMyPost] = useState(false);
+    const [votes,setVotes] = useState(upVotes);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
     const [saved,setSaved] = useState(isSaved);
-    const [followed,setFollowed]=useState(isFollowed);
     const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
 
     useEffect(() => {
@@ -60,77 +73,172 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     }, [isSaved]);
 
     useEffect(() => {
+        setVotes(upVotes);
+    }, [upVotes]);
+
+    useEffect(() => {
         setReplyNotifications(sendReplyNotifications);
     }, [sendReplyNotifications]);
 
-    function handleJoin() {
-        setJoined(!joined);
-        //api call to join subreddit
-    }
-
-
-    function handleHide() {
-        setHidden(!hidden);
+    async function handleHide() {
+        let response;
+        try {
+            if(hidden){
+                response = await handler(`/posts/${postId}/unhide`, "POST", "", temporaryToken)
+                setHidden(false);
+            }else{
+                response = await handler(`/posts/${postId}/hide`, "POST", "", temporaryToken)
+                setHidden(true)
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to hide a post
     }
 
-    function handleDelete () {
-        setDeleted(true);
+    async function handleDelete () {
+        let response;
+        try {
+            response = await handler(`/posts/${postId}`, "DELETE", "", temporaryToken)
+            setDeleted(true);
+            console.log(response);
+        }  catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to delete a post
     }
 
-    function handleUpVote(vote) {
+    async function handleUpVote(vote) {
+        let response;
+        try {
+            if(vote === 1)
+            {
+                response = await handler(`/posts/${postId}/upvote`, "POST", "", temporaryToken);
+            }
+            else
+            {
+                response = await handler(`/posts/${postId}/downvote`, "POST", "", temporaryToken);
+            }
+            console.log(response);
+        }  catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
+
         //api call to upvote or down vote
     }
 
-    function handlePollVote(choice) {
-        console.log(choice);
+    async function handlePollVote(choice) {
+        let response;
+        try {
+            response = await handler(`/posts/${postId}/poll/vote`, "POST", {selectedOptions: choice}, temporaryToken);
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to vote 
     }
 
-    function handleNSFW() {
+    async function handleNSFW() {
+        let response;
+        console.log(`${postId}`)
+        try{
+            if(NSFW){
+                response = await handler(`/posts/${postId}/unnsfw`, "POST","", temporaryToken)
+                setNSFW(false);
+            }else{
+                response = await handler(`/posts/${postId}/nsfw`, "POST","", temporaryToken)
+                setNSFW(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to invert NSFW
     }
 
-    function handleSpoiler() {
+    async function handleSpoiler() {
+        let response;
+        try{
+            if(spoiler){
+                response = await handler(`/posts/${postId}/unspoiler`, "POST","", temporaryToken)
+                setSpoiler(false);
+            }else{
+                response = await handler(`/posts/${postId}/spoiler`, "POST","", temporaryToken)
+                setSpoiler(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to invert Spoiler
     }
 
-    function handleFollow() {
-        setFollowed(!followed);
-        onFollow();
+/*     async function handleFollow() {
+        let response;
+        try{
+            if(followed){
+                response = await handler(`/users/unfollow`, "POST",{username:userName},temporaryToken)
+                setFollowed(false);
+            }else{
+                response = await handler(`/users/follow`, "POST",{username:userName}, temporaryToken)
+                setFollowed(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to follow or unfollow a user
-    }
+    } */
 
-    function handleReport(mainReason,subReason) {
-        console.log(subReason);
+    async function handleReport(mainReason,subReason) {
+        let response;
+        try{
+            response = await handler(`/posts/${postId}/report`, "POST", {reason: mainReason, sureason: subReason}, temporaryToken);
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to report a post
     }
 
-    function handleBlock() {
-        console.log("block");
+    async function handleBlock() {
+        let response;
+        try{
+        response = await handler(`/users/block`, "POST",{username:userName}, temporaryToken)
+        console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to block a user
     }
 
-    function handleNSFW () {
-        setNSFW(!NSFW);
-        //api call to set one of your posts as nsfw
-    }
-
-    function handleSpoiler () {
-        setSpoiler(!spoiler);
-        //api call to set one of your posts as spoiler
-    }
-
-    function handleSaved () {
-        setSaved(!saved);
+    async function handleSaved () {
+        let response;
+        try{
+            if(saved){
+                response = await handler(`/posts/${postId}/unsave`, "POST","", temporaryToken)
+                setSaved(false);
+            }else{
+                response = await handler(`/posts/${postId}/save`, "POST","", temporaryToken)
+                setSaved(true);
+            }
+            console.log(response);
+        } catch(e){
+            console.error("Error fetching Data: " ,e)
+        }
         //api call to save a post
+    }
 
+    async function handleReplyNotifications () {
+        setReplyNotifications(!sendReplyNotifications);
+        //api call to set reply notifications
     }
 
     const onEdit= async (newcontent)=>{
         try {
-            const response = await apiHandler(`/posts/${postId}/edit`, "POST",newcontent);
+            console.log(newcontent);
+            const response = await handler(`/posts/${postId}/edit`, "PUT",  {content:newcontent.content} , temporaryToken);
             console.log('edit done:', response);
             description=newcontent;
             setIsEditing(false);
@@ -165,11 +273,6 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     }
 
     const formattedDescription = parseAndStyleLinks(description);
-
-    function handleReplyNotifications () {
-        setReplyNotifications(!sendReplyNotifications);
-        //api call to set reply notifications
-    }
 
     return (
         <div className={styles.post}>
@@ -213,7 +316,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                 </div>}
                 {hidden === true && <HiddenPost unHide={handleHide} />}
                 {(hidden === false && deleted === false) && <div>
-                    <Header isUser={myPost} profilePicture={profilePicture} userName={userName} showProfilePicture={true} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={handleFollow} isMember={isMember} joined={joined} onJoin={handleJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onEdit={()=>setIsEditing(true)} />
+                    <Header postId={postId} isUser={myPost} profilePicture={profilePicture} userName={userName} showProfilePicture={true} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate}  isMember={isMember} joined={isJoined} onJoin={onJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onEdit={()=>setIsEditing(true)} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
                         {isEditing&& <CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={description} buttonDisplay={"Save edits"} isPost={true}/>}
@@ -276,8 +379,8 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                             />}
                         </div>
                         </div>
-                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} />}
-                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={upVotes} voteStatus={upVoteStatus}  commentCount={comments} isMod={true} />
+                    {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} myVote={pollVote}/>}
+                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} commentCount={comments} isMod={true} />
                 </div>
                 </div>}
             </div>

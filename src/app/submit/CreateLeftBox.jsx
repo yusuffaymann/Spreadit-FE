@@ -13,11 +13,12 @@ import RenderLinkBox from "./RenderLinkBox";
 import RenderMiscOptions from "./RenderMiscOptions";
 import RenderNotificationSettings from "./RenderNotificationSettings";
 import RenderTitleBox from "./RenderTitleBox";
+import { create } from "@mui/material/styles/createTransitions";
 
 function CreateLeftBox({setTitle, title, setUrl, url, spoiler, setSpoiler, nsfw, setNsfw,
   notify, setNotify, length, setLength, options, setOptions, mediaArray, setMediaArray, 
   postMediaArray, setPostMediaArray, selectedOption, setSelectedOption, ready,
-  content, setContent}) {
+  content, setContent, createPost}) {
     const [rawContent, setRawContent] = useState("");
   
   
@@ -26,6 +27,7 @@ function CreateLeftBox({setTitle, title, setUrl, url, spoiler, setSpoiler, nsfw,
     setSelectedOption(option);
   };
 
+  console.log(mediaArray)
   return (
     <div className={styles.mainBoxBorders}>
       <div className={styles.mainBoxHeader}>
@@ -89,7 +91,7 @@ function CreateLeftBox({setTitle, title, setUrl, url, spoiler, setSpoiler, nsfw,
         setContent={setContent} mediaArray={postMediaArray} setMediaArray={setPostMediaArray}/>}
       </div>
 
-      <RenderMiscOptions setNsfw={setNsfw} nsfw={nsfw} setSpoiler={setSpoiler} spoiler={spoiler} ready={ready}/>
+      <RenderMiscOptions setNsfw={setNsfw} nsfw={nsfw} setSpoiler={setSpoiler} spoiler={spoiler} ready={ready} createPost={createPost}/>
       <RenderNotificationSettings notify={notify} setNotify={setNotify}/>
     </div>
   );

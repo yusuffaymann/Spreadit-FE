@@ -25,7 +25,7 @@ import removeBell from "../../assets/post-images/bell-filled.svg"
 import Button from "./Button";
 
 
-function PostHeader ({postId, isUser, userName,showProfilePicture, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isFollowed, onFollow, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications}) {
+function PostHeader ({postId, isUser, userName,showProfilePicture, profilePicture, subRedditName, subRedditPicture, subRedditRules, time, banner, subRedditDescription, isProfile, isInComment, cakeDate, isMember, joined, onJoin, isSaved, onSave, onDelete, myPost, onHide, onReport, onBlock, isSpoiler, onSpoiler, isNSFW, onNSFW, replyNotifications, onReplyNotifications, onEdit}) {
 
     const router = useRouter();
     const [showDropdown, setShowDropdown] = useState(false);
@@ -62,7 +62,7 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
                 {showSubRedditInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} onClick={(e) => {e.stopPropagation();}}>
 
-                    {isProfile && <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />}
+                    {isProfile && <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} />}
                     {!isProfile && <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={banner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={onJoin}/> }
                 </div>}
                 {showProfilePicture&&<img className={styles.subRedditPicture}
@@ -89,7 +89,7 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
                 </div>}
                 {showProfileInfo &&
                 <div onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowProfileInfo(false)} >
-                    <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} isFollowed={isFollowed} onFollow={onFollow} />
+                    <ProfileInfoModal isUser={isUser} userName={userName} profilePicture={profilePicture} cakeDate={cakeDate} />
                 </div>}
                 <img className={styles.subRedditPicture}
                     src={subRedditPicture}
@@ -133,7 +133,8 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
                 </PostDropDownMenu>}
                 {myPost === true &&
                 <PostDropDownMenu showDropdown={showDropdown} setShowDropDown={setShowDropdown} > 
-                    <PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={() => router.push(`/comments/${postId}?isEditing`)} /> 
+                    {isInComment&&<PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={onEdit} />}
+                    {!isInComment&&<PostDropDownItem icon={edit} iconAlt="Edit Icon" description="Edit post" onClick={() => router.push(`/comments/${postId}?isEditing=${true}`)} />}  
                     {!isSaved && <PostDropDownItem icon={save} iconAlt="Save Icon" description="Save" onClick={() => onSave()} />}
                     {isSaved && <PostDropDownItem icon={unsave} iconAlt="Unsave Icon" description="Remove from saved" onClick={() => onSave()} />}
                     <PostDropDownItem icon={hide} iconAlt="Hide Icon" description="Hide" onClick={() => onHide()} />

@@ -8,12 +8,26 @@ import Changegendercountry from "../../components//UI/Listbutton";
 import Connectbutton from "../../components/UI/Connectbutton";
 import ChangeEmailmodal from "../../components/UI/ChangeEmailModal";
 import ChangePasswordModal from "../../components/UI/ChangePasswordModal";
+import apiHandler from "../../utils/apiHandler";
+import getCookies from "@/app/utils/getCookies";
 
 const Home=()=> {
+  const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
   const [userData, setUserData] = useState(null);
   const [showEmailModal,setShowEmailModal]=useState(false);
   const [showPasswordModal,setShowPasswordModal]=useState(false);
-  const [currentDescription,setCurrentDescription]=useState("")
+  const [Username,setUsername]=useState("");
+  const [currentDescription,setCurrentDescription]=useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      const cookie = await getCookies();
+      if(cookie&&cookie.username){
+          setUsername(cookie.username);
+      }  
+    }
+    fetchData();
+  }, []);
 
     const openEmailModal = () => {
       setShowEmailModal(true);
@@ -37,15 +51,11 @@ const Home=()=> {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3002/settings/account');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        console.log(data);
-        setUserData(data);
+        const response = await apiHandler(`/settings/account`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
+        console.log(response);
+        setUserData(response);
       } catch (error) {
-        console.error('Error fetching data:', error.message);
+        console.error('Error', error);
       }
     }
     fetchData();
@@ -55,26 +65,27 @@ const Home=()=> {
     return <div>Loading...</div>;
   }
 
-  const {username, email, password, gender, country, connected } = userData;
+  const {email, password, gender, country, connected } = userData;
 
   
 const updateGender= async (newgender)=>{
+  const reply={email:currentDescription==""?email:currentDescription,gender:newgender};
   try {
-      const response = await apiHandler(`settings/account`, "POST",newgender);
-      console.log('Gender changed:', response);
+    const response = await apiHandler(`/settings/account`, "PUT", reply,temporaryToken );
+    console.log(response);
   } catch (error) {
-    console.error('Error changing gender:', error.message);
+    console.error('Error', error);
   }
 }
 
 const updateCountry= async (newcountry)=>{
+  const reply={email:currentDescription==""?email:currentDescription,country:newcountry};
   try {
-      const response = await apiHandler(`settings/account`, "POST",newcountry);
+      const response = await apiHandler(`/settings/account`, "PUT",reply, temporaryToken);
       console.log('Country changed:', response);
-      
 
   } catch (error) {
-    console.error('Error changing country:', error.message);
+    console.error('Error:', error);
   }
 }
 
@@ -136,7 +147,7 @@ const updateCountry= async (newcountry)=>{
             <h3 className={Styles.subheader}>DELETE ACCOUNT</h3>
             <hr className={Styles.line}></hr>
           </div>
-          <Deleteaccount password={password} username={username}/>
+          <Deleteaccount password={password} username={Username}/>
         </div>
       </div>
     </div>

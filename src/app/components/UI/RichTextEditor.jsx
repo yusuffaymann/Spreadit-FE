@@ -383,6 +383,8 @@ function closeTag(style) {
     setVideoToggled(!videoToggled);
   };
 
+  console.log(mediaArray)
+
   const toolbarItems = [
     {
       onClick: handleBoldToggle,
@@ -512,13 +514,13 @@ function closeTag(style) {
             </div>
           </div>
           <div>
-            <div class={styles.DraftEditorroot}>
-              <div class={styles.DraftEditoreditorContainer}>
+            <div className={styles.DraftEditorroot}>
+              <div className={styles.DraftEditoreditorContainer}>
                 <div
-                  class={styles.publicDraftEditorcontent}
+                  className={styles.publicDraftEditorcontent}
                   role="textbox"
                   placeholder="Text (optional)"
-                  spellcheck="true"
+                  spellCheck="true"
                   onInput={handleInputChange}
                   onKeyDown={handleKeyDown} // Add keydown event listener
                 >
