@@ -12,7 +12,6 @@ import { redirect } from 'next/navigation'
 
 
 function CreateCommunityModal(props) {
-  const [token , setToken] = useState(null);
   const [nameTaken, setNameTaken] = useState(false);
   const [errors, setErrors] = useState("");
   const [formData, setFormData] = useState({
@@ -43,6 +42,11 @@ function CreateCommunityModal(props) {
   };
 
   async function handleCreate(){
+    const cookies = await getCookies()
+    if(cookies === null){
+      redirect("/login")
+    }
+    const token = cookies.access_token
     const communityName = formData.name
     const isNSFW = formData.mature
     let communityType
@@ -53,7 +57,8 @@ function CreateCommunityModal(props) {
     } else{
       communityType = "Restricted"
     }
-    const response = await apiHandler("/community/create", "POST", {name: communityName, is18plus: isNSFW, communityType: communityType}, token)
+    console.log(`the token is: ${token}`)
+    const response = await apiHandler("/community/create", "POST", {name: communityName, is18plus: isNSFW ? "true" : "false", communityType: communityType}, token)
     console.log(response)
   }
 
