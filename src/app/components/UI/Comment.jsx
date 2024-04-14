@@ -68,7 +68,8 @@ const onComment = async (newReply) => {
   
         if (newReply.attachments) {
           formData.append('attachments', newReply.attachments);
-      }
+        }
+        formData.append('fileType',"image");
         console.log(formData);
         const response = await fetch(`http://localhost:2000/comment/${comment.id}/reply`, {
             method: 'POST',
