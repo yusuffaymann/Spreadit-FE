@@ -1,12 +1,35 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import "./TopCommunities.css";
 import ToolBar from "../components/UI/Toolbar";
 import CommunityBoxItem from "../components/UI/CommunityBoxItem";
-import awwpfp from "@/app/assets/awwpfp.jpg";
+import awwpfp from "@/app/assets/blueProfile.jpeg";
+import awwbanner from "@/app/assets/background.jpeg";
 import Image from "next/image";
+import getCookies from "../utils/getCookies";
+import handler from "../utils/apiHandler";
 
 function TopCommunities() {
-  const communities = [
+  const [communities, setCommunities] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const cookies = await getCookies();
+      if (cookies === null || !cookies.access_token) {
+        redirect("/login");
+      }
+      try{
+        const response = await handler("/community/top-communities", "GET", "", cookies.access_token);
+        console.log(response.communities);
+        setCommunities(response.communities);
+
+      }catch(err){
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const communitiesdd = [
     {
       icon: <Image className="icon" src={awwpfp} alt="Community Profile" />,
       name: "technology",
@@ -66,11 +89,11 @@ function TopCommunities() {
                   <CommunityBoxItem
                     count={key + 1}
                     name={val.name}
-                    icon={val.icon}
+                    icon={<Image className="icon" src={awwpfp} alt="Community Profile" />}
                     iconurl={awwpfp}
                     description={val.description}
                     category={val.category}
-                    members={val.members}
+                    members={"1k"}
                     key={key}
                   />
                 </div>
