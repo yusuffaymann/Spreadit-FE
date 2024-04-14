@@ -78,7 +78,7 @@ useEffect(() => {
   async function getPost() {
       setLoading(true);
     try {
-      const post = await apiHandler(`/posts/${postId}/one`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
+      const post = await apiHandler(`/posts/${postId}`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
       console.log(post);
       setThePost(post);
 
