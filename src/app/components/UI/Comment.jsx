@@ -21,6 +21,7 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
     const [replies,setReplies]=useState(comment.replies);
     const [hidden,setHidden]=useState(comment.is_hidden);
     const [saved,setSaved]=useState(comment.is_saved);
+    const [upVoteStatus,setupVoteStatus]=useState("");
     
     const [isUser,setIsUser]=useState(false);
     const [isDeleted,setIsDeleted]=useState(false);
@@ -33,7 +34,13 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
                 setIsUser(true);
             }
           }
-          
+          if(comment.is_upvoted){
+            setupVoteStatus("upvoted")
+          }else if(comment.is_downvoted){
+            setupVoteStatus("downvoted");
+          }else{
+            setupVoteStatus("neutral");
+          }
             
         }
         fetchData();
@@ -173,6 +180,7 @@ const onComment = async (newReply) => {
 
     const onSave= async ()=>{
         try {
+            console.log(upVoteStatus);
             const response = await apiHandler(`/comments/${comment.id}/save`, "POST", "", temporaryToken);
             console.log('save toggled:', response);
             setSaved(!saved);
@@ -227,7 +235,7 @@ const onComment = async (newReply) => {
             {!hidden&&!isDeleted&&(
                     <div className={styles.commentbody}>
                        <PostHeader isUser={isUser} isProfile={true} isInComment={false} showProfilePicture={showProfilePicture} userName={comment.user.username} profilePicture={comment.user.avatar_url} time={comment.created_at} cakeDate={comment.user.created_at}/>
-                       {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.content} commentImage={comment.media[0].link} buttonDisplay={"Save edits"} isPost={false}/>)}
+                       {isEditing&&(<CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={comment.content} commentImage={comment.media.length!==0?comment.media[0].link:[]} buttonDisplay={"Save edits"} isPost={false}/>)}
                         {!isEditing&&(
                         <div className={styles.commentcontent}>
                             {comment.media.length!==0&&(<img src={comment.media[0].link} className={styles.commentimage} />)}
