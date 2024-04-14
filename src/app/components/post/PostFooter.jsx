@@ -49,9 +49,20 @@ import PostDropDownMenu from "./PostDropDownMenu";
  * <PostFooter upvote={upvote} downvote={downvote} voteCount={voteCount} commentCount={commentCount} isMod={isMod}/>    
  * 
  */
-function PostFooter({upvote, downvote, voteCount, commentCount, isMod}) {
+function PostFooter({upvote, downvote, voteCount, commentCount, isMod, voteStatus}) {
     const [buttonState, setButtonState] = React.useState({type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon, upHover: "", downHover: ""}); // state of "neutral" for neutral, upvoted for upvote, downvoted for downvote
     const [showDropdown, setShowDropdown] = React.useState(false);
+
+    React.useEffect(() => {
+        setButtonState(prevButtonState => {
+            if (voteStatus === "upvoted") {
+            return({...prevButtonState, type: "upvoted", upvoteIcon: upvoteFilled, downvoteIcon: downvoteOutlined});
+          } else if (voteStatus === "downvoted") {
+            return({...prevButtonState, type: "downvoted", upvoteIcon: upvoteOutlined, downvoteIcon: downvoteFilled});
+          } else {
+            return({...prevButtonState, type: "neutral", upvoteIcon: upvoteIcon, downvoteIcon: downvoteIcon});
+          }}) 
+      }, [voteStatus]);
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);

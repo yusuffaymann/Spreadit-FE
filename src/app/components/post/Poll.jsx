@@ -8,6 +8,8 @@ import parseTime from "../../utils/timeDifference"
 
 function Poll ({isOpen,options,onVote,pollExpiration,myVote}) {
 
+    const myVoteIndex = options.findIndex(optionObj => optionObj.option === myVote);
+
     let totalVotes = options.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.votes;
     }, 0);
@@ -16,13 +18,6 @@ function Poll ({isOpen,options,onVote,pollExpiration,myVote}) {
     const [wininngChoice, setWinningChoice] = useState(-1);
     const [hasVoted,setHasVoted] = useState(false);
 
-    useEffect(() => {
-        if(myVote!=="")
-        {
-            setHasVoted[true];
-            selectedChoice[myVote];
-        }
-    }, []); 
 
     useEffect(() => {
         const indexOfMaxVotes = options.reduce((maxIndex, currentObject, currentIndex) => {
@@ -30,6 +25,16 @@ function Poll ({isOpen,options,onVote,pollExpiration,myVote}) {
         }, 0);
         setWinningChoice(indexOfMaxVotes);
     }, [hasVoted]);
+
+
+    useEffect(() => {
+        if(myVoteIndex !== -1)
+        {
+            setHasVoted(true);
+            setSelectedChoice(myVoteIndex);
+        }
+    }, []); 
+
 
     function handleVote () {
         onVote(options[selectedChoice]);

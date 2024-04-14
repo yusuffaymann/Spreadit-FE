@@ -61,7 +61,7 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                             <div className={styles.subInfo} onMouseEnter={() => clearTimeout(timeOut)} onMouseLeave={() => setShowSubRedditInfo(false)} >
                                 <SubRedditInfoModal subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditBanner={subRedditBanner} subRedditDescription={subRedditDescription} isMember={isMember} joined={joined} onJoin={handleJoin}/>
                             </div>}
-                            <img className={styles.subRedditPicture}
+                            <Image className={styles.subRedditPicture}
                                 src={subRedditPicture}
                                 width={256}
                                 height={256}

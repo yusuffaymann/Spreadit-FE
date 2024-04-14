@@ -32,18 +32,12 @@ function PostHeader ({postId, isUser, userName,showProfilePicture, profilePictur
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [showProfileInfo,setShowProfileInfo] = useState(false);
     const [showReportModal,setShowReportModal] = useState(false);
-    
     const [showDeleteModal,setShowDeleteModal] = useState(false);
 
     let timeOut;
 
     function toggleDropdown() {
         setShowDropdown(prevShowDropdown => !prevShowDropdown);
-    }
-
-    const handleFollow=()=>{
-        setFollowed(!followed);
-        onFollow();
     }
 
     async function handleMouseLeaveSubreddit() {
