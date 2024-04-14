@@ -10,24 +10,33 @@ import ChangeEmailmodal from "../../components/UI/ChangeEmailModal";
 import ChangePasswordModal from "../../components/UI/ChangePasswordModal";
 import apiHandler from "../../utils/apiHandler";
 import getCookies from "@/app/utils/getCookies";
+import { useRouter } from "next/navigation";
 
 const Home=()=> {
-  const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+  const router = useRouter();
+  const [temporaryToken, setToken] = useState(null);
+  useEffect(() => {
+    async function cookiesfn() {
+      const cookies = await getCookies();
+      if(cookies !== null && cookies.access_token){
+        setToken(cookies.access_token);
+          if(cookies&&cookies.username){
+            setUsername(cookies.username);
+          } 
+      } else {
+        router.push("/login")
+      }
+
+    }
+    cookiesfn();
+  }, []);
+  //const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
   const [userData, setUserData] = useState(null);
   const [showEmailModal,setShowEmailModal]=useState(false);
   const [showPasswordModal,setShowPasswordModal]=useState(false);
   const [Username,setUsername]=useState("");
   const [currentDescription,setCurrentDescription]=useState("");
 
-  useEffect(() => {
-    async function fetchData() {
-      const cookie = await getCookies();
-      if(cookie&&cookie.username){
-          setUsername(cookie.username);
-      }  
-    }
-    fetchData();
-  }, []);
 
     const openEmailModal = () => {
       setShowEmailModal(true);
@@ -50,6 +59,8 @@ const Home=()=> {
 
   useEffect(() => {
     async function fetchData() {
+      if(temporaryToken===null){
+        return}
       try {
         const response = await apiHandler(`/settings/account`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
         console.log(response);
@@ -59,7 +70,7 @@ const Home=()=> {
       }
     }
     fetchData();
-  }, []);
+  }, [temporaryToken]);
 
   if (!userData) {
     return <div>Loading...</div>;
@@ -131,7 +142,7 @@ const updateCountry= async (newcountry)=>{
             <Changeemailpassword type="Email address" description={currentDescription==""?email:currentDescription} display="Change" activate={() => {openEmailModal()}} />
             {showEmailModal && (<ChangeEmailmodal close={()=>closeEmailModal()} updatetext={(newdescription) => updateupdatedescription(newdescription)} />) }
             <Changeemailpassword type="Password" description="Password must be at least 8 characters long" display="Change" activate={() => {openPasswordModal()}} />
-            {showPasswordModal && (<ChangePasswordModal close={()=>closePasswordModal()} />)}
+            {showPasswordModal && (<ChangePasswordModal email={currentDescription=="" ? email : currentDescription} close={()=>closePasswordModal()} />)}
             <Changegendercountry list={genders} initialv={gender} type={"Gender"}  displayedColor={"blue"} choose={(newgender) => updateGender(newgender)} />
             <Changegendercountry list={countries} initialv={country} type={"Country"} displayedColor={"blue"} choose={(newcountry) => updateCountry(newcountry)} />
         </div>

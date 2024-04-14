@@ -5,15 +5,34 @@ import Layout from "../SettingsLayout";
 import Blockmute from "../../components/UI/Blockmute";
 import Blockedmuted from "../../components/UI/Blockedmuted";
 import apiHandler from "../../utils/apiHandler";
+import getCookies from "../../utils/getCookies";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    const router = useRouter();
+    const [temporaryToken, setToken] = useState(null);
+    useEffect(() => {
+      async function cookiesfn() {
+        const cookies = await getCookies();
+        if(cookies !== null && cookies.access_token){
+          setToken(cookies.access_token);
+        } else {
+          router.push("/login")
+        }
+  
+      }
+      cookiesfn();
+    }, []);
+
+    //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [userData, setUserData] = useState(null); 
     const [blockedUsers, setBlockedUsers] = useState([]); 
     const [mutedCommunities, setMutedCommunities] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
+      if(temporaryToken===null){
+        return}
       try {
         const response = await apiHandler(`/settings/safety-privacy`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
         console.log(response);
@@ -25,7 +44,7 @@ export default function Home() {
       }
     }
     fetchData();
-  }, []);
+  }, [temporaryToken]);
 
   if (!userData) {
     return <div>Loading...</div>;

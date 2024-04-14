@@ -11,11 +11,26 @@ import CommentPost from "../../components/UI/CommentPost";
 import CommentInput from "../../components/UI/CommentInput";
 import RightCommentsSidebar from "../../components/UI/RightCommentsSidebar";
 import { useSearchParams } from "next/navigation";
-import parseTime from "@/app/utils/timeDifference"
+import parseTime from "@/app/utils/timeDifference";
+import getCookies from "@/app/utils/getCookies";
+import { useRouter } from "next/navigation";
 
 const Home=({params : {postId}})=> {
+  const router = useRouter();
+  const [temporaryToken, setToken] = useState(null);
+  useEffect(() => {
+    async function cookiesfn() {
+      const cookies = await getCookies();
+      if(cookies !== null && cookies.access_token){
+        setToken(cookies.access_token);
+      } else {
+        router.push("/login")
+      }
 
-  const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    }
+    cookiesfn();
+  }, []);
+  //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
   const searchParams=useSearchParams();
   const isedit=searchParams.has("isEditing");
   const [addingComment,setAddingComment]=useState(false);
@@ -77,6 +92,8 @@ const pollOptions = [{votes:5 , option:"Option A"},{votes:5 , option:"Option B"}
 
 useEffect(() => {
   async function getPost() {
+    if(temporaryToken===null){
+      return}
       setLoading(true);
     try {
       const post = await apiHandler(`/posts/${postId}`, "GET", "",temporaryToken );
@@ -98,12 +115,13 @@ useEffect(() => {
     }
   }
   getPost();
-},[]);
+},[temporaryToken]);
 
 useEffect(()=>{
   async function getComments(){
+    if(temporaryToken===null){
+      return}
   try{
-    console.log("calling");
     const commentsData = await apiHandler(`/posts/comment/${postId}?include_replies=true`, "GET", "", temporaryToken)
         console.log(commentsData)
         setComments(commentsData.comments)
@@ -112,7 +130,7 @@ useEffect(()=>{
       console.error('Error fetching data:', error);
   }
 }getComments();
-},[]);
+},[temporaryToken]);
 
 /* useEffect(() => {
   async function getRemainingData() {
@@ -273,7 +291,7 @@ async function handleJoin() {
         </div>
         <div className={styles.mainbar}>
             <div className={styles.postarea}>
-            <CommentPost postId={thePost._id} profilePicture={thePost.userProfilePic} cakeDate={"1/1/2024"} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[thePost.content.length-1]?thePost.content[thePost.content.length-1]:""} attachments={thePost.attachments} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isSaved={thePost.isSaved} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isJoined={joined} onJoin={handleJoin} isMember={subscribe.isSubscribed} Editing={isEditing} />
+            <CommentPost postId={thePost._id} profilePicture={thePost.userProfilePic} cakeDate={"1/1/2024"} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditDescription={theSub.description} banner={theSub.communityBanner} subRedditRules={theSub.rules} time={parseTime(thePost.date)} title={thePost.title} description={thePost.content[thePost.content.length-1]?thePost.content[thePost.content.length-1]:""} attachments={thePost.attachments} upVotes={thePost.votesUpCount - thePost.votesDownCount} comments={thePost.commentsCount} userName={thePost.username} isSpoiler={thePost.isSpoiler} isSaved={thePost.isSaved} isNSFW={thePost.isNsfw} pollOptions={thePost.pollOptions} pollIsOpen={thePost.isPollEnabled} pollExpiration={thePost.pollExpiration} sendReplyNotifications={thePost.sendPostReplyNotification} isJoined={joined} onJoin={handleJoin} isMember={subscribe.isSubscribed} upVoteStatus={thePost.hasUpvoted ? "upvoted" : (thePost.hasDownvoted ? "downvoted" : "neutral")} Editing={isEditing} />
              {/* <CommentPost profilePicture={profilePicture} cakeDate={"1/1/2024"} /> */}
             </div>
           <div className={styles.inputarea}>

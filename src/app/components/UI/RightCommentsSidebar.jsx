@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 
 const rightCommentsSidebar=({name,description,members,rules,isJoined, onJoin,moderators})=>{
     const router = useRouter();
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
-    return(
+     return(
         <div className={styles.rightsidebar}>
             <div className={styles.sectioninfo}>
                 {!isJoined&&(<Changebutton type={name} description="" display="join" activate={onJoin} />)}

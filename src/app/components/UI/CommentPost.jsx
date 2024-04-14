@@ -34,7 +34,23 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
       );
     
     const router = useRouter();
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    const [temporaryToken, setToken] = useState(null);
+    useEffect(() => {
+        async function cookiesfn() {
+        const cookies = await getCookies();
+        if(cookies !== null && cookies.access_token){
+            setToken(cookies.access_token);
+            if(cookies.username === userName){
+                setMyPost(true);
+              }
+        } else {
+            router.push("/login")
+        }
+
+        }
+        cookiesfn();
+    }, []);
+    //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isEditing,setIsEditing]=useState(Editing);
     const [imageIndex, setImageIndex] = useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -42,22 +58,12 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
     const [view, setView] = useState(false);
     const [deleted,setDeleted] = useState(false);
     const [myPost,setMyPost] = useState(false);
+    const [displayDescription,setDisplayDescription]=useState(description);
     const [votes,setVotes] = useState(upVotes);
     const [NSFW,setNSFW] = useState(isNSFW);
     const[spoiler,setSpoiler] = useState(isSpoiler);
     const [saved,setSaved] = useState(isSaved);
     const [replyNotifications,setReplyNotifications] = useState(sendReplyNotifications);
-
-    useEffect(() => {
-        async function fetchData() {
-          const cookie = await getCookies();
-    
-          if(cookie.username === userName){
-            setMyPost(true);
-          }
-        }
-        fetchData();
-      }, []);
     
     useEffect(() => {
         setNSFW(isNSFW);
@@ -240,7 +246,8 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
             console.log(newcontent);
             const response = await handler(`/posts/${postId}/edit`, "PUT",  {content:newcontent.content} , temporaryToken);
             console.log('edit done:', response);
-            description=newcontent;
+            setDisplayDescription(newcontent.content);
+            console.log(displayDescription);
             setIsEditing(false);
 
     } catch (error) {
@@ -272,7 +279,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
         return formattedText;
     }
 
-    const formattedDescription = parseAndStyleLinks(description);
+    const formattedDescription = parseAndStyleLinks(displayDescription);
 
     return (
         <div className={styles.post}>
@@ -319,7 +326,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                     <Header postId={postId} isUser={myPost} profilePicture={profilePicture} userName={userName} showProfilePicture={true} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} time={time} banner={banner} subRedditDescription={subRedditDescription} isProfile={isProfile} isInComment={true} cakeDate={cakeDate}  isMember={isMember} joined={isJoined} onJoin={onJoin} myPost={myPost} isNSFW={NSFW} onNSFW={handleNSFW} isSpoiler={spoiler} onSpoiler={handleSpoiler} isSaved={saved} onSave={handleSaved} onReport={handleReport} onBlock={handleBlock} onHide={handleHide} onDelete={handleDelete} replyNotifications={replyNotifications} onReplyNotifications={handleReplyNotifications} onEdit={()=>setIsEditing(true)} />
                     <div className={styles.title}>{title}</div>
                     <div className={styles.content} >
-                        {isEditing&& <CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={description} buttonDisplay={"Save edits"} isPost={true}/>}
+                        {isEditing&& <CommentInput onComment={onEdit} close={()=>setIsEditing(false)} commentBody={displayDescription} buttonDisplay={"Save edits"} isPost={true}/>}
                         <div className={styles.postcontent}>
                         
                         {(!view&& (isNSFW||isSpoiler))&&(

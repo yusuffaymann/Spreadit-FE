@@ -5,6 +5,8 @@ import mailp from "../../assets/mailimage.png"
 import googlep from "../../assets/Google.png"
 import Styles from "./Connectbutton.module.css"
 import apiHandler from "../../utils/apiHandler"
+import { useRouter } from "next/navigation";
+import getCookies from "@/app/utils/getCookies";
 
 /**
  * connect/disconnect button to google account
@@ -28,7 +30,21 @@ import apiHandler from "../../utils/apiHandler"
  */
 
 const Connectbutton=(props)=>{
-    const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+  const router = useRouter();
+    const [temporaryToken, setToken] = useState(null);
+    useEffect(() => {
+      async function cookiesfn() {
+        const cookies = await getCookies();
+        if(cookies !== null && cookies.access_token){
+          setToken(cookies.access_token);
+        } else {
+          router.push("/login")
+        }
+  
+      }
+      cookiesfn();
+    }, []);
+    //const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [currentPassword, setCurrentPassword] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(true);

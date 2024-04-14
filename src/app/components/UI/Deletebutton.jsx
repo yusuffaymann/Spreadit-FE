@@ -5,6 +5,7 @@ import { useState,useEffect } from 'react';
 import  Styles from "./Deletebutton.module.css";
 import apiHandler from "../../utils/apiHandler";
 import { useRouter } from "next/navigation";
+import getCookies from "@/app/utils/getCookies";
 
 /**
  * Delete modal that checks on the inputs and deletes the account
@@ -19,8 +20,21 @@ import { useRouter } from "next/navigation";
 
 
 const Deleteaccount=(props)=>{
-    const router = useRouter();
-    const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+  const router = useRouter();
+  const [temporaryToken, setToken] = useState(null);
+  useEffect(() => {
+    async function cookiesfn() {
+      const cookies = await getCookies();
+      if(cookies !== null && cookies.access_token){
+        setToken(cookies.access_token);
+      } else {
+        router.push("/login")
+      }
+
+    }
+    cookiesfn();
+  }, []);
+    //const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [currentPassword, setCurrentPassword] = useState('');
     const [UserName, setUserName] = useState('');
     const [CheckBox,setCheckBox]=useState(false);

@@ -12,25 +12,29 @@ import { useRouter } from "next/navigation";
 
 function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate}) {
     const router = useRouter();
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    const [temporaryToken, setToken] = useState(null);
+    //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isFollowed,setIsFollowed]=useState(false);
     const [loading,setLoading] = useState(false);
 
     useEffect(() => {
-        async function fetchData() {
-          const cookie = await getCookies();
-          if(cookie&&cookie.username){
-            if(cookie.username !== userName){
+        async function cookiesfn() {
+          const cookies = await getCookies();
+          if(cookies&&cookies.username&&cookies.access_token){
+                setToken(cookies.access_token);
+            if(cookies.username !== userName){
                 setLoading(true);
                 const response=await handler(`/users/isfollowed/${userName}`,"GET", "",temporaryToken);
                 setIsFollowed(response.isFollowed);
                 setLoading(false);
             }
-          }
+          }else {
+            router.push("/login")
+        }
           
             
         }
-        fetchData();
+        cookiesfn();
       }, []);
 
       const handleFollow=async()=> {

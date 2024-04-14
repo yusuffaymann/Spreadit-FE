@@ -14,7 +14,8 @@ import { redirect } from 'next/navigation';
 import handler from "../../utils/apiHandler";
 
 const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,showProfilePicture})=>{
-    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    const [temporaryToken, setToken] = useState(null);
+    //const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isReplying,setIsReplying]=useState(false);
     const [isEditing,setIsEditing]=useState(false);
     const [showReply,setShowReply]=useState(true);
@@ -27,12 +28,15 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
     const [isDeleted,setIsDeleted]=useState(false);
 
     useEffect(() => {
-        async function fetchData() {
-          const cookie = await getCookies();
-          if(cookie&&cookie.username){
-            if(cookie.username === comment.user.username){
-                setIsUser(true);
-            }
+        async function cookiesfn() {
+          const cookies = await getCookies();
+          if(cookies&&cookies.username&&cookies.access_token){
+                setToken(cookies.access_token);
+                if(cookies.username === comment.user.username){
+                    setIsUser(true);
+                }
+          }else{
+            router.push("/login")
           }
           if(comment.is_upvoted){
             setupVoteStatus("upvoted")
@@ -43,7 +47,7 @@ const Comment=({postId, comment,subRedditName,subRedditPicture,subRedditRules,sh
           }
             
         }
-        fetchData();
+        cookiesfn();
       }, []);
 
     
@@ -78,7 +82,7 @@ const onComment = async (newReply) => {
         if (newReply.attachments) {
           formData.append('attachments', newReply.attachments);
       }
-  
+        console.log(formData);
         const response = await fetch(`http://localhost:2000/comment/${comment.id}/reply`, {
             method: 'POST',
             headers: {
