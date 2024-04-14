@@ -6,23 +6,35 @@ import SubRedditInfoModal from "../components/post/SubRedditInfoModal";
 import spoilerIcon from "../assets/post-images/mod-icons/spoiler.svg";
 import nsfwIcon from "../assets/post-images/mod-icons/nsfw.svg";
 
-function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,postPictures,upVotes,comments,video,isNSFW,isSpoiler, isMember}) {
+function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescription,subRedditBanner,postTitle,attachments,upVotes,comments,isNSFW,isSpoiler,isMember}) {
 
     const router = useRouter();
     const [showSubRedditInfo,setShowSubRedditInfo] = useState(false);
     const [joined,setJoined] = useState(false);
     let timeOut;
 
-    function convertToEmbedLink(videoLink) {
+    const { postPictures, videos } = attachments.reduce(
+        (acc, attachment) => {
+          if (attachment.type === 'image') {
+            acc.postPictures.push(attachment.link);
+          } else if (attachment.type === 'video') {
+            acc.videos.push(attachment.link);
+          }
+          return acc;
+        },
+        { postPictures: [], videos: [] }
+      );
+
+    function convertToEmbedLink(videosLink) {
         // Regular expression to check if the link is a YouTube link
         const youtubeRegex = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/;
     
-        if (youtubeRegex.test(videoLink)) {
+        if (youtubeRegex.test(videosLink)) {
             // If it's a YouTube link, replace "watch" with "embed"
-            return videoLink.replace("/watch?v=", "/embed/");
+            return videosLink.replace("/watch?v=", "/embed/");
         } else {
             // If it's not a YouTube link, return the original link
-            return videoLink;
+            return videosLink;
         }
     }
 
@@ -61,7 +73,7 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                     </div>
                     <div className={styles.title}>{postTitle}</div>
                 </div>
-                {(postPictures.length !== 0 || video.length !== 0 ) && <div className={styles.media} onClick={(e) => {e.stopPropagation();}} >
+                {(postPictures.length !== 0 || videos.length !== 0 ) && <div className={styles.media} onClick={(e) => {e.stopPropagation();}} >
                         {(isSpoiler || isNSFW) && <div className={styles.overlay} onClick={(e) => {e.stopPropagation();}} ></div>}
                         <div className={styles.warningIcon} onClick={(e) => {e.stopPropagation();}} >
                             {isNSFW && <Image 
@@ -78,8 +90,8 @@ function MiniaturePost ({postId,subRedditName,subRedditPicture,subRedditDescript
                                         alt="Spoiler" />}
                             </div>
                         <div>
-                            {video.length === 0 && <Image src={postPictures[0]} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
-                            {video.length !==0 && <video className={styles.video} title="Posted video" src={convertToEmbedLink(video[0])}  ></video>}
+                            {videos.length === 0 && <Image src={postPictures[0]} alt="posted image " fill style={{objectFit: "cover", maxWidth: "100%"}}  />}
+                            {videos.length !==0 && <video className={styles.video} title="Posted videos" src={convertToEmbedLink(videos[0])}  ></video>}
                         </div>
                     </div>}
                 </div>

@@ -6,7 +6,7 @@ import check from "../../assets/check.svg";
 import parseTime from "../../utils/timeDifference"
 
 
-function Poll ({isOpen,options,onVote,pollExpiration}) {
+function Poll ({isOpen,options,onVote,pollExpiration,myVote}) {
 
     let totalVotes = options.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.votes;
@@ -15,6 +15,14 @@ function Poll ({isOpen,options,onVote,pollExpiration}) {
     const [selectedChoice, setSelectedChoice] = useState(-1);
     const [wininngChoice, setWinningChoice] = useState(-1);
     const [hasVoted,setHasVoted] = useState(false);
+
+    useEffect(() => {
+        if(myVote!=="")
+        {
+            setHasVoted[true];
+            selectedChoice[myVote];
+        }
+    }, []); 
 
     useEffect(() => {
         const indexOfMaxVotes = options.reduce((maxIndex, currentObject, currentIndex) => {

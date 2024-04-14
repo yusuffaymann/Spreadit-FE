@@ -6,6 +6,12 @@ const social = [
     logo: "https://www.redditstatic.com/desktop2x/img/social-links/custom.png",
   },
   {
+    id: 26,
+    name: "Spreadit",
+    platform: "Spreadit",
+    logo: "../assets/logoSpreadIt.svg",
+  },
+  {
     id: 2,
     name: "Reddit",
     platform: "Reddit",
@@ -148,12 +154,6 @@ const social = [
     name: "Shopify",
     platform: "Shopify",
     logo: "https://www.redditstatic.com/desktop2x/img/social-links/shopify.png",
-  },
-  {
-    id: 26,
-    name: "Spreadit",
-    platform: "Spreadit",
-    logo: "../assets/logoSpreadIt.svg",
   },
 ];
 
