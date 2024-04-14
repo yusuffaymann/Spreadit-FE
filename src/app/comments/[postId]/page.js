@@ -14,38 +14,18 @@ import { useSearchParams } from "next/navigation";
 import parseTime from "@/app/utils/timeDifference"
 
 const Home=({params : {postId}})=> {
-  const UserName="Teachers";
+
   const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
   const searchParams=useSearchParams();
   const isedit=searchParams.has("isEditing");
-  const [userData, setUserData] = useState(null);
   const [addingComment,setAddingComment]=useState(false);
   const [comments,setComments]=useState([]);
   const [isEditing,setIsEditing]=useState(true);
-  const [postIdState, setPostIdState] = useState(postId);
-  const [posterUserName,setPosterUserName] = useState("");
-  const [upVotes,setUpVotes] = useState(0);
-  const [downVotes,setDownVotes] = useState(0);
-  const [commentsCount,setCommentsCount] = useState(0);
-  const [title,setTitle] = useState("");
-  const [description,setdescription] = useState("");
-  const [images,setImages] = useState([]);
-  const [video,setVideo] = useState("");
-  const [isSpoiler,setisSpoiler] = useState(false);
-  const [isNSFW,setIsNSFW] = useState(false);
-  const [subName,setSubName] = useState("");
-  const [subDescription,setSubDescription] = useState("");
-  const [subImage,setSubImage] = useState("");
-  const [subBanner,setSubBanner] = useState("");
-  const [subRules,setSubRules] = useState("");
-  const [members,setMembers] = useState([]);
-  const [isMember,setIsMember] = useState(false);
-  const [myUserName,setMyUserName] = useState("u/Common-Summer-7186");
-  const [profilePicture,setProfilePicture]=useState("https://wallpapers.com/images/hd/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf.jpg");
   const [loading,setLoading] = useState(true);
   const [thePost,setThePost]=useState(null);
   const [theSub,setTheSub]=useState(null);
   const [subscribe,setSubscribe]=useState(null);
+  /* const [addedcomment,setAddedComment]=useState(false); */
 
 useEffect(()=>{
   setIsEditing(isedit);
@@ -98,7 +78,7 @@ useEffect(() => {
   async function getPost() {
       setLoading(true);
     try {
-      const post = await apiHandler(`/posts/${postId}/one`, "GET", "","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M" );//todo change api endpoint according to sortBy state
+      const post = await apiHandler(`/posts/${postId}/one`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
       console.log(post);
       setThePost(post);
 
@@ -124,17 +104,89 @@ useEffect(() => {
   getPost();
 },[]);
 
+/* useEffect(()=>{
+  async function getcomments(){
+    try {
+        const commentsData = await apiHandler(`/posts/comment/${thePost._id}?include_replies=true`, "GET", "", temporaryToken)
+        console.log(commentsData);
+        setComments(commentsData.comments);
+    } catch(error){
+      console.error('Error fetching data:', error);
+    }
+  }
+  getcomments();
+},[addedcomment]) */
 
+
+  /* async function handler(url, method, body, token="") {
+    try {
+      const base_url = 'http://localhost:2000';
+      const headers = token !== "" ? {"Content-Type": "application/json","Authorization": `Bearer ${token}`} : {"Content-Type": "application/json"}
+
+  
+      // Conditionally include the body only when it's provided and the method is not 'GET'
+      const requestOptions = {
+        method: `${method}`,
+        headers: headers,
+        body: method !== ('GET' || 'DELETE') && body ? JSON.stringify(body) : undefined
+      };
+  
+      const response = await fetch(`${base_url}${url}`, requestOptions);
+  
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+  
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error; // Re-throw for further handling
+    }
+  };
   const onComment = async (newComment) => {
     try {
-          const response = await apiHandler(`/post/comment/${postIdState}`, "POST",newComment);
+          const response = await apiHandler(`/post/comment/${thePost._id}`, "POST",newComment,temporaryToken);
           console.log('New comment added:', response);
-          setComments((prev) => [...prev, newComment]);
-
+          setAddingComment(false);
+          setComments((prev) => [...prev, response.comment]);
     } catch (error) {
         console.error('Error adding comment:', error.message);
     }
+} */
+
+const onComment = async (newComment) => {
+  try {
+      const formData = new FormData();
+
+      formData.append('content', newComment.content);
+
+      if (newComment.attachments) {
+        formData.append('attachments', newComment.attachments);
+    }
+
+      const response = await fetch(`http://localhost:2000/post/comment/${thePost._id}`, {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${temporaryToken}`
+          },
+          body: formData
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log('New comment added:', responseData);
+      setAddingComment(false);
+      setComments((prev) => [...prev, responseData.comment]);
+  } catch (error) {
+      console.error('Error adding comment:', error.message);
+  }
 }
+
+
+
 
   /* useEffect(() => {
     async function fetchData() {
@@ -191,7 +243,7 @@ useEffect(() => {
             <div>
               {comments.map((comment)=>(
               <div>
-                <Comment comment={comment} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditRules={theSub.rules}/>
+                <Comment comment={comment} subRedditName={thePost.community} subRedditPicture={theSub.image} subRedditRules={theSub.rules} showProfilePicture={true} />
               </div>
               ))}
             </div>

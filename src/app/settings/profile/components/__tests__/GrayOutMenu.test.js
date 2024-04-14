@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import GrayOutMenuWrapper from "../GrayOutMenu";
-import GrayOutMenu from "../GrayOutMenu";
+import GrayOutMenuWrapper from "../GrayOutMenuWrapper";
+import GrayOutMenu from "../GrayOutMenuWrapper";
 
 describe("GrayOutMenuWrapper component", () => {
   it("renders the menu closed by default", () => {

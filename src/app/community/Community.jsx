@@ -12,6 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PopupMessage from "./PopupMessage";
+import DropDownItem from "../components/UI/DropDownItem";
 
 function Community({ communityName }) {
   //const [communityName, setCommunityName] = useState("aww");

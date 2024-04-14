@@ -7,10 +7,16 @@ import imageicon from "../../assets/image.svg";
 const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay,isPost}) => {
     const [showModal, setShowModal] = useState(false);
     const [commentBodyState, setCommentBody] = useState(commentBody || '');
-    const [imageURL,setImageURL]=useState(commentImage || null)
+    const [imageURL,setImageURL]=useState(null)
     const [image, setImage] = useState(null);
     const contentEditableRef = useRef(null);
     const inputRef = useRef(null);
+
+    const updateImage=()=>{
+        if(commentImage!==undefined){
+            setImageURL(commentImage);
+        }
+    }
 
     const resizeContentEditable = (element) => {
         element.style.height = "auto";
@@ -31,6 +37,7 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
             contentEditableRef.current.innerHTML = formattedBody;
             attachClickEventToLinks(contentEditableRef.current);
         }
+        updateImage();
     }, []);
 
     const handleCancel=()=>{
@@ -53,9 +60,8 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
     const handleCommentSubmit = () => {
         if(contentEditableRef.current.innerHTML || imageURL){
             const newComment = {
-                body: contentEditableRef.current.innerHTML,
-                replies: [],
-                media: image ? image : null
+                content: contentEditableRef.current.innerHTML,
+                attachments: image ? image : []
             }
             setCommentBody('');
             setImage(null);
@@ -72,6 +78,7 @@ const CommentInput = ({ onComment, close, commentBody,commentImage,buttonDisplay
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setImage(file);
+        console.log(file);
         setImageURL(URL.createObjectURL(file));
     }
 
