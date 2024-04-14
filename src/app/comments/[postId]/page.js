@@ -79,33 +79,57 @@ useEffect(() => {
   async function getPost() {
       setLoading(true);
     try {
-      const post = await apiHandler(`/posts/${postId}`, "GET", "",temporaryToken );//todo change api endpoint according to sortBy state
+      const post = await apiHandler(`/posts/${postId}`, "GET", "",temporaryToken );
       console.log(post);
       setThePost(post);
+      const subData = await apiHandler(`/community/get-info?communityName=${post.community}`, "GET", "", temporaryToken);
+      const subscribed = await apiHandler(`/community/is-subscribed?communityName=${post.community}`, "GET", "", temporaryToken);
+      setTheSub(subData);
+      console.log(subData);
+      setSubscribe(subscribed);
+      setJoined(subscribed.isSubscribed);
 
       //todo call to subReddit endpoint using the subReddit name in postObject.community to get info about the subReddit of the post then add it to the subArray to be used in populating post component
-        const data = await apiHandler(`/community/get-info?communityName=${post.community}`, "GET", "", temporaryToken);
-        const returnedData = {description: data.description, rules: data.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd",
-        communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png"};
-        setTheSub(returnedData);
-        console.log(returnedData);
 
-        const subscribeData = await apiHandler(`/community/is-subscribed?communityName=${post.community}`, "GET", "", temporaryToken);
-        setSubscribe(subscribeData);
-        setJoined(subscribeData.isSubscribed);
-
-        const commentsData = await apiHandler(`/posts/comment/${post._id}?include_replies=true`, "GET", "", temporaryToken)
-        console.log(commentsData)
-        setComments(commentsData.comments)
-    
     } catch (error) {
       console.error('Error fetching data:', error);
-    } finally {
+  }finally {
       setLoading(false);
     }
   }
   getPost();
 },[]);
+
+useEffect(()=>{
+  async function getComments(){
+  try{
+    console.log("calling");
+    const commentsData = await apiHandler(`/posts/comment/${postId}?include_replies=true`, "GET", "", temporaryToken)
+        console.log(commentsData)
+        setComments(commentsData.comments)
+    
+    } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+}getComments();
+},[]);
+
+/* useEffect(() => {
+  async function getRemainingData() {
+    try {
+      const subData = await apiHandler(`/community/get-info?communityName=${thePost.community}`, "GET", "", temporaryToken);
+      const subscribed = await apiHandler(`/community/is-subscribed?communityName=${thePost.community}`, "GET", "", temporaryToken);
+      setTheSub(subData);
+      console.log(subData);
+      setSubscribe(subscribed);
+      setJoined(subscribed.isSubscribed);
+       return { description: subData.description, rules: subData.rules, image: "https://styles.redditmedia.com/t5_2qh1o/styles/communityIcon_x9kigzi7dqbc1.jpg?format=pjpg&s=9e3981ea1791e9674e00988bd61b78e8524f60cd", communityBanner: "https://styles.redditmedia.com/t5_2qh1o/styles/bannerBackgroundImage_rympiqekcqbc1.png", ...subscribed};
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+getRemainingData();
+},[thePost]) */
 
 /* useEffect(()=>{
   async function getcomments(){
@@ -269,7 +293,7 @@ async function handleJoin() {
           {comments.length===0&&(<p>Be the first to add a comment</p>)}
         </div>
         <div className={styles.rightbar}>
-          <RightCommentsSidebar name={thePost.community} description={theSub.description} rules={theSub.rules} members={"200K"} isJoined={joined}  onJoin={handleJoin} moderators={[]} />
+          <RightCommentsSidebar name={thePost.community} description={theSub.description} rules={theSub.rules} members={theSub.membersCount} isJoined={joined}  onJoin={handleJoin} moderators={[]} />
         </div>
       </div>
     </div>
