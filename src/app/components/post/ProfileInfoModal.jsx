@@ -1,3 +1,4 @@
+import { useState,useEffect } from 'react';
 import Image from 'next/image'
 import Link from "next/link";
 import plusicon from "../../assets/plus-circle.svg"
@@ -5,10 +6,51 @@ import dashicon from "../../assets/dash-circle.svg"
 import chaticon from "../../assets/chat-dots.svg" 
 import cakeicon from "../../assets/cake.svg" 
 import styles from "./ProfileInfoModal.module.css"
+import getCookies from '@/app/utils/getCookies'; 
+import handler from "@/app/utils/apiHandler";
 
-function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate, isFollowed, onFollow}) {
+function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate}) {
+    const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
+    const [isFollowed,setIsFollowed]=useState(false);
+    const [loading,setLoading] = useState(false);
+
+    useEffect(() => {
+        async function fetchData() {
+          const cookie = await getCookies();
+          if(cookie&&cookie.username){
+            if(cookie.username !== userName){
+                setLoading(true);
+                const response=await handler(`/users/isfollowed/${userName}`,"GET", "",temporaryToken);
+                setIsFollowed(response.isFollowed);
+                setLoading(false);
+            }
+          }
+          
+            
+        }
+        fetchData();
+      }, []);
+
+      const handleFollow=async()=> {
+        try {
+            if(!isFollowed){
+                const response = await handler(`/users/follow`, "POST",{username:userName}, temporaryToken);
+                console.log(response);
+            }
+            else{
+                const response = await handler(`/users/unfollow`, "POST",{username:userName}, temporaryToken);
+                console.log(response);
+            }
+            setIsFollowed(!isFollowed);
+          } catch (error) {
+            console.error('Error toggling follow :', error);
+          }
+    }
+
     return (
         <div className={styles.modal} onClick={(e) => {e.stopPropagation();}} >
+            {!loading&&
+            <div>
             <div className={styles.nameAndPicture}>
                 <img className={styles.profilePicture}
                     src={profilePicture}
@@ -29,13 +71,13 @@ function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate, isFollow
             {!isUser&&
             <div className={styles.buttons}>
                 {!isFollowed&&(
-                    <div className={styles.followButton} onClick={onFollow} >
+                    <div className={styles.followButton} onClick={handleFollow} >
                         <Image src={plusicon} alt="plus icon" className={styles.icons} />
                         <p className={styles.buttondescription}>Follow</p>
                     </div>
                 )}
                 {isFollowed&&(
-                    <div className={styles.followButton} onClick={onFollow} >
+                    <div className={styles.followButton} onClick={handleFollow} >
                         <Image src={dashicon} alt="dash icon" className={styles.icons} />
                         <p className={styles.buttondescription}>Unfollow</p>
                     </div>
@@ -46,7 +88,9 @@ function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate, isFollow
                         <p className={styles.buttondescription}>Chat</p>
                     </div>
                 </Link>
-            </div> }               
+            </div> } 
+            </div>} 
+            {loading&&<p className={styles.loading}>loading</p>}             
         </div>
     );
 
