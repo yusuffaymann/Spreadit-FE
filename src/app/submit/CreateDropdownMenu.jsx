@@ -2,13 +2,22 @@ import React, { useState, useRef, useEffect } from "react";
 import DropdownCommunity from "./DropdownCommunity";
 import styles from "./CreateDropdownMenu.module.css";
 import CreateCommunityModal from "../components/UI/CreateCommunityModal";
+import awwpfp from "@/app/assets/awwpfp.jpg";
+import { useRouter } from "next/navigation";
 
 function CreateDropdownMenu({
   userName = "Testing",
   userIcon = "https://styles.redditmedia.com/t5_7r9ed6/styles/profileIcon_ljpm97v13fpc1.jpg",
+  setCommunity,
+  communities
 }) {
+  const router = useRouter()
+
+    
   const [showCreateCommunityModal, setShowCreateCommunityModal] =
     useState(false);
+    const [username, setUsername] = useState("");
+    const [avatar, setAvatar] = useState(awwpfp);
 
   const handleRedirect = () => {
     // Redirect to the desired URL when the div is clicked
@@ -40,11 +49,11 @@ function CreateDropdownMenu({
                 alt="User avatar"
                 className={`${styles.userIconRadius} ${styles.userIconIdent}
             ${styles.userIconBorder} ${styles.userIconSize}`}
-                src={userIcon}
+                src={avatar}
               />
             </div>
             <div className={`${styles.userNameFlex}`}>
-              <span className={`${styles.userNameText}`}>u/{userName}</span>
+              <span className={`${styles.userNameText}`}>u/{username}</span>
             </div>
           </div>
         </div>
@@ -64,7 +73,11 @@ function CreateDropdownMenu({
             Create New
           </button>
         </div>
-        <DropdownCommunity communityMembers={1} /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity /><DropdownCommunity />
+        {console.log(communities) ?? communities.map((communityObj) => {
+          return (
+            <DropdownCommunity communityName={communityObj.name} communityMembers={communityObj.membersCount} setCommunity={setCommunity}/>
+          )
+        })}
       </div>
     </div>
   );
