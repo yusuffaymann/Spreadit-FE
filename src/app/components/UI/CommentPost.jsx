@@ -19,7 +19,7 @@ import handler from "@/app/utils/apiHandler";
  * @component
  */
 
-function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, attachments,  upVotes, comments, time, banner, subRedditDescription, isProfile, cakeDate, isMember, isJoined, onJoin, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
+function CommentPost({ postId, title, description, userName,profilePicture, subRedditName, subRedditPicture,subRedditRules, attachments,  upVotes, comments, time, banner, subRedditDescription, upVoteStatus, isProfile, cakeDate, isMember, isJoined, onJoin, isSaved, sendReplyNotifications, isSpoiler, isNSFW, pollIsOpen, pollOptions, pollExpiration, Editing }) {
 
     const { images, video } = attachments.reduce(
         (acc, attachment) => {
@@ -380,7 +380,7 @@ function CommentPost({ postId, title, description, userName,profilePicture, subR
                         </div>
                         </div>
                     {pollOptions.length !== 0 && <Poll isOpen={pollIsOpen} options={pollOptions} onVote={handlePollVote} pollExpiration={pollExpiration} myVote={pollVote}/>}
-                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} commentCount={comments} isMod={true} />
+                    <PostFooter upvote={() => handleUpVote(1)} downvote={() => handleUpVote(-1)} voteCount={votes} voteStatus={upVoteStatus} commentCount={comments} isMod={true} />
                 </div>
                 </div>}
             </div>

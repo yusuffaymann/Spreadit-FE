@@ -180,7 +180,6 @@ const onComment = async (newReply) => {
 
     const onSave= async ()=>{
         try {
-            console.log(upVoteStatus);
             const response = await apiHandler(`/comments/${comment.id}/save`, "POST", "", temporaryToken);
             console.log('save toggled:', response);
             setSaved(!saved);
@@ -242,7 +241,7 @@ const onComment = async (newReply) => {
                             <span className={styles.commenttext} dangerouslySetInnerHTML={{ __html: formattedDescription }}></span>
                         </div>
                         )}
-                        {!isEditing&&(<CommentFooter upvote={onUpVote} downvote={onDownVote} voteCount={comment.likes_count} isSaved={saved} onSave={onSave} onHide={onHide} isUser={isUser} onEdit={onClickEdit} onReply={()=>setIsReplying(true)}  onDelete={onDelete} userName={comment.user.username} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} onReport={handleReport} onBlock={handleBlock}/>)}
+                        {!isEditing&&(<CommentFooter upvote={onUpVote} downvote={onDownVote} voteCount={comment.likes_count} voteStatus={upVoteStatus} isSaved={saved} onSave={onSave} onHide={onHide} isUser={isUser} onEdit={onClickEdit} onReply={()=>setIsReplying(true)}  onDelete={onDelete} userName={comment.user.username} subRedditName={subRedditName} subRedditPicture={subRedditPicture} subRedditRules={subRedditRules} onReport={handleReport} onBlock={handleBlock}/>)}
                         {isReplying&&(<CommentInput onComment={onComment} close={()=>setIsReplying(false)} buttonDisplay={"comment"} isPost={false}/>)}  
                         {showProfilePicture&&replies.length !== 0 &&(
                             <div>
