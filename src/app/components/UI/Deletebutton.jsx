@@ -4,6 +4,7 @@ import binp from"../../assets/binimage.png"
 import { useState,useEffect } from 'react';
 import  Styles from "./Deletebutton.module.css";
 import apiHandler from "../../utils/apiHandler";
+import { useRouter } from "next/navigation";
 
 /**
  * Delete modal that checks on the inputs and deletes the account
@@ -18,6 +19,7 @@ import apiHandler from "../../utils/apiHandler";
 
 
 const Deleteaccount=(props)=>{
+    const router = useRouter();
     const temporaryToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [currentPassword, setCurrentPassword] = useState('');
     const [UserName, setUserName] = useState('');
@@ -104,8 +106,7 @@ const Deleteaccount=(props)=>{
       try {
         const response = await apiHandler(`/settings/account`, "DELETE", "",temporaryToken );
         console.log(response);
-        alert("redirect to the home page without an account");
-        return response;
+        router.push(`/home`);
       } catch (error) {
         console.error('Error', error);
       }

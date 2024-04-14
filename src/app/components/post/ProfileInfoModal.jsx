@@ -8,8 +8,10 @@ import cakeicon from "../../assets/cake.svg"
 import styles from "./ProfileInfoModal.module.css"
 import getCookies from '@/app/utils/getCookies'; 
 import handler from "@/app/utils/apiHandler";
+import { useRouter } from "next/navigation";
 
 function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate}) {
+    const router = useRouter();
     const temporaryToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjE5NjcxOTBkNDM3ZmJmNGYyOGI4ZDIiLCJ1c2VybmFtZSI6IlRlc3RVc2VyIiwiaWF0IjoxNzEzMDI5MjM1fQ.ih5SD2C1dSo96CRDbUGX3E5z9mGvCh37zAGh53Y8z-M";
     const [isFollowed,setIsFollowed]=useState(false);
     const [loading,setLoading] = useState(false);
@@ -50,7 +52,7 @@ function ProfileInfoModal ({userName,isUser, profilePicture,  cakeDate}) {
     return (
         <div className={styles.modal} onClick={(e) => {e.stopPropagation();}} >
             {!loading&&
-            <div>
+            <div onClick={() => {router.push(`/profile/${userName}`)}}>
             <div className={styles.nameAndPicture}>
                 <img className={styles.profilePicture}
                     src={profilePicture}
