@@ -3,10 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import getCookies from "./utils/getCookies";
-import Post from "./components/Post/Post"
-import ReportModal from "./components/UI/ReportModal";
-import handler from "./utils/apiHandler";
-import DeletePost from "./components/Post/DeletePostModal";
 
 function Home() {
   const router = useRouter();

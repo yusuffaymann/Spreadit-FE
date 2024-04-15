@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./ReportModal.module.css"
 import Image from "next/image";
-import Button from "../Post/Button";
+import Button from "../post/Button";
 import Toogle from "./Switch";
 import close from "../../assets/close.svg"
 import back from "../../assets/back.svg"

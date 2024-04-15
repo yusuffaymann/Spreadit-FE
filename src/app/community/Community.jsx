@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PopupMessage from "./PopupMessage";
-import DropDownItem from "../components/UI/DropDownItem";
+import DropDownItem from "../components/UI/DropdownItem";
 import PostDropDownItem from "../components/post/PostDropDownItem";
 import PostDropDownMenu from "../components/post/PostDropDownMenu";
 import up from "@/app/assets/up-arrow.svg";
